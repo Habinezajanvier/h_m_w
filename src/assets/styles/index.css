@@ -1,0 +1,24 @@
+body {
+  margin: 0;
+  font-family: "Source Sans Pro", sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-size: 14px;
+  background: rgb(35, 36, 37);
+  background: linear-gradient(
+    131deg,
+    #222431,
+    rgba(162, 162, 164, 1) 80%,
+    #222431
+  );
+}
+
+ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.App {
+  min-height: 100vh;
+}

@@ -1,0 +1,98 @@
+.sInputContainer {
+  .sInput {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    border-bottom: 1px solid rgba(228, 228, 231, 0.4);
+
+    .inputBox {
+      input {
+        background: transparent;
+        outline: none;
+        border: none;
+        font-size: 16px;
+        font-style: normal;
+        font-weight: 400;
+        line-height: 30px;
+        letter-spacing: 0px;
+        text-align: left;
+        color: #e4e4e766;
+      }
+    }
+
+    .select {
+      position: relative;
+      align-self: flex-end;
+      cursor: pointer;
+
+      img {
+        width: 20px;
+        height: 20px;
+        user-select: none;
+      }
+
+      .selectedValue {
+        // border-right: 1px solid lightgray;
+      }
+      .selectOptions {
+        &::-webkit-scrollbar {
+          width: 2px;
+        }
+
+        position: absolute;
+        top: 0;
+        left: 1px;
+        background-color: rgb(19, 19, 19);
+        overflow-y: scroll;
+
+        width: 243px;
+        height: 123px;
+
+        border-radius: 6px;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        padding: 5px 0;
+
+        li {
+          padding: 4px 15px;
+          border-radius: 4px;
+          &:hover {
+            background: rgba(1, 143, 106, 0.85);
+          }
+          cursor: pointer;
+          gap: 10px;
+          display: flex;
+          align-items: flex-start;
+          img {
+            width: 20px;
+            height: 20px;
+          }
+
+          div {
+            &:first-child {
+              display: flex;
+            }
+            &:nth-child(2) {
+              color: rgba($color: #fff, $alpha: 0.8);
+            }
+
+            &:last-child {
+              color: gray;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .sInputErrLabel {
+font-size: 16px;
+font-style: normal;
+font-weight: 400;
+line-height: 30px;
+text-align: left;
+color: #D80027;
+
+  }
+}

@@ -1,0 +1,41 @@
+{
+  "compilerOptions": {
+    "target": "es2018",
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
+    "allowJs": true,
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "strict": false,
+    "forceConsistentCasingInFileNames": true,
+    "noFallthroughCasesInSwitch": true,
+    "module": "esnext",
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "noEmit": true,
+    "jsx": "react-jsx",
+    "experimentalDecorators": true, 
+
+  },
+  "include": [
+    "src"
+  ],
+  "paths": {
+    "crypto": [
+      "node_modules/crypto-js" 
+    ]
+  },
+  // "paths": {
+  //   "crypto": [
+  //     "node_modules/crypto-browserify"
+  //   ],
+  //   "stream": [
+  //     "node_modules/stream-browserify"
+  //   ]
+  // }
+}

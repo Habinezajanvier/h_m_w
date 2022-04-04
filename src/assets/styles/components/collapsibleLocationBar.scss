@@ -1,0 +1,71 @@
+.locationBar {
+  .location-activityList {
+    max-height: 438px;
+    padding: 12px 10px;
+
+    overflow-y: scroll;
+    &::-webkit-scrollbar {
+      width: 0;
+    }
+
+    background: #24262e;
+    // box-shadow: inset 0px 0px 3px rgba(0, 0, 0, 0.25);
+    border-left: 4px rgba(0, 0, 0, 0.25);
+  }
+
+  .location-list {
+    gap: 10px;
+  }
+
+  .location-item {
+    background: #1d1f27;
+    border-radius: 6px;
+    padding: 12px 14px;
+
+    &:hover {
+      background: #067f61;
+    }
+  }
+
+  .location-item-active {
+    background: #067f61;
+  }
+
+  .location-item-details {
+    gap: 14px;
+  }
+
+  .location-status {
+    position: relative;
+    width: 16px;
+    height: 16px;
+
+    .location-status-signalimg {
+      height: 100%;
+      width: 100%;
+    }
+
+    .location-signal-status {
+      position: absolute;
+      top: 60%;
+      left: 50%;
+    }
+  }
+
+  .location-id {
+    font-family: "Source Sans Pro";
+    font-style: normal;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 20px;
+    color: rgba(228, 228, 231, 0.8);
+  }
+  .location-address {
+    font-family: "Source Sans Pro";
+    font-style: normal;
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 20px;
+    color: rgba(255, 255, 255, 0.6);
+  }
+}

@@ -1,0 +1,160 @@
+.feedback {
+  padding-top: 34px;
+  //   padding-bottom: 34px;
+  .feedback-header {
+    color: rgba(255, 255, 255, 0.8);
+    padding-bottom: 41px;
+  }
+
+  .feedback-header,
+  .feedback-upper-text,
+  .emojiList,
+  .feedback-submit,
+  .feedback-submit-btn {
+    padding-left: 21px;
+    padding-right: 40px;
+  }
+
+  .feedback-upper {
+    border-bottom: 1px solid rgba(228, 228, 231, 0.2);
+  }
+
+  .feedback-upper-text {
+    gap: 20px;
+  }
+
+  .feedback-text {
+    font-family: "Source Sans Pro";
+    font-style: normal;
+    font-weight: 600;
+    font-size: 14px;
+    line-height: 20px;
+    color: rgba(255, 255, 255, 0.8);
+  }
+
+  .emojiList {
+    gap: 20px;
+    margin: 30px 0;
+  }
+
+  .feedback-textbox {
+    background: #121212;
+    border: 1px solid rgba(245, 38, 38, 0.8);
+    box-sizing: border-box;
+    border-radius: 6px;
+    height: 148px;
+    position: relative;
+  }
+
+  .feedback-submit {
+    .feedback-text {
+      padding: 30px 0;
+    }
+  }
+
+  .feedback-textarea {
+    width: 100%;
+    height: 100%;
+    background-color: transparent;
+    border: none;
+    outline: none;
+    resize: none;
+    font-family: "Source Sans Pro";
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 20px;
+    padding: 10px 12px;
+    color: rgba(255, 255, 255, 0.4);
+    &::-webkit-scrollbar {
+      width: 0;
+    }
+  }
+
+  .feedback-add {
+    position: absolute;
+    width: 28px;
+    height: 28px;
+    background: rgba(1, 143, 106, 0.85);
+    border-radius: 4px;
+    // margin-left: auto;
+    right: 16px;
+    bottom: 11px;
+    img {
+      width: 14px;
+      height: 14px;
+    }
+  }
+
+  .feedback-add-media {
+    gap: 45px;
+    margin-top: 21px;
+  }
+
+  .feedback-media-name {
+    font-family: "Source Sans Pro";
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 20px;
+    color: rgba(255, 255, 255, 0.8);
+  }
+
+  .feedback-media-delete {
+    width: 28px;
+    height: 28px;
+    background: #e03761;
+    border-radius: 4px;
+    img {
+      width: 14px;
+      height: 17px;
+    }
+  }
+
+  .feedback-submit-btn {
+    .button {
+      margin-left: auto;
+      padding: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 80px;
+      height: 40px;
+    }
+  }
+
+  .feedback-submitted {
+    height: 110%;
+    gap: 24px;
+    .feedback-thankyou-img {
+      width: 160px;
+      height: 160px;
+      margin-left: auto;
+      margin-right: auto;
+      img {
+        width: 100%;
+        height: 100%;
+      }
+    }
+    .feedback-thankyou-text {
+      div {
+        font-family: "Source Sans Pro";
+        font-style: normal;
+        font-weight: 400;
+        line-height: 16px;
+        text-align: center;
+        color: rgba(255, 255, 255, 0.8);
+      }
+    }
+    .feedback-home-btn {
+      margin-top: 12px;
+      .button {
+        padding: 0;
+        width: 116px;
+        height: 36px;
+        background: rgba(1, 143, 106, 0.85);
+        border-radius: 4px;
+      }
+    }
+  }
+}

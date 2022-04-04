@@ -1,0 +1,148 @@
+.label {
+  font-family: "Source Sans Pro";
+  font-style: normal;
+  font-weight: normal;
+  font-size: 16px;
+  line-height: 30px;
+
+  color: rgba(143, 146, 161, 0.6);
+}
+
+.h1 {
+  font-size: 30px;
+}
+
+.h2 {
+  font-size: 24px;
+}
+
+.h1,
+.h2,
+.text-lg1 {
+  font-weight: bold;
+}
+
+.text-lg1,
+.text-lg2 {
+  font-size: 16px;
+}
+
+.text-lg2 {
+  font-weight: 600;
+}
+
+//  flex box
+.flex {
+  display: flex;
+}
+
+.items-center {
+  align-items: center;
+}
+
+.justify-between {
+  justify-content: space-between;
+}
+
+.justify-evenly {
+  justify-content: space-evenly;
+}
+
+.justify-center {
+  justify-content: center;
+}
+
+.fd-column {
+  flex-direction: column;
+}
+
+.flex-center-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.flex-1 {
+  flex: 1;
+}
+
+// colors
+.color-skyBlue {
+  color: #56ccf2;
+}
+
+.dark-blue {
+  color: #216692;
+}
+
+.gray-200 {
+  color: rgba(228, 228, 231, 0.2);
+}
+
+.red-dark {
+  color: #e03761;
+}
+
+// cursor
+.c-pointer {
+  cursor: pointer;
+}
+
+// width/ height
+.w100 {
+  width: 100%;
+}
+.h100 {
+  height: 100%;
+}
+.min-h-100vh {
+  min-height: 100vh;
+}
+
+// margin
+.m-auto {
+  margin: auto;
+}
+
+// alignment
+.text-center {
+  text-align: center;
+}
+
+// misc
+
+.d-none{
+    display: none;
+}
+.chokidr-title {
+  font-family: "Source Sans Pro";
+  font-size: 38px;
+  font-style: normal;
+  font-weight: 900;
+  line-height: 36px;
+  letter-spacing: -3px;
+  text-align: center;
+  color: #ffffff;
+  margin-bottom: 53px;
+  cursor: pointer;
+
+  text-shadow: 0px 64px 36px rgba(31, 31, 31, 0.0910736),
+    0px 32.0312px 18.0176px rgba(31, 31, 31, 0.132396),
+    0px 19.2941px 10.8529px rgba(31, 31, 31, 0.16306),
+    0px 12.3647px 6.95514px rgba(31, 31, 31, 0.19),
+    0px 8.01379px 4.50776px rgba(31, 31, 31, 0.21694),
+    0px 5.04459px 2.83758px rgba(31, 31, 31, 0.247604),
+    0px 2.89843px 1.63037px rgba(31, 31, 31, 0.288926),
+    0px 1.27567px 0.717567px rgba(31, 31, 31, 0.38);
+}
+
+// box shadows
+.card-shadow {
+  box-shadow: 0px 54px 500px rgba(0, 0, 0, 0.0826639),
+    0px 24.9658px 231.165px rgba(0, 0, 0, 0.11943),
+    0px 14.2849px 132.267px rgba(0, 0, 0, 0.147217),
+    0px 8.67082px 80.2854px rgba(0, 0, 0, 0.172783),
+    0px 5.22455px 48.3755px rgba(0, 0, 0, 0.20057),
+    0px 2.90937px 26.9386px rgba(0, 0, 0, 0.237336),
+    0px 1.2513px 11.5861px rgba(0, 0, 0, 0.32);
+}

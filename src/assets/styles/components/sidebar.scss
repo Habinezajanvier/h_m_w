@@ -1,0 +1,102 @@
+// Sidebar Drawr
+.sidebarDrawr {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 258px;
+    height: 100vh;
+    z-index: 10;
+    background: #1d1d20;
+  
+    .sidebarDrawr-header {
+      display: flex;
+      justify-content: flex-end;
+      padding: 16px 15px 37px 16px;
+      svg {
+        font-size: 30px;
+        color: rgba(228, 228, 231, 0.8);
+      }
+    }
+  
+    .sidebarDrawr-body {
+      height: 89%;
+    }
+  
+    .sidebar-navList {
+      width: 100%;
+      gap: 35px;
+    }
+  
+    .glow-border-left {
+      width: 4px;
+      height: 30px;
+  
+      border-radius: 6px 0px 0px 6px;
+      transform: matrix(-1, 0, 0, 1, 0, 0);
+    }
+  
+    .sidebar-navItem {
+      cursor: pointer;
+      gap: 12px;
+      img {
+        width: 20px;
+        height: 20px;
+        color: red;
+      }
+    }
+  
+    .navLink {
+      font-family: "Source Sans Pro";
+      font-weight: 600;
+      font-size: 16px;
+      line-height: 30px;
+      color: rgba(228, 228, 231, 0.4);
+    }
+  
+    .sidebar-navItem-active {
+      .glow-border-left {
+        background: rgba(1, 143, 106, 0.85);
+        box-shadow: -6px 0px 30px 8px rgba(169, 255, 233, 0.48);
+      }
+      .navLink {
+        color: rgba(255, 255, 255, 0.8);
+      }
+    }
+  
+    .sidebarDrawr-footer {
+      padding-bottom: 14px;
+      .sidebarDrawr-loginStatus {
+        padding: 24px;
+      }
+  
+      .loginStatus-label {
+        font-family: "Source Sans Pro";
+        font-style: normal;
+        font-weight: 600;
+        font-size: 15px;
+        line-height: 30px;
+        color: rgba(255, 255, 255, 0.8);
+      }
+  
+      .footer-chokidr-lable {
+        font-family: "Source Sans Pro";
+        font-style: normal;
+        font-weight: 600;
+        font-size: 12px;
+        line-height: 20px;
+        text-align: center;
+        color: rgba(228, 228, 231, 0.4);
+      }
+  
+      .footer-chokidr-createdBy {
+        font-family: "Source Sans Pro";
+        font-style: normal;
+        font-weight: 400;
+        font-size: 12px;
+        line-height: 20px;
+        text-align: center;
+        color: rgba(228, 228, 231, 0.2);
+      }
+    }
+  }
+  

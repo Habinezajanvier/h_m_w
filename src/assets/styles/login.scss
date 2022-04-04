@@ -1,0 +1,112 @@
+.login {
+  .title {
+    font-family: "Source Sans Pro";
+    font-size: 38px;
+    font-style: normal;
+    font-weight: 900;
+    line-height: 36px;
+    letter-spacing: -3px;
+    text-align: center;
+    color: #ffffff;
+    margin-bottom: 53px;
+
+    text-shadow: 0px 64px 36px rgba(31, 31, 31, 0.0910736),
+      0px 32.0312px 18.0176px rgba(31, 31, 31, 0.132396),
+      0px 19.2941px 10.8529px rgba(31, 31, 31, 0.16306),
+      0px 12.3647px 6.95514px rgba(31, 31, 31, 0.19),
+      0px 8.01379px 4.50776px rgba(31, 31, 31, 0.21694),
+      0px 5.04459px 2.83758px rgba(31, 31, 31, 0.247604),
+      0px 2.89843px 1.63037px rgba(31, 31, 31, 0.288926),
+      0px 1.27567px 0.717567px rgba(31, 31, 31, 0.38);
+  }
+
+  .loginCard {
+    display: flex;
+    justify-content: center;
+
+    .login-popup-container {
+      height: 100%;
+      margin-top: 45px;
+    }
+
+    .loading-img{
+      animation: rotation 2s infinite linear;
+    }
+
+    @keyframes rotation {
+      from {
+        transform: rotate(0deg);
+      }
+      to {
+        transform: rotate(359deg);
+      }
+    }
+    .password-searching{
+      .text-center{
+        margin-bottom: 20px;
+      }
+    }
+    
+    .login-popup, .password-searching{
+      padding: 29px;
+      max-width: 348px;
+      font-style: normal;
+      font-weight: normal;
+      font-size: 16px;
+      line-height: 22px;
+
+      color: rgba(255, 255, 255, 0.7);
+    }
+
+    .login-popup {
+      background: #24262e;
+     
+
+      
+
+      .login-popup-footer {
+        justify-content: flex-end;
+        margin-top: 39px;
+        gap: 51px;
+      }
+    }
+  }
+  .container {
+    padding: 33px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    height: 100%;
+
+    .login-card-head {
+      font-style: normal;
+      font-weight: normal;
+      font-size: 20px;
+      line-height: 30px;
+      padding: 30px 44px;
+
+      text-align: center;
+
+      color: #e4e4e7;
+    }
+
+    .login-card-body {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .login-card-footer,
+    .login-card-body {
+      align-items: center;
+      justify-content: space-between;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .login-card-footer {
+      gap: 25px;
+    }
+  }
+}

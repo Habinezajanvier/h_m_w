@@ -1,0 +1,66 @@
+.signup {
+  .signupCard {
+    display: flex;
+    justify-content: center;
+  }
+  .container {
+    padding: 33px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    // justify-content: space-between;
+    height: 100%;
+    .signup-card-head {
+      font-style: normal;
+      font-weight: normal;
+      font-size: 20px;
+      line-height: 30px;
+      padding: 30px 44px;
+
+      text-align: center;
+
+      color: #e4e4e7;
+    }
+
+    .signup-card-body {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+      gap: 59px;
+      margin-top: 25px;
+    }
+    // .signup-card-footer,
+    .signup-card-body {
+      align-items: center;
+      justify-content: space-between;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .signup-card-footer {
+      gap: 25px;
+
+    
+    }
+
+    .signup-btn {
+        width: fit-content;
+      }
+  }
+}
+
+
+
+.registrationLoading{
+  img{
+    border-radius: 8px;
+  }
+font-size: 18px;
+font-style: normal;
+font-weight: 700;
+line-height: 20px;
+text-align: center;
+color: rgba(228, 228, 231, 0.8);
+gap: 12px;
+}

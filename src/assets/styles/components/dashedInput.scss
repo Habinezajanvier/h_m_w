@@ -1,0 +1,30 @@
+.dashedInput {
+  .input {
+    display: flex;
+    gap: 7px;
+    input {
+      width: 41px;
+      background-color: transparent;
+      border: none;
+      outline: none;
+      line-height: 30px;
+      border-bottom: 1px solid rgba(228, 228, 231, 0.4);
+
+      font-style: normal;
+      font-weight: normal;
+      font-size: 35px;
+      line-height: 20px;
+      color: rgba(228, 228, 231, 0.8);
+      text-align: center;
+    }
+  }
+
+  .bottomText {
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 30px;
+    text-align: right;
+    margin-top: 7px;
+  }
+}
