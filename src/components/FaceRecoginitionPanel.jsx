@@ -15,17 +15,18 @@ const FaceRecoginitionPanel = () => {
 
   useEffect(() => {
     console.log("adjk", init);
-  });
+  }, [init]);
 
   useEffect(() => {
     const loadModels = async () => {
-      const MODEL_URL = process.env.PUBLIC_URL + "/models";
+      const Model_URI = process.env.REACT_APP_FACE_API_MODELS_URI;
+
       setInitializing(true);
       Promise.all([
-        faceapi.nets.tinyFaceDetector.loadFromUri(MODEL_URL),
-        faceapi.nets.faceLandmark68Net.loadFromUri(MODEL_URL),
-        faceapi.nets.faceRecognitionNet.loadFromUri(MODEL_URL),
-        faceapi.nets.faceExpressionNet.loadFromUri(MODEL_URL),
+        faceapi.nets.tinyFaceDetector.loadFromUri(Model_URI),
+        faceapi.nets.faceLandmark68Net.loadFromUri(Model_URI),
+        faceapi.nets.faceRecognitionNet.loadFromUri(Model_URI),
+        faceapi.nets.faceExpressionNet.loadFromUri(Model_URI),
       ]).then(startVideo);
     };
     loadModels();
@@ -87,19 +88,21 @@ const FaceRecoginitionPanel = () => {
             resizedDetections[0].detection.score > 0.7
             // resizedDetections[0].expressions.happy > 0.5
           ) {
-
             let coordX = resizedDetections[0].detection._box._x;
             let coordY = resizedDetections[0].detection._box._y;
             let cWidth = resizedDetections[0].detection._box._width;
             let cHeight = resizedDetections[0].detection._box._height;
-           
+
             // calculating coords and with/height from video frame
             const regionsToExtract = [
-              new faceapi.Rect(coordX, coordY, cWidth, cHeight)
+              new faceapi.Rect(coordX, coordY, cWidth, cHeight),
             ];
 
             // etracting faces from video frame via faceapi
-            let faceImages = await faceapi.extractFaces(videoRef.current, regionsToExtract);
+            let faceImages = await faceapi.extractFaces(
+              videoRef.current,
+              regionsToExtract
+            );
 
             // checking if face avilable
             if (faceImages.length === 0) {
@@ -110,9 +113,7 @@ const FaceRecoginitionPanel = () => {
                 let cnvImg = cnv.toDataURL();
                 console.log("face found ", cnvImg);
               });
-             
             }
-
 
             // document.getElementById("screenshot").appendChild(img);
           }
@@ -136,8 +137,6 @@ const FaceRecoginitionPanel = () => {
 
           canvas.getContext("2d").clearRect(0, 0, canvas.width, canvas.height);
           faceapi.draw.drawDetections(canvas, resizedDetections);
-
-       
 
           // faceapi.draw.drawFaceLandmarks(canvas, resizedDetections);
           // faceapi.draw.drawFaceExpressions(canvas, resizedDetections);

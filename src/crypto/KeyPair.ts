@@ -368,8 +368,8 @@ export function createKeypair(): KeyPair {
     async createPop(): Promise<JsonWebKey> {
       return new Promise<JsonWebKey>(async (resolve, reject) => {
         try {
-          if (type != KeyPairType.HYBRID)
-            reject(`Usable only in hybrid keypair mode`);
+          // if (type != KeyPairType.HYBRID)
+            // reject(`Usable only in hybrid keypair mode`);
           if (!did) throw new Error(`Keypair did not generated`);
           const jwk = signatureKeyPair.publicKeyJwk
           resolve(jwk)
@@ -381,8 +381,8 @@ export function createKeypair(): KeyPair {
     async verifyPop(pop: JsonWebKey, did: string): Promise<Boolean> {
       return new Promise<Boolean>(async (resolve, reject) => {
         try {
-          if (type != KeyPairType.HYBRID)
-            reject(`Usable only in hybrid keypair mode`);
+          // if (type != KeyPairType.HYBRID)
+          //   reject(`Usable only in hybrid keypair mode`);
           if(!pop) throw new Error(`JsonWebKey must be provided`)
           const decodedDid = decodeDid(did);
           const keypair = await Bls12381G2KeyPair.fromJwk({publicKeyJwk:pop})

@@ -9,6 +9,15 @@ import frenchflag from "../assets/images/french-flag.png";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import PropTypes from "prop-types";
 
+const countryCode_flag = {
+  "+91": indflag,
+  "+41": usflag,
+  "+44": ukflag,
+  "+48": polandflag,
+  "+90": turkeyflag,
+  "+689": frenchflag,
+};
+
 const SelectableInput = ({
   placeholder,
   type,
@@ -20,15 +29,15 @@ const SelectableInput = ({
   inputValue,
 }) => {
   const [showOptions, setShowOptions] = useState(false);
-  const [value, setValue] = useState("90");
-  const [selectedValue, setSelectedValue] = useState("");
+  const [value, setValue] = useState("");
+  const [selectedValue, setSelectedValue] = useState("+91");
 
   useEffect(() => {
     getValue({ value, selectedValue });
   }, [value, selectedValue]);
 
   useEffect(() => {
-    setValue(inputValue);
+    inputValue && setValue(inputValue);
   }, []);
 
   return (
@@ -39,7 +48,11 @@ const SelectableInput = ({
             className="selectedValue"
             onClick={() => setShowOptions(!showOptions)}
           >
-            <img src={selectIcon ? selectIcon : indflag} alt="country flag" />
+            {selectIcon ? (
+              <img src={selectIcon ? selectIcon : indflag} alt="country flag" />
+            ) : (
+              <img src={countryCode_flag[selectedValue] } alt="country flag" />
+            )}
             {withSelectable && <ArrowDropDownIcon className="gray-200" />}
           </div>
           {showOptions && withSelectable && (
@@ -48,20 +61,21 @@ const SelectableInput = ({
                 className="flex items-center"
                 onClick={() => {
                   setShowOptions(false);
-                  setSelectedValue("");
+                  setSelectedValue("+91");
                 }}
               >
                 <div>
-                  <img src={usflag} alt="country flag" />
+                  <img src={indflag} alt="country flag" />
                 </div>
-                <div>United States</div>
-                <div>+41</div>
+                <div>India</div>
+                <div>+91</div>
               </li>
+
               <li
                 className="flex items-center"
                 onClick={() => {
                   setShowOptions(false);
-                  setSelectedValue("");
+                  setSelectedValue("+44");
                 }}
               >
                 <div>
@@ -75,7 +89,7 @@ const SelectableInput = ({
                 className="flex items-center"
                 onClick={() => {
                   setShowOptions(false);
-                  setSelectedValue("");
+                  setSelectedValue("+48");
                 }}
               >
                 <div>
@@ -88,7 +102,7 @@ const SelectableInput = ({
                 className="flex items-center"
                 onClick={() => {
                   setShowOptions(false);
-                  setSelectedValue("");
+                  setSelectedValue("+90");
                 }}
               >
                 <div>
@@ -101,11 +115,11 @@ const SelectableInput = ({
                 className="flex items-center"
                 onClick={() => {
                   setShowOptions(false);
-                  setSelectedValue("");
+                  setSelectedValue("+41");
                 }}
               >
                 <div>
-                  <img src={frenchflag} alt="country flag" />
+                  <img src={usflag} alt="country flag" />
                 </div>
                 <div>United States</div>
                 <div>+41</div>
@@ -114,7 +128,7 @@ const SelectableInput = ({
                 className="flex items-center"
                 onClick={() => {
                   setShowOptions(false);
-                  setSelectedValue("");
+                  setSelectedValue("+689");
                 }}
               >
                 <div>
@@ -132,7 +146,11 @@ const SelectableInput = ({
             value={value}
             placeholder={placeholder}
             maxLength={maxLength}
-            onChange={(e) => setValue(e.target.value)}
+            onChange={(e) => {
+              type === "number"
+                ? setValue(e.target.value.replace(/\D/g, ""))
+                : setValue(e.target.value);
+            }}
           />
         </div>
       </div>

@@ -14,7 +14,7 @@ import {
   BbsVerifyProofRequest
 } from "@mattrglobal/bbs-signatures";
 import { BlsKeyPair } from "@mattrglobal/bbs-signatures";
-import { randomBytes } from "crypto";
+import { randomBytes } from "crypto-browserify";
 import { Bls12381G2KeyPair } from "@mattrglobal/bls12381-key-pair";
 
 

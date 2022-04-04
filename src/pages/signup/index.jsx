@@ -8,18 +8,11 @@ import KeyboardBackspaceIcon from "@mui/icons-material/KeyboardBackspace";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import otpImg from "../../assets/images/otp.png";
-import regLoadingImg from "../../assets/images/registration-loading.png";
+
 import FaceRecoginitionPanel from "../../components/FaceRecoginitionPanel";
 import { registerUser } from "./registerUser";
-
-const RegistrationLoading = ({ label }) => {
-  return (
-    <div className="registrationLoading flex-center-center fd-column min-h-100vh flex-1">
-      <img src={regLoadingImg} alt="chokidr" />
-      <div className="registrationLabel">Connecting to public network</div>
-    </div>
-  );
-};
+import SearchQRCode from "./SearchQRCode";
+import RegistrationLoading from "./RegistrationLoading";
 
 const styles = {
   display: "flex",
@@ -28,28 +21,12 @@ const styles = {
   // minHeight: "100vh",
 };
 
-const SearchingQRCode = () => {
-  return (
-    <div className="login-popup-container">
-      <div className="login-popup">
-        <div>{/* <img src={loadingImg} alt="loading" /> */}</div>
-        <div className="text-center">
-          Searching for the mnemonic password QR code stored on this device
-        </div>
-        <div>Allow to search this device to scan QR code?</div>
-        <div className="login-popup-footer flex">
-          <div className="popup-btn dark-blue c-pointer">Deny</div>
-          <div className="popup-btn dark-blue c-pointer">Allow</div>
-        </div>
-      </div>
-    </div>
-  );
-};
-
 const Signup = ({ ...props }) => {
   const [isMemonicScreen, setIsMemonicScreen] = useState(false);
+  const [isMemonicScreen2, setIsMemonicScreen2] = useState(false);
   const [isOtpSent, setIsOtpSent] = useState(false);
   const [memonicPassword, setMemonicPassword] = useState("");
+  const [memonicPassword2, setMemonicPassword2] = useState("");
   const [countryCode, setCountryCode] = useState("");
   const [phone, setPhone] = useState("");
   const [invalidOTP, setInvalidOTP] = useState(false);
@@ -61,7 +38,7 @@ const Signup = ({ ...props }) => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    // registerUser();
+    registerUser("+911234567890");
   }, []);
 
   // handling data from inputbox
@@ -124,7 +101,10 @@ const Signup = ({ ...props }) => {
                           placeholder={"Enter Phone Number"}
                           type="number"
                           maxLength={10}
-                          getValue={(data) => setPhone(data)}
+                          getValue={({ value, selectedValue }) => {
+                            setPhone(value);
+                            setCountryCode(selectedValue);
+                          }}
                           withSelectable={true}
                         />
                       </div>
@@ -143,7 +123,7 @@ const Signup = ({ ...props }) => {
                   {/* Enter OTP */}
                   {
                     //  popup for searching QR Code
-                    // <SearchingQRCode />
+                    // <SearchQRCode />
 
                     isOtpSent && !isMemonicScreen && (
                       <div className="signup-card-body">
@@ -169,9 +149,16 @@ const Signup = ({ ...props }) => {
                     // memonic passwork/phone input
                     <div className="signup-card-body">
                       <div>
-                        {isMemonicScreen && (
+                        {isMemonicScreen && !isMemonicScreen2 && (
                           <DashedInput
                             getValue={(d) => setMemonicPassword(d)}
+                            label="Set up a 6 digit pin to secure your mnemonic password"
+                          />
+                        )}
+                        {isMemonicScreen2 && (
+                          <DashedInput
+                            getValue={(d) => setMemonicPassword2(d)}
+                            label="Re-enter the 6 digit password"
                           />
                         )}
                       </div>
@@ -200,7 +187,20 @@ const Signup = ({ ...props }) => {
                     </div>
                   )}
 
-                  {isMemonicScreen && (
+                  {isMemonicScreen && !isMemonicScreen2 && (
+                    <div className="signup-card-footer flex justify-evenly items-center flex-1 fd-column">
+                      <div className="signup-btn">
+                        <Button
+                          outlined={false}
+                          title={"Next"}
+                          onClick={() => {
+                            setIsMemonicScreen2(true);
+                          }}
+                        />
+                      </div>
+                    </div>
+                  )}
+                  {isMemonicScreen2 && (
                     <div className="signup-card-footer flex justify-evenly items-center flex-1 fd-column">
                       <div className="signup-btn">
                         <Button

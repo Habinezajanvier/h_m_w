@@ -1,8 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 import "../assets/styles/components/dashedInput.scss";
 
-const DashedInput = ({ getValue }) => {
-  const [input, setInput] = useState([]);  
+const DashedInput = ({ getValue, label }) => {
+  const [input, setInput] = useState([]);
   const inputRef1 = useRef(null);
   const inputRef2 = useRef(null);
   const inputRef3 = useRef(null);
@@ -20,13 +20,11 @@ const DashedInput = ({ getValue }) => {
     inputRef6,
   ];
 
-
   // returning value when all input filled
   useEffect(() => {
     input.join("").length > 5 && getValue && getValue(input.join(""));
   }, [input]);
 
-  
   const handleInput = (value, nextref, id) => {
     let updatedInput = input;
     updatedInput[id] = value;
@@ -38,11 +36,13 @@ const DashedInput = ({ getValue }) => {
 
   return (
     <div className="dashedInput">
-      <div className="label c-pointer">Enter Mnemonic password pin</div>
-      <div className="input">
+      <div className="label c-pointer text-center">
+        {label ? label : "Enter Mnemonic password pin"}
+      </div>
+      <div className="input justify-center">
         {refArr.map((e, i) => (
           <input
-          key={i}
+            key={i}
             ref={e}
             type="text"
             maxLength={1}
