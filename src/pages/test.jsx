@@ -1,6 +1,7 @@
 import React from 'react'
 import FaceRecoginitionPanel from '../components/FaceRecoginitionPanel'
 import Header from '../components/Header'
+import ShowMnemonic from './signup/ShowMnemonic'
 
 
 const styles = {
@@ -12,12 +13,17 @@ minHeight: '100vh'
 
 const Test = () => {
   return (
+    <div>
+    abcde
+          <ShowMnemonic />
+        </div>
+  
     // <Header />
 
     // <Detection />
-    <div style={styles}>
-        <FaceRecoginitionPanel />
-        </div>
+    // <div style={styles}>
+    //     <FaceRecoginitionPanel />
+    //     </div>
   )
 }
 

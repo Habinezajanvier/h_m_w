@@ -4,6 +4,7 @@ import { Provider } from "react-redux";
 import { ThemeProvider } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
 import * as axios from "./config/axios";
+import { createClient, Provider as URQLProvider } from "urql";
 
 // Relative imports
 import App from "./App";
@@ -17,8 +18,11 @@ import {
 import store from "./redux/store";
 import theme from "./config/theme";
 import { BrowserRouter } from "react-router-dom";
-import 'mapbox-gl/dist/mapbox-gl.css';
+import "mapbox-gl/dist/mapbox-gl.css";
 
+const client = createClient({
+  url: "https://api.ckdr.co.in/graphql",
+});
 
 axios.init();
 
@@ -33,14 +37,16 @@ if (token) {
 
 ReactDOM.render(
   <Provider store={store}>
-    <React.StrictMode>
-      <ThemeProvider theme={theme}>
-        <CssBaseline />
-        <BrowserRouter>
-          <App />
-        </BrowserRouter>
-      </ThemeProvider>
-    </React.StrictMode>
+    <URQLProvider value={client}>
+      <React.StrictMode>
+        <ThemeProvider theme={theme}>
+          <CssBaseline />
+          <BrowserRouter>
+            <App />
+          </BrowserRouter>
+        </ThemeProvider>
+      </React.StrictMode>
+    </URQLProvider>
   </Provider>,
   document.getElementById("root")
 );

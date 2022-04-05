@@ -13,6 +13,9 @@ import FaceRecoginitionPanel from "../../components/FaceRecoginitionPanel";
 import { registerUser } from "./registerUser";
 import SearchQRCode from "./SearchQRCode";
 import RegistrationLoading from "./RegistrationLoading";
+import SignUpWrapper from "./SignUpWrapper";
+import { testRegisterUser } from "./testRigister";
+import { useMutation } from "urql";
 
 const styles = {
   display: "flex",
@@ -20,6 +23,51 @@ const styles = {
   justifyContent: "center",
   // minHeight: "100vh",
 };
+
+const registerMutation = `
+mutation{
+  register(signup: 
+    {
+    id: "ZekeHPYC_s0hWG3wu6DfaKF2AYoUUm_j",
+    
+    did: "did:ckdr:Ee3qAOe1TJiVFv1WxmKa8XxcCnpQlJ24mNRsQQbCa72Tq55XpJvyyi8hDvQP0OzusJA1d66eYEXNGMYpUN+H5LojadxaIw+PoIkkpOHdudMOP5GqD1QHBt1MEMnu/L7c8Cf5GBXIWnIiYrnlRKSNeLstld3exB8Q2Ht2pSKRQ2gDqnsV",
+    
+    role: "admin",
+    
+    createdTime: "2022-04-05T10:27:57.038Z",
+    
+    metaInformation: {firstName: "Rishabh",},
+    
+    proofOfPossession: "mDVCipSvWmtYmrDRy5AgRJXff_QZQpmmFS2pmgt3Sl5_5Z6RDhiU5y3Kurrq3MgtFqWvWZKRaAgCBW3L_xiXnTSE_1K6cMBJ8PKlthrTdMXg4724q1kaIx9y-X0prkzF",
+#     odid: "",
+    signature: {
+                id: "ZekeHPYC_s0hWG3wu6DfaKF2AYoUUm_j",
+      algo: "ZekeHPYC_s0hWG3wu6DfaKF2AYoUUm_j",
+      
+                proof :"mDVCipSvWmtYmrDRy5AgRJXff_QZQpmmFS2pmgt3Sl5_5Z6RDhiU5y3Kurrq3MgtFqWvWZKRaAgCBW3L_xiXnTSE_1K6cMBJ8PKlthrTdMXg4724q1kaIx9y-X0prkzF"
+    },
+    
+  }
+  
+  ){
+    id,
+    peerId,
+    createdTime,
+    controller,
+    approverDid,
+    system_approved,
+    organisationDID,
+    organisation_approved,
+    registrationState,
+    root,
+    invited_by,
+    graph,
+    proof,
+    blacklisted,
+    signature
+  }
+}
+`;
 
 const Signup = ({ ...props }) => {
   const [isMemonicScreen, setIsMemonicScreen] = useState(false);
@@ -37,8 +85,28 @@ const Signup = ({ ...props }) => {
   );
   const navigate = useNavigate();
 
-  useEffect(() => {
-    registerUser("+911234567890");
+  const [updateTodoResult, updateTodo] = useMutation(registerMutation);
+
+  useEffect(async () => {
+    const registerObj = testRegisterUser();
+    console.log("testRegisterUser", await registerObj);
+
+    // registerUser("+911234567890")
+    //   .then((res) => {
+    //     const {
+    //       id,
+    //       did,
+    //       role,
+    //       createdTime,
+    //       metaInformation,
+    //       proofOfPossession,
+    //       signature,
+    //     } = res;
+
+    //   })
+    //   .catch((err) => {
+    //     console.log(err);
+    //   });
   }, []);
 
   // handling data from inputbox
@@ -76,146 +144,127 @@ const Signup = ({ ...props }) => {
               <FaceRecoginitionPanel />
             </div>
           ) : (
-            <div className="signupCard">
-              <Card>
-                <div className="container">
-                  <div className="signup-card-head flex items-center justify-between w100">
-                    <div className="flex items-center ">
-                      <KeyboardBackspaceIcon
-                        onClick={() => navigate(-1)}
-                        className={"c-pointer"}
+            <SignUpWrapper>
+              {/* Enter phone number */}
+              {!isOtpSent && !isMemonicScreen && (
+                <div className="signup-card-body">
+                  <div>
+                    <SelectableInput
+                      inputValue={""}
+                      placeholder={"Enter Phone Number"}
+                      type="number"
+                      maxLength={10}
+                      getValue={({ value, selectedValue }) => {
+                        setPhone(value);
+                        setCountryCode(selectedValue);
+                      }}
+                      withSelectable={true}
+                    />
+                  </div>
+                  <div className="signup-btn">
+                    <Button
+                      outlined={false}
+                      title={"Verify"}
+                      onClick={() => {
+                        setIsOtpSent(true);
+                      }}
+                    />
+                  </div>
+                </div>
+              )}
+
+              {/* Enter OTP */}
+              {
+                //  popup for searching QR Code
+                // <SearchQRCode />
+
+                isOtpSent && !isMemonicScreen && (
+                  <div className="signup-card-body">
+                    <div>
+                      <SelectableInput
+                        inputValue={OTP}
+                        placeholder={"Enter OTP"}
+                        type="number"
+                        maxLength={6}
+                        getValue={({ value }) => setOTP(value)}
+                        withSelectable={false}
+                        selectIcon={otpImg}
+                        errText={invalidOTP && isOtpSent ? "Incorrect OTP" : ""}
                       />
                     </div>
-                    <div>
-                      {isMemonicScreen ? "Mnemonic password" : "Sign Up"}{" "}
-                    </div>
-                    <div></div>
                   </div>
+                )
+              }
 
-                  {/* Enter phone number */}
-                  {!isOtpSent && !isMemonicScreen && (
-                    <div className="signup-card-body">
-                      <div>
-                        <SelectableInput
-                          inputValue={""}
-                          placeholder={"Enter Phone Number"}
-                          type="number"
-                          maxLength={10}
-                          getValue={({ value, selectedValue }) => {
-                            setPhone(value);
-                            setCountryCode(selectedValue);
-                          }}
-                          withSelectable={true}
-                        />
-                      </div>
-                      <div className="signup-btn">
-                        <Button
-                          outlined={false}
-                          title={"Verify"}
-                          onClick={() => {
-                            setIsOtpSent(true);
-                          }}
-                        />
-                      </div>
-                    </div>
-                  )}
-
-                  {/* Enter OTP */}
-                  {
-                    //  popup for searching QR Code
-                    // <SearchQRCode />
-
-                    isOtpSent && !isMemonicScreen && (
-                      <div className="signup-card-body">
-                        <div>
-                          <SelectableInput
-                            inputValue={OTP}
-                            placeholder={"Enter OTP"}
-                            type="number"
-                            maxLength={6}
-                            getValue={({ value }) => setOTP(value)}
-                            withSelectable={false}
-                            selectIcon={otpImg}
-                            errText={
-                              invalidOTP && isOtpSent ? "Incorrect OTP" : ""
-                            }
-                          />
-                        </div>
-                      </div>
-                    )
-                  }
-
-                  {
-                    // memonic passwork/phone input
-                    <div className="signup-card-body">
-                      <div>
-                        {isMemonicScreen && !isMemonicScreen2 && (
-                          <DashedInput
-                            getValue={(d) => setMemonicPassword(d)}
-                            label="Set up a 6 digit pin to secure your mnemonic password"
-                          />
-                        )}
-                        {isMemonicScreen2 && (
-                          <DashedInput
-                            getValue={(d) => setMemonicPassword2(d)}
-                            label="Re-enter the 6 digit password"
-                          />
-                        )}
-                      </div>
-                    </div>
-                  }
-
-                  {/* Footer */}
-                  {isOtpSent && !isMemonicScreen && (
-                    <div className="signup-card-footer flex justify-evenly items-center flex-1 fd-column">
-                      {OTP.length === 6 && (
-                        <div className="signup-btn">
-                          <Button
-                            outlined={false}
-                            title={isMemonicScreen ? "Next" : "Continue"}
-                            onClick={() => {
-                              setIsMemonicScreen(true);
-                            }}
-                          />
-                        </div>
-                      )}
-
-                      <div className="label">
-                        <span>Didn’t receive OTP?</span>
-                        <span className="color-skyBlue c-pointer"> Resend</span>
-                      </div>
-                    </div>
-                  )}
-
-                  {isMemonicScreen && !isMemonicScreen2 && (
-                    <div className="signup-card-footer flex justify-evenly items-center flex-1 fd-column">
-                      <div className="signup-btn">
-                        <Button
-                          outlined={false}
-                          title={"Next"}
-                          onClick={() => {
-                            setIsMemonicScreen2(true);
-                          }}
-                        />
-                      </div>
-                    </div>
-                  )}
-                  {isMemonicScreen2 && (
-                    <div className="signup-card-footer flex justify-evenly items-center flex-1 fd-column">
-                      <div className="signup-btn">
-                        <Button
-                          outlined={false}
-                          title={"Next"}
-                          onClick={() => {
-                            setReadyForFaceRegistration(true);
-                          }}
-                        />
-                      </div>
-                    </div>
-                  )}
+              {
+                // memonic passwork/phone input
+                <div className="signup-card-body">
+                  <div>
+                    {isMemonicScreen && !isMemonicScreen2 && (
+                      <DashedInput
+                        getValue={(d) => setMemonicPassword(d)}
+                        label="Set up a 6 digit pin to secure your mnemonic password"
+                      />
+                    )}
+                    {isMemonicScreen2 && (
+                      <DashedInput
+                        getValue={(d) => setMemonicPassword2(d)}
+                        label="Re-enter the 6 digit password"
+                      />
+                    )}
+                  </div>
                 </div>
-              </Card>
-            </div>
+              }
+
+              {/* Footer */}
+              {isOtpSent && !isMemonicScreen && (
+                <div className="signup-card-footer flex justify-evenly items-center flex-1 fd-column">
+                  {OTP.length === 6 && (
+                    <div className="signup-btn">
+                      <Button
+                        outlined={false}
+                        title={isMemonicScreen ? "Next" : "Continue"}
+                        onClick={() => {
+                          setIsMemonicScreen(true);
+                        }}
+                      />
+                    </div>
+                  )}
+
+                  <div className="label">
+                    <span>Didn’t receive OTP?</span>
+                    <span className="color-skyBlue c-pointer"> Resend</span>
+                  </div>
+                </div>
+              )}
+
+              {isMemonicScreen && !isMemonicScreen2 && (
+                <div className="signup-card-footer flex justify-evenly items-center flex-1 fd-column">
+                  <div className="signup-btn">
+                    <Button
+                      outlined={false}
+                      title={"Next"}
+                      onClick={() => {
+                        setIsMemonicScreen2(true);
+                      }}
+                    />
+                  </div>
+                </div>
+              )}
+              {isMemonicScreen2 && (
+                <div className="signup-card-footer flex justify-evenly items-center flex-1 fd-column">
+                  <div className="signup-btn">
+                    <Button
+                      outlined={false}
+                      title={"Next"}
+                      onClick={() => {
+                        setReadyForFaceRegistration(true);
+                      }}
+                    />
+                  </div>
+                </div>
+              )}
+            </SignUpWrapper>
           )}
         </>
       )}
