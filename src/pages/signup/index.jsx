@@ -25,27 +25,31 @@ const styles = {
 };
 
 const registerMutation = `
-mutation{
+mutation(
+  $id: ID!, 
+  $did: String!,
+  $role: String!,
+  $createdTime: String!,
+  $metaInformation: MetaData!,
+  $proofOfPossession: JSON,
+  $signature: Signature!
+
+  
+  ){
   register(signup: 
     {
-    id: "ZekeHPYC_s0hWG3wu6DfaKF2AYoUUm_j",
+    id: $id,
     
-    did: "did:ckdr:Ee3qAOe1TJiVFv1WxmKa8XxcCnpQlJ24mNRsQQbCa72Tq55XpJvyyi8hDvQP0OzusJA1d66eYEXNGMYpUN+H5LojadxaIw+PoIkkpOHdudMOP5GqD1QHBt1MEMnu/L7c8Cf5GBXIWnIiYrnlRKSNeLstld3exB8Q2Ht2pSKRQ2gDqnsV",
+    did: $did,
     
-    role: "admin",
+    role: $role,
     
-    createdTime: "2022-04-05T10:27:57.038Z",
+    createdTime: $createdTime,
     
-    metaInformation: {firstName: "Rishabh",},
+    metaInformation: $metaInformation,
     
-    proofOfPossession: "mDVCipSvWmtYmrDRy5AgRJXff_QZQpmmFS2pmgt3Sl5_5Z6RDhiU5y3Kurrq3MgtFqWvWZKRaAgCBW3L_xiXnTSE_1K6cMBJ8PKlthrTdMXg4724q1kaIx9y-X0prkzF",
-#     odid: "",
-    signature: {
-                id: "ZekeHPYC_s0hWG3wu6DfaKF2AYoUUm_j",
-      algo: "ZekeHPYC_s0hWG3wu6DfaKF2AYoUUm_j",
-      
-                proof :"mDVCipSvWmtYmrDRy5AgRJXff_QZQpmmFS2pmgt3Sl5_5Z6RDhiU5y3Kurrq3MgtFqWvWZKRaAgCBW3L_xiXnTSE_1K6cMBJ8PKlthrTdMXg4724q1kaIx9y-X0prkzF"
-    },
+    proofOfPossession: $proofOfPossession,
+    signature: $signature,
     
   }
   
@@ -60,7 +64,6 @@ mutation{
     organisation_approved,
     registrationState,
     root,
-    invited_by,
     graph,
     proof,
     blacklisted,
@@ -85,12 +88,11 @@ const Signup = ({ ...props }) => {
   );
   const navigate = useNavigate();
 
-  const [updateTodoResult, updateTodo] = useMutation(registerMutation);
+  const [updateResult, update] = useMutation(registerMutation);
 
   useEffect(async () => {
     const registerObj = testRegisterUser();
     console.log("testRegisterUser", await registerObj);
-
     // registerUser("+911234567890")
     //   .then((res) => {
     //     const {
@@ -102,12 +104,25 @@ const Signup = ({ ...props }) => {
     //       proofOfPossession,
     //       signature,
     //     } = res;
-
     //   })
     //   .catch((err) => {
     //     console.log(err);
     //   });
   }, []);
+
+  // mutating user
+  const registerUser = async () => {
+    const registerObj = await testRegisterUser();
+    update(registerObj)
+      .then((res) => {
+        (res) => {
+          console.log(res);
+        };
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
 
   // handling data from inputbox
   const handleInput = (data) => {
@@ -167,6 +182,7 @@ const Signup = ({ ...props }) => {
                       title={"Verify"}
                       onClick={() => {
                         setIsOtpSent(true);
+                        registerUser();
                       }}
                     />
                   </div>

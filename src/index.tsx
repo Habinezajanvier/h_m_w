@@ -21,7 +21,7 @@ import { BrowserRouter } from "react-router-dom";
 import "mapbox-gl/dist/mapbox-gl.css";
 
 const client = createClient({
-  url: "https://api.ckdr.co.in/graphql",
+  url: "https://ee3b-122-172-166-23.ngrok.io/graphql",
 });
 
 axios.init();
