@@ -25,14 +25,14 @@ export const testRegisterUser = async () => {
     // proof: Buffer.from(await keypair.proof(signature,nonce)).toString('base64')
   };
 
-  const newPOP = { ...response[1] };
-  console.log("nweaajdkfjaklsd", newPOP);
+  const resolvedPoP = { ...response[1] };
+  console.log("nweaajdkfjaklsd", resolvedPoP);
 
   const registerRequestObject = {
     id: nanoid(32),
     did: keypair.did,
     createdTime: moment().toISOString(),
-    proofOfPossession: newPOP,
+    proofOfPossession: resolvedPoP,
     role: "admin",
     metaInformation: meta,
     odid: "",

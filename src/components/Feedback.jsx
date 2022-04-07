@@ -17,7 +17,7 @@ const Feedback = ({ onClose }) => {
   const [isSubmitted, setIsSubmitted] = useState(false);
   return (
     <Dialog
-      maxWidth={false}
+      maxWidth={"lg"}
       open={isOpen}
       color="primary"
       PaperProps={{

@@ -67,7 +67,7 @@ mutation(
     graph,
     proof,
     blacklisted,
-    signature
+    signature,
   }
 }
 `;

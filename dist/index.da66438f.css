@@ -1466,12 +1466,51 @@ ul {
   width: 100%;
 }
 
+.map-container .mapboxgl-popup {
+  max-width: 288px !important;
+}
+
+.map-container .mapboxgl-popup-content {
+  color: #56ccf2;
+  cursor: pointer;
+  background: #0009;
+  border: 2px solid #c4c4c467;
+  border-radius: 4px;
+  padding: 4px 12px;
+  font-family: Source Sans Pro;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 20px;
+}
+
+.map-container .mapboxgl-popup-tip {
+  border-top-color: #0006 !important;
+}
+
+.map-container .mapboxgl-popup-close-button {
+  display: none;
+}
+
 .map-body {
   height: 100%;
 }
 
 .mapboxgl-ctrl-bottom-left, .mapboxgl-ctrl-bottom-right {
   display: none !important;
+}
+
+.marker {
+  width: 50px;
+  height: 50px;
+  cursor: pointer;
+  background-image: url("https://avatars.githubusercontent.com/u/13369775?s=48&v=4");
+  background-size: cover;
+  border-radius: 50%;
+}
+
+.map-video-container .MuiPaper-root {
+  background-color: #000 !important;
 }
 
 .locationBar .location-activityList {

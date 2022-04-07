@@ -10,6 +10,7 @@ import profileImage from "../assets/images/man-avatar-md.png";
 import editProfileIc from "../assets/images/pencil-pad-edit-icon.svg";
 import Button from "./Button";
 import Sidebar from "./Sidebar";
+import weather from "../assets/images/weather.png";
 
 const HLabel = ({ icon, text, isLong, onClick }) => {
   return (
@@ -47,7 +48,7 @@ const Header = ({ onLocationClick }) => {
             />
             <HLabel
               isLong={false}
-              icon={"L"}
+              icon={<img src={weather} alt="weather" />}
               text={<span className="h-weather">23° C, Sunny</span>}
             />
           </div>

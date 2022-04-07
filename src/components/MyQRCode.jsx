@@ -13,7 +13,7 @@ const MyQRCode = ({ onClose }) => {
 
   return (
     <Dialog
-      maxWidth={false}
+      maxWidth={"lg"}
       open={isOpen}
       className="myqrcode"
       color="primary"
