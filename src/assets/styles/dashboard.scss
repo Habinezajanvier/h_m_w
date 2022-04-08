@@ -1,0 +1,377 @@
+.dashboard {
+    background: rgba(38, 40, 50, 0.8);
+    padding: 20px 20px 0 20px;
+    min-height: 100vh;
+    .dashboard-map-bg {
+      margin-top: 13px;
+      height: 88vh;
+      position: relative;
+    }
+  
+    .dashboard-side-panel,
+    .location-panel {
+      position: absolute;
+      width: 385px;
+      height: 100%;
+      right: 0;
+      bottom: 0;
+      overflow-y: scroll;
+      background: #24262e;
+      border-radius: 6px 0px 0px 6px;
+      padding: 18px 21px;
+  
+      &::-webkit-scrollbar {
+        width: 0;
+      }
+    }
+  
+    .panel-header-label {
+      font-family: "Source Sans Pro";
+      font-weight: 700;
+      font-size: 16px;
+      line-height: 30px;
+      color: rgba(228, 228, 231, 0.4);
+    }
+  
+    .panel-header-ext {
+      gap: 20px;
+    }
+  
+    .activities-list {
+      margin-top: 21px;
+  
+      display: flex;
+      flex-direction: column;
+      gap: 31px;
+    }
+  
+    .activity-label {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      .activity-title {
+        font-family: Source Sans Pro;
+        font-size: 16px;
+        font-weight: 400;
+        line-height: 20px;
+        color: rgba(228, 228, 231, 0.8);
+        display: flex;
+        align-items: center;
+        gap: 11px;
+      }
+      .activity-time {
+        font-family: Source Sans Pro;
+        font-size: 14px;
+        font-weight: 400;
+        line-height: 20px;
+        color: rgba(228, 228, 231, 0.4);
+      }
+    }
+  
+    .activity-info {
+      margin-top: 8px;
+      margin-left: 15px;
+      display: flex;
+      justify-content: space-between;
+      .activity-info-labels {
+        display: flex;
+        gap: 19px;
+  
+        .activity-member {
+          background: rgba(228, 228, 231, 0.2);
+          opacity: 0.5;
+          border-radius: 35px;
+          font-family: "Source Sans Pro";
+          font-style: normal;
+          font-weight: 600;
+          font-size: 12px;
+          line-height: 20px;
+          text-align: center;
+          padding: 2px 21px;
+          color: rgba(255, 255, 255, 0.8);
+        }
+  
+        .activity-priority {
+          font-family: "Source Sans Pro";
+          font-style: normal;
+          font-weight: 400;
+          font-size: 14px;
+          line-height: 20px;
+  
+          color: rgba(83, 215, 105, 0.8);
+        }
+      }
+    }
+    .acitivity-viewDoc {
+      font-family: Source Sans Pro;
+      font-size: 16px;
+      font-style: normal;
+      font-weight: 700;
+      line-height: 20px;
+      color: #018f6ad9;
+    }
+  
+    .detail-side-panel {
+      padding-right: 8px;
+    }
+    .activity-detail-view {
+      .panel-header-label {
+        gap: 15px;
+        margin-bottom: 16px;
+      }
+      .activity-label {
+        .device-name {
+          font-family: "Source Sans Pro";
+          font-style: normal;
+          font-weight: 600;
+          font-size: 16px;
+          line-height: 20px;
+          color: rgba(228, 228, 231, 0.85);
+        }
+      }
+  
+      .device-details-list {
+        margin-top: 13px;
+        padding-right: 10px;
+  
+        .rec-border {
+          border-left: 1px solid rgba(228, 228, 231, 0.2);
+          border-right: 1px solid rgba(228, 228, 231, 0.2);
+        }
+  
+        .device-details {
+          .device-detials-label {
+            margin-left: 5px;
+            font-family: "Source Sans Pro";
+            font-style: normal;
+            font-weight: 400;
+            font-size: 14px;
+            line-height: 20px;
+            color: rgba(228, 228, 231, 0.4);
+          }
+          .device-details-info {
+            font-family: "Source Sans Pro";
+            font-style: normal;
+            font-weight: 600;
+            font-size: 16px;
+            line-height: 20px;
+            text-align: center;
+            color: rgba(255, 255, 255, 0.8);
+          }
+        }
+      }
+  
+      .moreInfo {
+        padding-right: 10px;
+      }
+  
+      .moreInfo-title {
+        font-family: "Source Sans Pro";
+        font-style: normal;
+        font-weight: 400;
+        font-size: 16px;
+        line-height: 20px;
+        color: rgba(228, 228, 231, 0.8);
+        margin-top: 28px;
+      }
+  
+      .moreInfoLabel {
+        font-family: "Source Sans Pro";
+        font-style: normal;
+        font-weight: 400;
+        font-size: 14px;
+        line-height: 20px;
+        color: rgba(228, 228, 231, 0.4);
+        margin-top: 17px;
+        // margin-bottom: 15px;
+      }
+  
+      .moreInfoValue {
+        padding-top: 15px;
+        font-family: "Source Sans Pro";
+        font-style: normal;
+        font-weight: 400;
+        font-size: 16px;
+        line-height: 20px;
+        color: rgba(255, 255, 255, 0.8);
+        height: 51px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        img {
+          border-radius: 100%;
+          width: 35px;
+          height: 35px;
+        }
+      }
+    }
+  
+    .infoImages {
+      .infoImgTitle {
+        margin-top: 27px;
+        font-family: "Source Sans Pro";
+        font-style: normal;
+        font-weight: 400;
+        font-size: 14px;
+        line-height: 20px;
+        color: rgba(228, 228, 231, 0.8);
+      }
+  
+      .infoImgList {
+        display: flex;
+        align-items: center;
+        gap: 7px;
+        overflow-y: scroll;
+  
+        &::-webkit-scrollbar {
+          width: 0;
+        }
+      }
+  
+      .infoImgItem {
+        width: 204px;
+        height: 118px;
+        margin-top: 7px;
+      }
+    }
+    .peopleInvolved {
+      .moreInfo-title {
+        margin-top: 0px;
+      }
+    }
+  
+    .cryptoDetails {
+      padding: 26px 15px;
+      background: #22242c;
+      box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25), 0px 4px 4px rgba(0, 0, 0, 0.25),
+        inset 0px 4px 4px rgba(0, 0, 0, 0.25);
+  
+      margin-top: 26px;
+      .cryptoDetails-header {
+        gap: 15px;
+      }
+      .cryptoDetails-title {
+        font-family: "Source Sans Pro";
+        font-style: normal;
+        font-weight: 600;
+        font-size: 16px;
+        line-height: 20px;
+        color: rgba(228, 228, 231, 0.8);
+      }
+      .cryptoDetails-list {
+        .cryptoDetail-item {
+          display: flex;
+          flex-wrap: wrap;
+          // gap: 5px;
+        }
+  
+        .cryptoDetails-key,
+        .cryptoDetails-value {
+          font-family: "Source Sans Pro";
+          font-style: normal;
+          font-size: 14px;
+          line-height: 21px;
+          color: rgba(228, 228, 231, 0.8);
+        }
+  
+        .cryptoDetails-key {
+          font-weight: 700;
+        }
+        .cryptoDetails-value {
+          margin-left: 2px;
+          word-break: break-all;
+          font-weight: 400;
+          color: rgba(228, 228, 231, 0.6);
+        }
+      }
+    }
+  
+    .location-panel-exit {
+      position: absolute;
+      width: 42px;
+      height: 42px;
+      background: #24262e;
+      border-radius: 4px;
+      top: 0;
+      margin: 20px 10px;
+      svg {
+        color: #e4e4e7;
+      }
+    }
+  
+    .location-panel {
+      overflow-x: hidden;
+      padding: 16px 10px;
+      border-radius: 0;
+  
+      .location-activityList {
+        max-height: 438px;
+        padding: 12px 10px;
+  
+        overflow-y: scroll;
+        &::-webkit-scrollbar {
+          width: 0;
+        }
+  
+        background: #24262e;
+        box-shadow: inset 0px 0px 3px rgba(0, 0, 0, 0.25);
+      }
+  
+      .location-list {
+        gap: 10px;
+      }
+  
+      .location-item {
+        background: #1d1f27;
+        border-radius: 6px;
+        padding: 12px 14px;
+  
+        &:hover {
+          background: #067f61;
+        }
+      }
+  
+      .location-item-active {
+        background: #067f61;
+      }
+  
+      .location-item-details {
+        gap: 14px;
+      }
+  
+      .location-status {
+        position: relative;
+        width: 16px;
+        height: 16px;
+  
+        .location-status-signalimg {
+          height: 100%;
+          width: 100%;
+        }
+  
+        .location-signal-status {
+          position: absolute;
+          top: 60%;
+          left: 50%;
+        }
+      }
+  
+      .location-id {
+        font-family: "Source Sans Pro";
+        font-style: normal;
+        font-weight: 400;
+        font-size: 16px;
+        line-height: 20px;
+        color: rgba(228, 228, 231, 0.8);
+      }
+      .location-address {
+        font-family: "Source Sans Pro";
+        font-style: normal;
+        font-weight: 400;
+        font-size: 12px;
+        line-height: 20px;
+        color: rgba(255, 255, 255, 0.6);
+      }
+    }
+  }
+  

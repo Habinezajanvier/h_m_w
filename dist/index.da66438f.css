@@ -1083,19 +1083,19 @@ ul {
   padding: 0;
 }
 
-.home {
+.dashboard {
   min-height: 100vh;
   background: #262832cc;
   padding: 20px 20px 0;
 }
 
-.home .home-map-bg {
+.dashboard .dashboard-map-bg {
   height: 88vh;
   margin-top: 13px;
   position: relative;
 }
 
-.home .home-side-panel, .home .location-panel {
+.dashboard .dashboard-side-panel, .dashboard .location-panel {
   width: 385px;
   height: 100%;
   background: #24262e;
@@ -1107,11 +1107,11 @@ ul {
   overflow-y: scroll;
 }
 
-.home .home-side-panel::-webkit-scrollbar, .home .location-panel::-webkit-scrollbar {
+.dashboard .dashboard-side-panel::-webkit-scrollbar, .dashboard .location-panel::-webkit-scrollbar {
   width: 0;
 }
 
-.home .panel-header-label {
+.dashboard .panel-header-label {
   color: #e4e4e766;
   font-family: Source Sans Pro;
   font-size: 16px;
@@ -1119,24 +1119,24 @@ ul {
   line-height: 30px;
 }
 
-.home .panel-header-ext {
+.dashboard .panel-header-ext {
   gap: 20px;
 }
 
-.home .activities-list {
+.dashboard .activities-list {
   flex-direction: column;
   gap: 31px;
   margin-top: 21px;
   display: flex;
 }
 
-.home .activity-label {
+.dashboard .activity-label {
   justify-content: space-between;
   align-items: center;
   display: flex;
 }
 
-.home .activity-label .activity-title {
+.dashboard .activity-label .activity-title {
   color: #e4e4e7cc;
   align-items: center;
   gap: 11px;
@@ -1147,7 +1147,7 @@ ul {
   display: flex;
 }
 
-.home .activity-label .activity-time {
+.dashboard .activity-label .activity-time {
   color: #e4e4e766;
   font-family: Source Sans Pro;
   font-size: 14px;
@@ -1155,19 +1155,19 @@ ul {
   line-height: 20px;
 }
 
-.home .activity-info {
+.dashboard .activity-info {
   justify-content: space-between;
   margin-top: 8px;
   margin-left: 15px;
   display: flex;
 }
 
-.home .activity-info .activity-info-labels {
+.dashboard .activity-info .activity-info-labels {
   gap: 19px;
   display: flex;
 }
 
-.home .activity-info .activity-info-labels .activity-member {
+.dashboard .activity-info .activity-info-labels .activity-member {
   opacity: .5;
   text-align: center;
   color: #fffc;
@@ -1181,7 +1181,7 @@ ul {
   line-height: 20px;
 }
 
-.home .activity-info .activity-info-labels .activity-priority {
+.dashboard .activity-info .activity-info-labels .activity-priority {
   color: #53d769cc;
   font-family: Source Sans Pro;
   font-size: 14px;
@@ -1190,7 +1190,7 @@ ul {
   line-height: 20px;
 }
 
-.home .acitivity-viewDoc {
+.dashboard .acitivity-viewDoc {
   color: #018f6ad9;
   font-family: Source Sans Pro;
   font-size: 16px;
@@ -1199,16 +1199,16 @@ ul {
   line-height: 20px;
 }
 
-.home .detail-side-panel {
+.dashboard .detail-side-panel {
   padding-right: 8px;
 }
 
-.home .activity-detail-view .panel-header-label {
+.dashboard .activity-detail-view .panel-header-label {
   gap: 15px;
   margin-bottom: 16px;
 }
 
-.home .activity-detail-view .activity-label .device-name {
+.dashboard .activity-detail-view .activity-label .device-name {
   color: #e4e4e7d9;
   font-family: Source Sans Pro;
   font-size: 16px;
@@ -1217,17 +1217,17 @@ ul {
   line-height: 20px;
 }
 
-.home .activity-detail-view .device-details-list {
+.dashboard .activity-detail-view .device-details-list {
   margin-top: 13px;
   padding-right: 10px;
 }
 
-.home .activity-detail-view .device-details-list .rec-border {
+.dashboard .activity-detail-view .device-details-list .rec-border {
   border-left: 1px solid #e4e4e733;
   border-right: 1px solid #e4e4e733;
 }
 
-.home .activity-detail-view .device-details-list .device-details .device-detials-label {
+.dashboard .activity-detail-view .device-details-list .device-details .device-detials-label {
   color: #e4e4e766;
   margin-left: 5px;
   font-family: Source Sans Pro;
@@ -1237,7 +1237,7 @@ ul {
   line-height: 20px;
 }
 
-.home .activity-detail-view .device-details-list .device-details .device-details-info {
+.dashboard .activity-detail-view .device-details-list .device-details .device-details-info {
   text-align: center;
   color: #fffc;
   font-family: Source Sans Pro;
@@ -1247,11 +1247,11 @@ ul {
   line-height: 20px;
 }
 
-.home .activity-detail-view .moreInfo {
+.dashboard .activity-detail-view .moreInfo {
   padding-right: 10px;
 }
 
-.home .activity-detail-view .moreInfo-title {
+.dashboard .activity-detail-view .moreInfo-title {
   color: #e4e4e7cc;
   margin-top: 28px;
   font-family: Source Sans Pro;
@@ -1261,7 +1261,7 @@ ul {
   line-height: 20px;
 }
 
-.home .activity-detail-view .moreInfoLabel {
+.dashboard .activity-detail-view .moreInfoLabel {
   color: #e4e4e766;
   margin-top: 17px;
   font-family: Source Sans Pro;
@@ -1271,7 +1271,7 @@ ul {
   line-height: 20px;
 }
 
-.home .activity-detail-view .moreInfoValue {
+.dashboard .activity-detail-view .moreInfoValue {
   color: #fffc;
   height: 51px;
   justify-content: center;
@@ -1285,13 +1285,13 @@ ul {
   display: flex;
 }
 
-.home .activity-detail-view .moreInfoValue img {
+.dashboard .activity-detail-view .moreInfoValue img {
   width: 35px;
   height: 35px;
   border-radius: 100%;
 }
 
-.home .infoImages .infoImgTitle {
+.dashboard .infoImages .infoImgTitle {
   color: #e4e4e7cc;
   margin-top: 27px;
   font-family: Source Sans Pro;
@@ -1301,39 +1301,39 @@ ul {
   line-height: 20px;
 }
 
-.home .infoImages .infoImgList {
+.dashboard .infoImages .infoImgList {
   align-items: center;
   gap: 7px;
   display: flex;
   overflow-y: scroll;
 }
 
-.home .infoImages .infoImgList::-webkit-scrollbar {
+.dashboard .infoImages .infoImgList::-webkit-scrollbar {
   width: 0;
 }
 
-.home .infoImages .infoImgItem {
+.dashboard .infoImages .infoImgItem {
   width: 204px;
   height: 118px;
   margin-top: 7px;
 }
 
-.home .peopleInvolved .moreInfo-title {
+.dashboard .peopleInvolved .moreInfo-title {
   margin-top: 0;
 }
 
-.home .cryptoDetails {
+.dashboard .cryptoDetails {
   background: #22242c;
   margin-top: 26px;
   padding: 26px 15px;
   box-shadow: 0 4px 4px #00000040, 0 4px 4px #00000040, inset 0 4px 4px #00000040;
 }
 
-.home .cryptoDetails .cryptoDetails-header {
+.dashboard .cryptoDetails .cryptoDetails-header {
   gap: 15px;
 }
 
-.home .cryptoDetails .cryptoDetails-title {
+.dashboard .cryptoDetails .cryptoDetails-title {
   color: #e4e4e7cc;
   font-family: Source Sans Pro;
   font-size: 16px;
@@ -1342,12 +1342,12 @@ ul {
   line-height: 20px;
 }
 
-.home .cryptoDetails .cryptoDetails-list .cryptoDetail-item {
+.dashboard .cryptoDetails .cryptoDetails-list .cryptoDetail-item {
   flex-wrap: wrap;
   display: flex;
 }
 
-.home .cryptoDetails .cryptoDetails-list .cryptoDetails-key, .home .cryptoDetails .cryptoDetails-list .cryptoDetails-value {
+.dashboard .cryptoDetails .cryptoDetails-list .cryptoDetails-key, .dashboard .cryptoDetails .cryptoDetails-list .cryptoDetails-value {
   color: #e4e4e7cc;
   font-family: Source Sans Pro;
   font-size: 14px;
@@ -1355,18 +1355,18 @@ ul {
   line-height: 21px;
 }
 
-.home .cryptoDetails .cryptoDetails-list .cryptoDetails-key {
+.dashboard .cryptoDetails .cryptoDetails-list .cryptoDetails-key {
   font-weight: 700;
 }
 
-.home .cryptoDetails .cryptoDetails-list .cryptoDetails-value {
+.dashboard .cryptoDetails .cryptoDetails-list .cryptoDetails-value {
   word-break: break-all;
   color: #e4e4e799;
   margin-left: 2px;
   font-weight: 400;
 }
 
-.home .location-panel-exit {
+.dashboard .location-panel-exit {
   width: 42px;
   height: 42px;
   background: #24262e;
@@ -1376,17 +1376,17 @@ ul {
   top: 0;
 }
 
-.home .location-panel-exit svg {
+.dashboard .location-panel-exit svg {
   color: #e4e4e7;
 }
 
-.home .location-panel {
+.dashboard .location-panel {
   border-radius: 0;
   padding: 16px 10px;
   overflow-x: hidden;
 }
 
-.home .location-panel .location-activityList {
+.dashboard .location-panel .location-activityList {
   max-height: 438px;
   background: #24262e;
   padding: 12px 10px;
@@ -1394,46 +1394,46 @@ ul {
   box-shadow: inset 0 0 3px #00000040;
 }
 
-.home .location-panel .location-activityList::-webkit-scrollbar {
+.dashboard .location-panel .location-activityList::-webkit-scrollbar {
   width: 0;
 }
 
-.home .location-panel .location-list {
+.dashboard .location-panel .location-list {
   gap: 10px;
 }
 
-.home .location-panel .location-item {
+.dashboard .location-panel .location-item {
   background: #1d1f27;
   border-radius: 6px;
   padding: 12px 14px;
 }
 
-.home .location-panel .location-item:hover, .home .location-panel .location-item-active {
+.dashboard .location-panel .location-item:hover, .dashboard .location-panel .location-item-active {
   background: #067f61;
 }
 
-.home .location-panel .location-item-details {
+.dashboard .location-panel .location-item-details {
   gap: 14px;
 }
 
-.home .location-panel .location-status {
+.dashboard .location-panel .location-status {
   width: 16px;
   height: 16px;
   position: relative;
 }
 
-.home .location-panel .location-status .location-status-signalimg {
+.dashboard .location-panel .location-status .location-status-signalimg {
   height: 100%;
   width: 100%;
 }
 
-.home .location-panel .location-status .location-signal-status {
+.dashboard .location-panel .location-status .location-signal-status {
   position: absolute;
   top: 60%;
   left: 50%;
 }
 
-.home .location-panel .location-id {
+.dashboard .location-panel .location-id {
   color: #e4e4e7cc;
   font-family: Source Sans Pro;
   font-size: 16px;
@@ -1442,7 +1442,7 @@ ul {
   line-height: 20px;
 }
 
-.home .location-panel .location-address {
+.dashboard .location-panel .location-address {
   color: #fff9;
   font-family: Source Sans Pro;
   font-size: 12px;

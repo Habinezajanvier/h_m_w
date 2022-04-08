@@ -1,10 +1,10 @@
-import { Signin, Signup } from './pages'
+import { Signin, Signup } from "./pages";
 import { Routes, Route, Link } from "react-router-dom";
 import "./assets/styles/master.scss";
 import "./assets/styles/index.css";
-import Splash from './pages/splash';
-import Test from './pages/test';
-import Home from './pages/home';
+import Splash from "./pages/splash";
+import Test from "./pages/test";
+import Dashboard from "./pages/dashboard";
 
 function App() {
   return (
@@ -14,7 +14,7 @@ function App() {
         <Route path="/signup" element={<Signup />} />
         <Route path="/splash" element={<Splash />} />
         <Route path="/test" element={<Test />} />
-        <Route path="/" element={<Home />} />
+        <Route path="/dashboard" element={<Dashboard />} />
       </Routes>
     </div>
   );

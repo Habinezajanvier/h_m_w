@@ -72,6 +72,14 @@ mutation(
 }
 `;
 
+const sendOTPMutation = `
+mutation(
+  $target: String!, 
+){
+  otp(target: $target)
+}
+`;
+
 const Signup = ({ ...props }) => {
   const [isMemonicScreen, setIsMemonicScreen] = useState(false);
   const [isMemonicScreen2, setIsMemonicScreen2] = useState(false);
@@ -89,10 +97,11 @@ const Signup = ({ ...props }) => {
   const navigate = useNavigate();
 
   const [updateResult, update] = useMutation(registerMutation);
+  const [updateOTPResult, sendOTP] = useMutation(sendOTPMutation);
 
   useEffect(async () => {
-    const registerObj = testRegisterUser();
-    console.log("testRegisterUser", await registerObj);
+    // const registerObj = testRegisterUser();
+    // console.log("testRegisterUser", await registerObj);
     // registerUser("+911234567890")
     //   .then((res) => {
     //     const {
@@ -112,15 +121,28 @@ const Signup = ({ ...props }) => {
 
   // mutating user
   const registerUser = async () => {
-    const registerObj = await testRegisterUser();
-    update(registerObj)
+    // const registerObj = await testRegisterUser();
+    // update(registerObj)
+    //   .then((res) => {
+    //     (res) => {
+    //       console.log(res);
+    //     };
+    //   })
+    //   .catch((err) => {
+    //     console.log(err);
+    //   });
+
+    handleSendOTPRequest();
+  };
+
+  // sendOTP mutation
+  const handleSendOTPRequest = () => {
+    sendOTP({ target: `${countryCode}${phone}` })
       .then((res) => {
-        (res) => {
-          console.log(res);
-        };
+        console.log("OTP sent", res);
       })
       .catch((err) => {
-        console.log(err);
+        console.log("err", err);
       });
   };
 
