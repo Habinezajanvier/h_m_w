@@ -4,7 +4,6 @@ import { Provider } from "react-redux";
 import { ThemeProvider } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
 import * as axios from "./config/axios";
-import { createClient, Provider as URQLProvider } from "urql";
 
 // Relative imports
 import App from "./App";
@@ -19,9 +18,32 @@ import store from "./redux/store";
 import theme from "./config/theme";
 import { BrowserRouter } from "react-router-dom";
 import "mapbox-gl/dist/mapbox-gl.css";
+import {
+  createClient,
+  defaultExchanges,
+  subscriptionExchange,
+  Provider as URQLProvider,
+} from "urql";
+import { createClient as createWSClient } from "graphql-ws";
 
+// subscription ws client connection
+const wsClient = createWSClient({
+  url: process.env.REACT_APP_GRAPHQL_WSS_ENDPOINT,
+});
+
+// graphql client connection
 const client = createClient({
-  url: "https://ee3b-122-172-166-23.ngrok.io/graphql",
+  url: process.env.REACT_APP_GRAPHQL_ENDPOINT,
+  exchanges: [
+    ...defaultExchanges,
+    subscriptionExchange({
+      forwardSubscription: (operation) => ({
+        subscribe: (sink) => ({
+          unsubscribe: wsClient.subscribe(operation, sink),
+        }),
+      }),
+    }),
+  ],
 });
 
 axios.init();

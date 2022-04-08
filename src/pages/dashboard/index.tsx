@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "../../assets/styles/dashboard.scss";
 import Header from "../../components/Header";
 import Map from "../../components/DrawMap";
@@ -20,14 +20,57 @@ import redDotIcon from "../../assets/images/red-circular-dot.png";
 import greenDotIcon from "../../assets/images/green-circular-dot.svg";
 import CollapsibleLocationBar from "../../components/CollapsibleLocationBar";
 import crystalIcon from "../../assets/images/hexgon-crystal.png";
+import { useSubscription } from "urql";
 
-const dummyMapData = {};
+const activitiesSubscription = `
+subscription{
+  activities(topic: "activities",memberdid: "did:ckdr:Ee3qAFcbDNAdq9GvYG9pBPkgr3Q3C2NqbScjdxhXymoF53VNkyVbR8p1O3jgtIVRhb6Yv9QRNFdsf1uPfANviuR5pH0BoJdmCOcZitfZvcXmp5+gF1KHlRaUTb7PRBws+9iUcmPCl166ad8Q10TCTC8FapG5nonsv071Z30ODSHCYPGm" ){
+    id,
+    type,
+    timestamp,
+    notified,
+    state,
+    incidentID,
+    isIncident,
+    device_stream_id,
+    location{longitude, kinect,latitude},
+    subActivity,
+    activity_start_time,
+    activity_end_time,
+    detections{totalNumberOfPeople,totalNumberOfUnknowns},
+    related_sensors,
+    documentList,
+    relatedActivity,
+    signature,
+    proof,
+    witness,
+    
+    
+    
+  }
+}
+`;
+
+const handleSubscription = (activities = [], response: { activities: any }) => {
+  return [response.activities, ...activities];
+};
 
 const Dashboard = () => {
   const [detailView, setDetailVidew] = useState(false);
   const [isActivityShutterDown, setIsActivityShutterDown] = useState(false);
   const [isLocationView, setIsLocationView] = useState(false);
   const [LocTrackerIcon, setLocTrackerIcon] = useState(null);
+
+  const [res] = useSubscription(
+    { query: activitiesSubscription },
+    handleSubscription
+  );
+
+  useEffect(() => {
+    if (res.data) {
+      console.log(res.data);
+    }
+  }, [res]);
 
   return (
     <div className="dashboard">
