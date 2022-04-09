@@ -91,7 +91,7 @@ const Dashboard = () => {
   useEffect(() => {
     setTimeout(() => {
       setIsActivitySubPaused(true);
-    }, 1500);
+    }, 10000);
 
     // console.log(activitiesTitle["intrusion"]);
   }, []);
