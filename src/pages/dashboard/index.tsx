@@ -21,10 +21,15 @@ import greenDotIcon from "../../assets/images/green-circular-dot.svg";
 import CollapsibleLocationBar from "../../components/CollapsibleLocationBar";
 import crystalIcon from "../../assets/images/hexgon-crystal.png";
 import { useSubscription } from "urql";
+import { activitiesTitle, ActivityType } from "../../utils/activitiesList";
+import moment from "moment";
 
 const activitiesSubscription = `
-subscription{
-  activities(topic: "activities",memberdid: "did:ckdr:Ee3qAFcbDNAdq9GvYG9pBPkgr3Q3C2NqbScjdxhXymoF53VNkyVbR8p1O3jgtIVRhb6Yv9QRNFdsf1uPfANviuR5pH0BoJdmCOcZitfZvcXmp5+gF1KHlRaUTb7PRBws+9iUcmPCl166ad8Q10TCTC8FapG5nonsv071Z30ODSHCYPGm" ){
+subscription(
+  $topic: String!,
+  $memberdid: String
+){
+  activities(topic: $topic ,memberdid: $memberdid ){
     id,
     type,
     timestamp,
@@ -37,7 +42,7 @@ subscription{
     subActivity,
     activity_start_time,
     activity_end_time,
-    detections{totalNumberOfPeople,totalNumberOfUnknowns},
+    detections{totalNumberOfPeople,totalNumberOfUnknowns, priority},
     related_sensors,
     documentList,
     relatedActivity,
@@ -60,17 +65,48 @@ const Dashboard = () => {
   const [isActivityShutterDown, setIsActivityShutterDown] = useState(false);
   const [isLocationView, setIsLocationView] = useState(false);
   const [LocTrackerIcon, setLocTrackerIcon] = useState(null);
+  const [isActivitySubPaused, setIsActivitySubPaused] = useState(false);
+  const [activityList, setActivityList] = useState([]);
+  const subscriptionVariables = {
+    topic: "activities",
+    memberdid:
+      "did:ckdr:Ee3qAFcbDNAdq9GvYG9pBPkgr3Q3C2NqbScjdxhXymoF53VNkyVbR8p1O3jgtIVRhb6Yv9QRNFdsf1uPfANviuR5pH0BoJdmCOcZitfZvcXmp5+gF1KHlRaUTb7PRBws+9iUcmPCl166ad8Q10TCTC8FapG5nonsv071Z30ODSHCYPGm",
+  };
 
   const [res] = useSubscription(
-    { query: activitiesSubscription },
+    {
+      query: activitiesSubscription,
+      variables: subscriptionVariables,
+      pause: isActivitySubPaused,
+    },
     handleSubscription
   );
 
   useEffect(() => {
     if (res.data) {
-      console.log(res.data);
+      setActivityList(res.data);
     }
   }, [res]);
+
+  useEffect(() => {
+    setTimeout(() => {
+      setIsActivitySubPaused(true);
+    }, 1500);
+
+    // console.log(activitiesTitle["intrusion"]);
+  }, []);
+
+  // useEffect(() => {
+  //   activityList.map((e, i) => {
+  //     let d1 = moment(e.activity_start_time);
+
+  //     let d2 = moment();
+
+  //     var diff = d2.diff(d1, "days");
+
+  //     console.log(diff, d1, d2);
+  //   });
+  // }, [activityList]);
 
   return (
     <div className="dashboard">
@@ -101,7 +137,7 @@ const Dashboard = () => {
                   </div>
                 </div>
                 <ul className="activities-list">
-                  {[...Array(10)].map((e, i) => (
+                  {activityList.map((e, i) => (
                     <li className="activity-item" key={i}>
                       <div className="activity-label">
                         <div className="activity-title">
@@ -114,10 +150,31 @@ const Dashboard = () => {
                             className="c-pointer"
                             onClick={() => setDetailVidew(true)}
                           >
-                            Your Geo location is being tracked
+                            {activitiesTitle[e.type]}
                           </span>
                         </div>
-                        <div className="activity-time c-pointer">2 min ago</div>
+                        <div className="activity-time c-pointer">
+                          {moment().diff(
+                            moment(e.activity_start_time),
+                            "days"
+                          ) > 0
+                            ? `${moment().diff(
+                                moment(e.activity_start_time),
+                                "days"
+                              )} days ago`
+                            : moment().diff(
+                                moment(e.activity_start_time),
+                                "hours"
+                              ) > 0
+                            ? `${moment().diff(
+                                moment(e.activity_start_time),
+                                "hours"
+                              )} hrs ago`
+                            : `${moment().diff(
+                                moment(e.activity_start_time),
+                                "minutes"
+                              )} min ago`}
+                        </div>
                       </div>
                       <div className="activity-info">
                         <div className="activity-info-labels">
@@ -125,7 +182,8 @@ const Dashboard = () => {
                             Members
                           </div>
                           <div className="activity-priority c-pointer">
-                            Priority 0
+                            {"Priority "}
+                            {e.detections.priority ? e.detections.priority : 0}
                           </div>
                         </div>
                         <div className="acitivity-viewDoc c-pointer">
