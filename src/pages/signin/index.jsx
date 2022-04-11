@@ -9,6 +9,42 @@ import { useState } from "react";
 import DashedInput from "../../components/DashedInput";
 import loadingImg from "../../assets/images/loading.png";
 import closeImage from "../../assets/images/close-red.svg";
+import { getSigninTokens } from "./getSigninTokens";
+import { useMutation } from "urql";
+
+const signinMutation = `
+mutation(
+  $id: ID!, 
+  $did: String!,
+  $role: String!,
+  $createdTime: String!,
+  $proofOfPossession: JSON,
+  $signature: Signature!
+) {
+ login(login:{
+  id: "kW4yKfchcBJ_rvoj1ALIJe1f",
+  createdTime: "",
+  proofOfPossession: $proofOfPossession,
+    graph: {},
+    root: "",
+    did: $did,
+    proof:{},
+    event: {},
+    role: "admin"
+    signature: $signature
+  }
+  ){
+    id,
+    accesstoken,
+    createdTime,
+    organisationDID,
+    approved,
+    approverDid,
+    registrationState,
+  }
+}
+
+`;
 
 const Signin = ({ ...props }) => {
   const [isMemonicScreen, setIsMemonicScreen] = useState(false);
@@ -17,15 +53,18 @@ const Signin = ({ ...props }) => {
   const [searchingPassOnDevice, setSearchingPassOndevice] = useState(false);
   const [memonicPasswordNotFound, setMemonicPasswordNotFound] = useState(false);
   const [allowMemonicPassSearch, setAllowMemonicPassSearch] = useState(false);
+  const [updateSigninReq, signinReq] = useMutation(signinMutation);
 
   const handlePhone = (value, selectedValue) => {
     setPhone(value);
     setCountryCode(selectedValue);
   };
 
-  const handleSingIn = () => {
-    
-  }
+  const handleSingIn = async () => {
+    const signinTokens = await getSigninTokens();
+    console.log(signinTokens);
+    // signinReq()
+  };
 
   return (
     <div className="login">
@@ -99,6 +138,7 @@ const Signin = ({ ...props }) => {
                     <SelectableInput
                       placeholder="Enter Phone Number"
                       type="number"
+                      maxLength={10}
                       value={phone}
                       getValue={({ value, selectedValue }) =>
                         handlePhone(value, selectedValue)

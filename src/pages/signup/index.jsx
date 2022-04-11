@@ -76,15 +76,16 @@ const sendOTPMutation = `
 mutation(
   $target: String!, 
 ){
-  otp(target: $target)
+  otp(target: $target, regenerate: true)
 }
 `;
 
 const verifyOTPMutation = `
 mutation(
+  $token: String!,
   $target: String!, 
 ){
-  verifyOTP(target: $target)
+  verifyotp(token: $token, target: $target)
 }
 `;
 
@@ -131,31 +132,18 @@ const Signup = ({ ...props }) => {
     //   });
   }, []);
 
-  // mutating user
-  const registerUser = async () => {
-    // const registerObj = await testRegisterUser();
-    // update(registerObj)
-    //   .then((res) => {
-    //     (res) => {
-    //       console.log(res);
-    //     };
-    //   })
-    //   .catch((err) => {
-    //     console.log(err);
-    //   });
-
-    handleSendOTPRequest();
-  };
-
   // sendOTP mutation
   const handleSendOTPRequest = () => {
     sendOTP({ target: `${countryCode}${phone}` })
       .then((res) => {
         console.log("OTP sent", res);
-        setIsOtpSent(true);
-        setTimeout(() => {
-          setOTP("123456");
-        }, 1000);
+        if (res.data !== undefined) {
+          setIsOtpSent(true);
+          let newOTP = res?.data?.otp;
+          setTimeout(() => {
+            setOTP(newOTP);
+          }, 1000);
+        }
       })
       .catch((err) => {
         console.log("err", err);
@@ -184,11 +172,27 @@ const Signup = ({ ...props }) => {
     setCountryCode(selectedValue);
   };
 
+  // mutating user
+  const registerUser = async () => {
+    // const registerObj = await testRegisterUser();
+    // update(registerObj)
+    //   .then((res) => {
+    //     (res) => {
+    //       console.log(res);
+    //     };
+    //   })
+    //   .catch((err) => {
+    //     console.log(err);
+    //   });
+  };
+
   const handleVerifyOTP = () => {
-    verifyOTP({ target: `${countryCode}${phone}` })
+    verifyOTP({ token: OTP, target: `${countryCode}${phone}` })
       .then((res) => {
-        console.log("OTP verification", res);
-        setIsMemonicScreen(true);
+        if (res?.data?.verifyotp) {
+          console.log("OTP verification", res);
+          setIsMemonicScreen(true);
+        }
       })
       .catch((err) => {
         console.log("err", err);
@@ -196,14 +200,32 @@ const Signup = ({ ...props }) => {
   };
 
   const handleKeyPairGeneration = async () => {
-    const registerObj = await testRegisterUser(
+    let registerObj = await testRegisterUser(
       `${countryCode}${phone}`,
       memonicPassword
     );
-
     setMnenominPhrase(registerObj?.mnemonicPhrase);
-    setShowMnemonicPhrase(true);
-    console.log(registerObj);
+
+    delete registerObj?.mnemonicPhrase;
+
+    update(registerObj)
+      .then((res) => {
+        console.log(res?.data);
+
+        if (res?.data) {
+          // const storedInCred = storeInCredManager(
+          //   registerObj.id,
+          //   registerObj.did,
+          //   registerObj.metaInformation.firstName,
+
+          // );
+          setShowMnemonicPhrase(true);
+          console.log(registerObj);
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   return (
@@ -260,7 +282,7 @@ const Signup = ({ ...props }) => {
                   <div className="signup-card-body">
                     <div>
                       <SelectableInput
-                        inputValue={OTP}
+                        inputValue={OTP?.toString()}
                         placeholder={"Enter OTP"}
                         type="number"
                         maxLength={6}
