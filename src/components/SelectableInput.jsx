@@ -38,7 +38,7 @@ const SelectableInput = ({
 
   useEffect(() => {
     inputValue && setValue(inputValue);
-  }, []);
+  }, [inputValue]);
 
   return (
     <div className="sInputContainer">

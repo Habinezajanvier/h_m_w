@@ -3,9 +3,11 @@ import { createKeypair, KeyPairType } from "../../crypto/KeyPair";
 import { nanoid } from "nanoid";
 import moment from "moment";
 
-export const testRegisterUser = async () => {
+export const testRegisterUser = async (
+  target: string,
+  mnemonicPassword: string
+) => {
   const keypair = createKeypair();
-  const target = "+918296133177";
   const meta = {
     firstName: "bhavish",
     email: "bhavish@happymonk.co",
@@ -13,7 +15,8 @@ export const testRegisterUser = async () => {
   };
   const nonce = randomBytes(24);
 
-  await keypair.derive(target, KeyPairType.HYBRID);
+  const mnemonicPhrase = await keypair.derive(target, KeyPairType.HYBRID);
+
   const sig = keypair.blsSign([Buffer.from(JSON.stringify(meta))]);
   const pop = keypair.createPop();
   const response = await Promise.all([sig, pop]);
@@ -28,6 +31,8 @@ export const testRegisterUser = async () => {
   const resolvedPoP = { ...response[1] };
   console.log("nweaajdkfjaklsd", resolvedPoP);
 
+  // const passPhrase = await keypair.encodePkcs8(mnemonicPassword);
+
   const registerRequestObject = {
     id: nanoid(32),
     did: keypair.did,
@@ -39,6 +44,7 @@ export const testRegisterUser = async () => {
     invited_by: "",
     event: undefined,
     signature: signature,
+    mnemonicPhrase: mnemonicPhrase.mnemonic,
   };
 
   return registerRequestObject;

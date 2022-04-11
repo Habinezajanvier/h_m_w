@@ -40,27 +40,49 @@
 
     .signup-card-footer {
       gap: 25px;
-
-    
     }
 
     .signup-btn {
-        width: fit-content;
-      }
+      width: fit-content;
+    }
+  }
+
+  .mnemonicPhraseContainer {
+    border: 1px solid rgba(228, 228, 231, 0.4);
+
+    font-weight: 700;
+    line-height: 22px;
+    color: rgba(228, 228, 231, 0.8);
+
+    height: 125px;
+    padding: 10px;
+  }
+  .mnemonicPhraseLabel {
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 20px;
+    text-align: left;
+    margin-bottom: 5px;
+
+    color: rgba(228, 228, 231, 0.4);
+  }
+  .mnemonicPhraseLabel,
+  .mnemonicPhraseContainer {
+    width: 318px;
+    font-family: Source Sans Pro;
+    font-size: 16px;
   }
 }
 
-
-
-.registrationLoading{
-  img{
+.registrationLoading {
+  img {
     border-radius: 8px;
   }
-font-size: 18px;
-font-style: normal;
-font-weight: 700;
-line-height: 20px;
-text-align: center;
-color: rgba(228, 228, 231, 0.8);
-gap: 12px;
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 20px;
+  text-align: center;
+  color: rgba(228, 228, 231, 0.8);
+  gap: 12px;
 }

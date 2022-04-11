@@ -80,6 +80,14 @@ mutation(
 }
 `;
 
+const verifyOTPMutation = `
+mutation(
+  $target: String!, 
+){
+  verifyOTP(target: $target)
+}
+`;
+
 const Signup = ({ ...props }) => {
   const [isMemonicScreen, setIsMemonicScreen] = useState(false);
   const [isMemonicScreen2, setIsMemonicScreen2] = useState(false);
@@ -91,6 +99,9 @@ const Signup = ({ ...props }) => {
   const [invalidOTP, setInvalidOTP] = useState(false);
   const [OTP, setOTP] = useState("");
   const [regProcessing, setRegProcessing] = useState(false);
+  const [generateMnenominPhrase, setGenerateMnenominPhrase] = useState(false);
+  const [showMnemonicPhrase, setShowMnemonicPhrase] = useState(false);
+  const [mnenominPhrase, setMnenominPhrase] = useState("");
   const [readyForFaceRegistration, setReadyForFaceRegistration] = useState(
     false
   );
@@ -98,6 +109,7 @@ const Signup = ({ ...props }) => {
 
   const [updateResult, update] = useMutation(registerMutation);
   const [updateOTPResult, sendOTP] = useMutation(sendOTPMutation);
+  const [updateVerifyOTPResult, verifyOTP] = useMutation(verifyOTPMutation);
 
   useEffect(async () => {
     // const registerObj = testRegisterUser();
@@ -140,6 +152,10 @@ const Signup = ({ ...props }) => {
     sendOTP({ target: `${countryCode}${phone}` })
       .then((res) => {
         console.log("OTP sent", res);
+        setIsOtpSent(true);
+        setTimeout(() => {
+          setOTP("123456");
+        }, 1000);
       })
       .catch((err) => {
         console.log("err", err);
@@ -162,9 +178,32 @@ const Signup = ({ ...props }) => {
     }
   };
 
-  const handlePhoneInput = (data) => {
-    const { value, selectedValue } = data;
-    setPhone(`${value}${selectedValue}`);
+  const handlePhoneInput = (phoneNumber) => {
+    const { value, selectedValue } = phoneNumber;
+    setPhone(value);
+    setCountryCode(selectedValue);
+  };
+
+  const handleVerifyOTP = () => {
+    verifyOTP({ target: `${countryCode}${phone}` })
+      .then((res) => {
+        console.log("OTP verification", res);
+        setIsMemonicScreen(true);
+      })
+      .catch((err) => {
+        console.log("err", err);
+      });
+  };
+
+  const handleKeyPairGeneration = async () => {
+    const registerObj = await testRegisterUser(
+      `${countryCode}${phone}`,
+      memonicPassword
+    );
+
+    setMnenominPhrase(registerObj?.mnemonicPhrase);
+    setShowMnemonicPhrase(true);
+    console.log(registerObj);
   };
 
   return (
@@ -187,26 +226,27 @@ const Signup = ({ ...props }) => {
                 <div className="signup-card-body">
                   <div>
                     <SelectableInput
-                      inputValue={""}
+                      inputValue={phone?.toString()}
                       placeholder={"Enter Phone Number"}
                       type="number"
                       maxLength={10}
-                      getValue={({ value, selectedValue }) => {
-                        setPhone(value);
-                        setCountryCode(selectedValue);
+                      getValue={(phoneNumber) => {
+                        handlePhoneInput(phoneNumber);
                       }}
                       withSelectable={true}
                     />
                   </div>
                   <div className="signup-btn">
-                    <Button
-                      outlined={false}
-                      title={"Verify"}
-                      onClick={() => {
-                        setIsOtpSent(true);
-                        registerUser();
-                      }}
-                    />
+                    {phone?.toString()?.length === 10 && (
+                      <Button
+                        outlined={false}
+                        title={"Verify"}
+                        onClick={() => {
+                          handleSendOTPRequest();
+                          // registerUser();
+                        }}
+                      />
+                    )}
                   </div>
                 </div>
               )}
@@ -244,7 +284,7 @@ const Signup = ({ ...props }) => {
                         label="Set up a 6 digit pin to secure your mnemonic password"
                       />
                     )}
-                    {isMemonicScreen2 && (
+                    {isMemonicScreen2 && !showMnemonicPhrase && (
                       <DashedInput
                         getValue={(d) => setMemonicPassword2(d)}
                         label="Re-enter the 6 digit password"
@@ -254,16 +294,29 @@ const Signup = ({ ...props }) => {
                 </div>
               }
 
+              {showMnemonicPhrase && (
+                <>
+                  <label className="mnemonicPhraseLabel">
+                    Your mnemonic phrase is
+                  </label>
+                  <div className="mnemonicPhraseContainer">
+                    {mnenominPhrase}
+                  </div>
+                </>
+              )}
+
               {/* Footer */}
               {isOtpSent && !isMemonicScreen && (
                 <div className="signup-card-footer flex justify-evenly items-center flex-1 fd-column">
-                  {OTP.length === 6 && (
+                  {OTP?.toString()?.length === 6 && (
                     <div className="signup-btn">
                       <Button
                         outlined={false}
                         title={isMemonicScreen ? "Next" : "Continue"}
                         onClick={() => {
-                          setIsMemonicScreen(true);
+                          isMemonicScreen
+                            ? setIsMemonicScreen(true)
+                            : handleVerifyOTP();
                         }}
                       />
                     </div>
@@ -289,7 +342,22 @@ const Signup = ({ ...props }) => {
                   </div>
                 </div>
               )}
-              {isMemonicScreen2 && (
+              {isMemonicScreen2 && !showMnemonicPhrase && (
+                <div className="signup-card-footer flex justify-evenly items-center flex-1 fd-column">
+                  <div className="signup-btn">
+                    <Button
+                      outlined={false}
+                      title={"Next"}
+                      onClick={() => {
+                        // setReadyForFaceRegistration(true);
+                        handleKeyPairGeneration();
+                      }}
+                    />
+                  </div>
+                </div>
+              )}
+
+              {showMnemonicPhrase && (
                 <div className="signup-card-footer flex justify-evenly items-center flex-1 fd-column">
                   <div className="signup-btn">
                     <Button
@@ -297,6 +365,7 @@ const Signup = ({ ...props }) => {
                       title={"Next"}
                       onClick={() => {
                         setReadyForFaceRegistration(true);
+                        setShowMnemonicPhrase(false);
                       }}
                     />
                   </div>

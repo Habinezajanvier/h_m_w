@@ -413,6 +413,30 @@
   width: fit-content;
 }
 
+.signup .mnemonicPhraseContainer {
+  color: #e4e4e7cc;
+  height: 125px;
+  border: 1px solid #e4e4e766;
+  padding: 10px;
+  font-weight: 700;
+  line-height: 22px;
+}
+
+.signup .mnemonicPhraseLabel {
+  text-align: left;
+  color: #e4e4e766;
+  margin-bottom: 5px;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 20px;
+}
+
+.signup .mnemonicPhraseLabel, .signup .mnemonicPhraseContainer {
+  width: 318px;
+  font-family: Source Sans Pro;
+  font-size: 16px;
+}
+
 .registrationLoading {
   text-align: center;
   color: #e4e4e7cc;
@@ -1510,7 +1534,15 @@ ul {
 }
 
 .map-video-container .MuiPaper-root {
+  overflow: hidden;
+  width: 742px !important;
+  height: 387px !important;
   background-color: #000 !important;
+}
+
+.map-video-container .MuiPaper-root .map-streaming-player {
+  width: 100% !important;
+  height: 100% !important;
 }
 
 .locationBar .location-activityList {

@@ -37,7 +37,7 @@ const DrawMap = ({ trackerIcon }) => {
     popUpEl.className = "map-toolTip";
     popUpEl.innerText = "5th cross, Chickpet market, Avenue road";
     popUpEl.addEventListener("click", () => {
-     setOpenDilog(true)
+      setOpenDilog(true);
     });
 
     new mapboxgl.Marker(el)
@@ -60,9 +60,10 @@ const DrawMap = ({ trackerIcon }) => {
         className={"map-video-container"}
       >
         <ReactPlayer
+          className={"map-streaming-player"}
           url={
-            // "https://bitdash-a.akamaihd.net/content/sintel/hls/playlist.m3u8"
-            "http://216.48.189.5:8090/playlist.m3u8"
+            "https://bitdash-a.akamaihd.net/content/sintel/hls/playlist.m3u8"
+            // "http://216.48.189.5:8090/playlist.m3u8"
           }
           // url={"https://www.w3schools.com/html/movie.mp4"}
           // config={{

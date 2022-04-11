@@ -36,11 +36,6 @@
   .mapboxgl-popup-close-button {
     display: none;
   }
-
-
-
-
-  
 }
 
 .map-body {
@@ -64,9 +59,15 @@
 .map-toolTip {
 }
 
-.map-video-container{
-  .MuiPaper-root{
-    background-color:  rgb(0, 0, 0) !important;
-
+.map-video-container {
+  .MuiPaper-root {
+    background-color: rgb(0, 0, 0) !important;
+    width: 742px !important;
+    height: 387px !important;
+    overflow: hidden;
+    .map-streaming-player {
+      width: 100% !important;
+      height: 100% !important;
+    }
   }
 }
