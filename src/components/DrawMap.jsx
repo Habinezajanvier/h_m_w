@@ -63,7 +63,7 @@ const DrawMap = ({ trackerIcon }) => {
           className={"map-streaming-player"}
           url={
             "https://bitdash-a.akamaihd.net/content/sintel/hls/playlist.m3u8"
-            // "http://216.48.189.5:8090/playlist.m3u8"
+            // "http://192.168.52.215:8080/playlist.m3u"
           }
           // url={"https://www.w3schools.com/html/movie.mp4"}
           // config={{

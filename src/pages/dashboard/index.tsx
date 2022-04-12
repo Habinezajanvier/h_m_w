@@ -4,7 +4,7 @@ import Header from "../../components/Header";
 import Map from "../../components/DrawMap";
 import filterIc from "../../assets/images/filter-icon.svg";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
-import redLocIc from "../../assets/images/red-loc-icon.png";
+import redLocIc from "../../assets/images/icons/red-loc-icon.png";
 import greenExecIc from "../../assets/images/green-circular-exclamtion.svg";
 import yellowExecIc from "../../assets/images/yellow-circular-exclamtion.svg";
 import KeyboardBackspaceIcon from "@mui/icons-material/KeyboardBackspace";
@@ -21,8 +21,15 @@ import greenDotIcon from "../../assets/images/green-circular-dot.svg";
 import CollapsibleLocationBar from "../../components/CollapsibleLocationBar";
 import crystalIcon from "../../assets/images/hexgon-crystal.png";
 import { useSubscription } from "urql";
-import { activitiesTitle, ActivityType } from "../../utils/activitiesList";
+import {
+  activitiesIcons,
+  activitiesTitle,
+  ActivityType,
+} from "../../utils/activitiesList";
 import moment from "moment";
+
+const memberdid =
+  "did:ckdr:Ee3qAFcbDNAdq9GvYG9pBPkgr3Q3C2NqbScjdxhXymoF53VNkyVbR8p1O3jgtIVRhb6Yv9QRNFdsf1uPfANviuR5pH0BoJdmCOcZitfZvcXmp5+gF1KHlRaUTb7PRBws+9iUcmPCl166ad8Q10TCTC8FapG5nonsv071Z30ODSHCYPGm";
 
 const activitiesSubscription = `
 subscription(
@@ -42,7 +49,7 @@ subscription(
     subActivity,
     activity_start_time,
     activity_end_time,
-    detections{totalNumberOfPeople,totalNumberOfUnknowns, priority},
+    detections{totalNumberOfPeople,totalNumberOfUnknowns, known, actions,totalNumberOfFleet,severity_score, priority},
     related_sensors,
     documentList,
     relatedActivity,
@@ -69,8 +76,7 @@ const Dashboard = () => {
   const [activityList, setActivityList] = useState([]);
   const subscriptionVariables = {
     topic: "activities",
-    memberdid:
-      "did:ckdr:Ee3qAFcbDNAdq9GvYG9pBPkgr3Q3C2NqbScjdxhXymoF53VNkyVbR8p1O3jgtIVRhb6Yv9QRNFdsf1uPfANviuR5pH0BoJdmCOcZitfZvcXmp5+gF1KHlRaUTb7PRBws+9iUcmPCl166ad8Q10TCTC8FapG5nonsv071Z30ODSHCYPGm",
+    memberdid,
   };
 
   const [res] = useSubscription(
@@ -92,21 +98,11 @@ const Dashboard = () => {
     setTimeout(() => {
       setIsActivitySubPaused(true);
     }, 10000);
-
-    // console.log(activitiesTitle["intrusion"]);
   }, []);
 
-  // useEffect(() => {
-  //   activityList.map((e, i) => {
-  //     let d1 = moment(e.activity_start_time);
-
-  //     let d2 = moment();
-
-  //     var diff = d2.diff(d1, "days");
-
-  //     console.log(diff, d1, d2);
-  //   });
-  // }, [activityList]);
+  useEffect(() => {
+    console.log("activityList", activityList);
+  }, [activityList]);
 
   return (
     <div className="dashboard">
@@ -142,7 +138,11 @@ const Dashboard = () => {
                       <div className="activity-label">
                         <div className="activity-title">
                           <img
-                            src={redLocIc}
+                            src={
+                              activitiesIcons[e.type]
+                                ? activitiesIcons[e.type]
+                                : redLocIc
+                            }
                             alt="red location"
                             className="c-pointer"
                           />

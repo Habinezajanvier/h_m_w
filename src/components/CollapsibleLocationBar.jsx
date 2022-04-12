@@ -5,7 +5,7 @@ import redDotIcon from "../assets/images/red-circular-dot.png";
 import greenDotIcon from "../assets/images/green-circular-dot.svg";
 import downArrowIcon from "../assets/images/down-arrow-icon.png";
 import upArrowIcon from "../assets/images/up-arrow-icon.png";
-import redLocIc from "../assets/images/red-loc-icon.png";
+import redLocIc from "../assets/images//icons/red-loc-icon.png";
 
 const CollapsibleLocationBar = ({ isActive }) => {
   const [expand, setExpand] = useState(false);

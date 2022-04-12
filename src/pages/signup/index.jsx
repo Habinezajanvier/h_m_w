@@ -16,6 +16,7 @@ import RegistrationLoading from "./RegistrationLoading";
 import SignUpWrapper from "./SignUpWrapper";
 import { testRegisterUser } from "./testRigister";
 import { useMutation } from "urql";
+import { storeInCredManager } from "../../utils/storeInCredManager";
 
 const styles = {
   display: "flex",
@@ -213,12 +214,16 @@ const Signup = ({ ...props }) => {
         console.log(res?.data);
 
         if (res?.data) {
-          // const storedInCred = storeInCredManager(
-          //   registerObj.id,
-          //   registerObj.did,
-          //   registerObj.metaInformation.firstName,
+          const storedInCred = storeInCredManager(
+            registerObj.id,
+            registerObj.metaInformation.firstName,
+            registerObj.did,
 
-          // );
+          );
+
+          if(storedInCred){
+            console.log("user cred stored")
+          }
           setShowMnemonicPhrase(true);
           console.log(registerObj);
         }
