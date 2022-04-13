@@ -17,7 +17,11 @@ import SignUpWrapper from "./SignUpWrapper";
 import { testRegisterUser } from "./testRigister";
 import { useMutation } from "urql";
 import { storeInCredManager } from "../../utils/storeInCredManager";
-import { addUserTokenInIndexedDB, createIndexedDB } from "../../utils/indexedDBInteraction";
+import QRCode from "qrcode.react";
+import {
+  addUserTokenInIndexedDB,
+  createIndexedDB,
+} from "../../utils/indexedDBInteraction";
 
 const styles = {
   display: "flex",
@@ -95,6 +99,7 @@ const Signup = ({ ...props }) => {
   const [isMemonicScreen, setIsMemonicScreen] = useState(false);
   const [isMemonicScreen2, setIsMemonicScreen2] = useState(false);
   const [isOtpSent, setIsOtpSent] = useState(false);
+  const [isPhoneTaken, setIsPhoneTaken] = useState(false);
   const [memonicPassword, setMemonicPassword] = useState("");
   const [memonicPassword2, setMemonicPassword2] = useState("");
   const [countryCode, setCountryCode] = useState("");
@@ -104,6 +109,7 @@ const Signup = ({ ...props }) => {
   const [regProcessing, setRegProcessing] = useState(false);
   const [generateMnenominPhrase, setGenerateMnenominPhrase] = useState(false);
   const [showMnemonicPhrase, setShowMnemonicPhrase] = useState(false);
+  const [showQRCode, setShowQRCode] = useState(false);
   const [mnenominPhrase, setMnenominPhrase] = useState("");
   const [readyForFaceRegistration, setReadyForFaceRegistration] = useState(
     false
@@ -114,26 +120,6 @@ const Signup = ({ ...props }) => {
   const [updateOTPResult, sendOTP] = useMutation(sendOTPMutation);
   const [updateVerifyOTPResult, verifyOTP] = useMutation(verifyOTPMutation);
 
-  useEffect(async () => {
-    // const registerObj = testRegisterUser();
-    // console.log("testRegisterUser", await registerObj);
-    // registerUser("+911234567890")
-    //   .then((res) => {
-    //     const {
-    //       id,
-    //       did,
-    //       role,
-    //       createdTime,
-    //       metaInformation,
-    //       proofOfPossession,
-    //       signature,
-    //     } = res;
-    //   })
-    //   .catch((err) => {
-    //     console.log(err);
-    //   });
-  }, []);
-
   // sendOTP mutation
   const handleSendOTPRequest = () => {
     sendOTP({ target: `${countryCode}${phone}` })
@@ -141,6 +127,7 @@ const Signup = ({ ...props }) => {
         console.log("OTP sent", res);
         if (res.data !== undefined) {
           setIsOtpSent(true);
+          setIsPhoneTaken(true);
           let newOTP = res?.data?.otp;
           setTimeout(() => {
             setOTP(newOTP);
@@ -174,26 +161,13 @@ const Signup = ({ ...props }) => {
     setCountryCode(selectedValue);
   };
 
-  // mutating user
-  const registerUser = async () => {
-    // const registerObj = await testRegisterUser();
-    // update(registerObj)
-    //   .then((res) => {
-    //     (res) => {
-    //       console.log(res);
-    //     };
-    //   })
-    //   .catch((err) => {
-    //     console.log(err);
-    //   });
-  };
-
   const handleVerifyOTP = () => {
     verifyOTP({ token: OTP, target: `${countryCode}${phone}` })
       .then((res) => {
         if (res?.data?.verifyotp) {
           console.log("OTP verification", res);
           setIsMemonicScreen(true);
+          setIsOtpSent(false);
         }
       })
       .catch((err) => {
@@ -208,7 +182,7 @@ const Signup = ({ ...props }) => {
     );
     setMnenominPhrase(registerObj?.mnemonicPhrase);
 
-    delete registerObj?.mnemonicPhrase;
+    // delete registerObj?.mnemonicPhrase;
 
     update(registerObj)
       .then((res) => {
@@ -227,8 +201,15 @@ const Signup = ({ ...props }) => {
 
           delete registerObj?.did;
 
-          // addUserTokenInIndexedDB(registerObj);
-          createIndexedDB(registerObj);
+          let stringifiedRegisterObj = JSON.stringify(registerObj);
+          console.log(stringifiedRegisterObj);
+
+          let registeredBuffer = Buffer.from(stringifiedRegisterObj).toString(
+            "base64"
+          );
+          console.log(registeredBuffer);
+
+          createIndexedDB({ id: registerObj.id, userData: registeredBuffer });
 
           console.log("after idb stoage");
 
@@ -257,7 +238,7 @@ const Signup = ({ ...props }) => {
           ) : (
             <SignUpWrapper>
               {/* Enter phone number */}
-              {!isOtpSent && !isMemonicScreen && (
+              {!isPhoneTaken && !isMemonicScreen && (
                 <div className="signup-card-body">
                   <div>
                     <SelectableInput
@@ -329,13 +310,24 @@ const Signup = ({ ...props }) => {
                 </div>
               }
 
-              {showMnemonicPhrase && (
+              {showMnemonicPhrase && !showQRCode && (
                 <>
                   <label className="mnemonicPhraseLabel">
                     Your mnemonic phrase is
                   </label>
                   <div className="mnemonicPhraseContainer">
                     {mnenominPhrase}
+                  </div>
+                </>
+              )}
+
+              {showQRCode && (
+                <>
+                  <label className="mnemonicPhraseLabel">
+                    Your mnemonic password is encrypted as a QR code
+                  </label>
+                  <div className="mnemonicQRCodeContainer">
+                    <QRCode value={memonicPassword} level={"H"}  size={170} />
                   </div>
                 </>
               )}
@@ -371,6 +363,7 @@ const Signup = ({ ...props }) => {
                       outlined={false}
                       title={"Next"}
                       onClick={() => {
+                        setIsMemonicScreen(false);
                         setIsMemonicScreen2(true);
                       }}
                     />
@@ -384,7 +377,7 @@ const Signup = ({ ...props }) => {
                       outlined={false}
                       title={"Next"}
                       onClick={() => {
-                        // setReadyForFaceRegistration(true);
+                        setIsMemonicScreen2(false);
                         handleKeyPairGeneration();
                       }}
                     />
@@ -392,15 +385,30 @@ const Signup = ({ ...props }) => {
                 </div>
               )}
 
-              {showMnemonicPhrase && (
+              {showMnemonicPhrase && !showQRCode && (
                 <div className="signup-card-footer flex justify-evenly items-center flex-1 fd-column">
                   <div className="signup-btn">
                     <Button
                       outlined={false}
                       title={"Next"}
                       onClick={() => {
-                        setReadyForFaceRegistration(true);
                         setShowMnemonicPhrase(false);
+                        setShowQRCode(true);
+                      }}
+                    />
+                  </div>
+                </div>
+              )}
+
+              {showQRCode && (
+                <div className="signup-card-footer flex justify-evenly items-center flex-1 fd-column">
+                  <div className="signup-btn">
+                    <Button
+                      outlined={false}
+                      title={"Save QR code on this device"}
+                      onClick={() => {
+                        setReadyForFaceRegistration(true);
+                        setShowQRCode(false);
                       }}
                     />
                   </div>
