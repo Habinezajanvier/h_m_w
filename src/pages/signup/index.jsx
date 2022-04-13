@@ -17,6 +17,7 @@ import SignUpWrapper from "./SignUpWrapper";
 import { testRegisterUser } from "./testRigister";
 import { useMutation } from "urql";
 import { storeInCredManager } from "../../utils/storeInCredManager";
+import { addUserTokenInIndexedDB, createIndexedDB } from "../../utils/indexedDBInteraction";
 
 const styles = {
   display: "flex",
@@ -217,13 +218,20 @@ const Signup = ({ ...props }) => {
           const storedInCred = storeInCredManager(
             registerObj.id,
             registerObj.metaInformation.firstName,
-            registerObj.did,
-
+            registerObj.did
           );
 
-          if(storedInCred){
-            console.log("user cred stored")
+          if (storedInCred) {
+            console.log("user cred stored");
           }
+
+          delete registerObj?.did;
+
+          // addUserTokenInIndexedDB(registerObj);
+          createIndexedDB(registerObj);
+
+          console.log("after idb stoage");
+
           setShowMnemonicPhrase(true);
           console.log(registerObj);
         }
