@@ -21,7 +21,7 @@ export const createIndexedDB = (cred) => {
   };
 };
 
-export const addUserTokenInIndexedDB =  (userCred) => {
+export const addUserTokenInIndexedDB = (userCred) => {
   let request = window.indexedDB.open("userTokens", 1);
   let db = null;
   request.onsuccess = (e) => {
@@ -38,4 +38,24 @@ export const addUserTokenInIndexedDB =  (userCred) => {
       console.log("Transaction completed: database modification finished.");
     });
   };
+};
+
+export const readIndexedDB = () => {
+    let request = window.indexedDB.open("userTokens", 1);
+    request.onsuccess = (e) => {
+      console.log(e, "sucess")
+      let db = e.target.result;
+      let tx = db.transaction("user_store", "readonly");
+      let userStore = tx.objectStore('user_store')
+      let openRequest = userStore.openCursor();
+      openRequest.onsuccess = (r) => {
+        const cursor = r.target.result
+
+        if(cursor){
+          let value = cursor.value
+          console.log(value)
+          return value
+        }
+      }
+    }
 };

@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import "../assets/styles/components/dashedInput.scss";
 
-const DashedInput = ({ getValue, label }) => {
+const DashedInput = ({ getValue, label, isForgotHidden }) => {
   const [input, setInput] = useState([]);
   const inputRef1 = useRef(null);
   const inputRef2 = useRef(null);
@@ -50,7 +50,11 @@ const DashedInput = ({ getValue, label }) => {
           />
         ))}
       </div>
-      <div className="color-skyBlue c-pointer bottomText">Forgot password?</div>
+      {!isForgotHidden && (
+        <div className="color-skyBlue c-pointer bottomText">
+          Forgot password?
+        </div>
+      )}
     </div>
   );
 };

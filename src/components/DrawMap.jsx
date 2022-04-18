@@ -62,8 +62,10 @@ const DrawMap = ({ trackerIcon }) => {
         <ReactPlayer
           className={"map-streaming-player"}
           url={
-            "https://bitdash-a.akamaihd.net/content/sintel/hls/playlist.m3u8"
+            // "https://bitdash-a.akamaihd.net/content/sintel/hls/playlist.m3u8"
+            "https://216.48.189.5:8080/playlist.m3u8"
             // "http://192.168.52.215:8080/playlist.m3u"
+            // "https://bitdash-a.akamaihd.net/content/MI201109210084_1/m3u8s/f08e80da-bf1d-4e3d-8899-f0f6155f6efa.m3u8"
           }
           // url={"https://www.w3schools.com/html/movie.mp4"}
           // config={{
