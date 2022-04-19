@@ -54,6 +54,25 @@
   .h-right {
     gap: 35px;
   }
+
+  .notification {
+    position: relative;
+
+    .notificaton-pannel {
+      max-height: 318px;
+      overflow-y: auto;
+      background: #22242c !important;
+      position: absolute;
+      margin-top: 8px;
+      top: 100%;
+      right: -5px;
+      z-index: 20;
+
+      &::-webkit-scrollbar{
+        
+      }
+    }
+  }
 }
 
 .pofileSetting-dilog {
@@ -161,4 +180,3 @@
     }
   }
 }
-

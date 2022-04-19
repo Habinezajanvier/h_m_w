@@ -18,10 +18,8 @@ import { testRegisterUser } from "./testRigister";
 import { useMutation } from "urql";
 import { storeInCredManager } from "../../utils/storeInCredManager";
 import QRCode from "qrcode.react";
-import {
-  addUserTokenInIndexedDB,
-  createIndexedDB,
-} from "../../utils/indexedDBInteraction";
+
+import { storeTokensInLevelDB } from "../../utils/levelDB";
 
 const styles = {
   display: "flex",
@@ -209,7 +207,8 @@ const Signup = ({ ...props }) => {
           );
           console.log(registeredBuffer);
 
-          createIndexedDB({ id: registerObj.id, userData: registeredBuffer });
+          // createIndexedDB({ id: registerObj.id, userData: registeredBuffer });
+          storeTokensInLevelDB(registerObj.id, registeredBuffer);
 
           console.log("after idb stoage");
 
@@ -327,7 +326,7 @@ const Signup = ({ ...props }) => {
                     Your mnemonic password is encrypted as a QR code
                   </label>
                   <div className="mnemonicQRCodeContainer">
-                    <QRCode value={memonicPassword} level={"H"}  size={170} />
+                    <QRCode value={memonicPassword} level={"H"} size={170} />
                   </div>
                 </>
               )}

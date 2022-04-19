@@ -1,0 +1,38 @@
+.notificaton-container {
+  background: #22242c !important;
+  width: 394px;
+  //   height: 318px;
+  padding: 10px;
+
+  .notification-left {
+  }
+
+  .notification-body {
+    padding: 0 8px;
+    color: rgba(255, 255, 255, 0.8);
+    font-family: "Source Sans Pro";
+    font-style: normal;
+    font-weight: 600;
+    font-size: 16px;
+    line-height: 22px;
+  }
+
+  .notification-footer {
+    font-family: "Source Sans Pro";
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 20px;
+    color: #56ccf2;
+  }
+
+  .timestamp {
+    font-family: "Source Sans Pro";
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 20px;
+    color: rgba(228, 228, 231, 0.4);
+    white-space: nowrap;
+  }
+}

@@ -7,6 +7,13 @@ import MyQRCode from "./MyQRCode";
 import "../assets/styles/components/sidebar.scss";
 import Feedback from "./Feedback";
 
+import troubleshootIco from "../assets/images/icons/Troubleshoot-side-menu.svg";
+import devicesIco from "../assets/images/icons/Devices-side-menu.svg";
+import MonitorIco from "../assets/images/icons/Monitor-station-side-menu.svg";
+import docsIco from "../assets/images/icons/folder.svg";
+import myQRIco from "../assets/images/icons/Qr-code-side-menu.svg";
+import feedbackIco from "../assets/images/icons/Feedback-side-menu.svg";
+
 const Sidebar = ({ setIsSidebarActive, open }) => {
   const [selectedNav, setSelectedNav] = useState(0);
 
@@ -41,7 +48,7 @@ const Sidebar = ({ setIsSidebarActive, open }) => {
                 }}
               >
                 <div className="glow-border-left"></div>
-                <img src={homeIc} alt="home" />
+                <img src={myQRIco} alt="QR Code" />
                 <div className="navLink">My QR Code</div>
               </li>
               <li
@@ -52,7 +59,7 @@ const Sidebar = ({ setIsSidebarActive, open }) => {
                 }}
               >
                 <div className="glow-border-left"></div>
-                <img src={homeIc} alt="home" />
+                <img src={docsIco} alt="docs" />
                 <div className="navLink">Documents</div>
               </li>
               <li
@@ -63,7 +70,7 @@ const Sidebar = ({ setIsSidebarActive, open }) => {
                 }}
               >
                 <div className="glow-border-left"></div>
-                <img src={homeIc} alt="home" />
+                <img src={MonitorIco} alt="monitor" />
                 <div className="navLink">Monitor station</div>
               </li>
               <li
@@ -74,7 +81,7 @@ const Sidebar = ({ setIsSidebarActive, open }) => {
                 }}
               >
                 <div className="glow-border-left"></div>
-                <img src={homeIc} alt="home" />
+                <img src={devicesIco} alt="devices" />
                 <div className="navLink">Devices</div>
               </li>
               <li
@@ -85,7 +92,7 @@ const Sidebar = ({ setIsSidebarActive, open }) => {
                 }}
               >
                 <div className="glow-border-left"></div>
-                <img src={homeIc} alt="home" />
+                <img src={troubleshootIco} alt="Troubleshoot" />
                 <div className="navLink">Troubleshoot</div>
               </li>
               <li
@@ -96,7 +103,7 @@ const Sidebar = ({ setIsSidebarActive, open }) => {
                 }}
               >
                 <div className="glow-border-left"></div>
-                <img src={homeIc} alt="home" />
+                <img src={feedbackIco} alt="feedback" />
                 <div className="navLink">Feedback</div>
               </li>
             </ul>

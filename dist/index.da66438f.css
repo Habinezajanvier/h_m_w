@@ -698,6 +698,21 @@ ul {
   gap: 35px;
 }
 
+.header .notification {
+  position: relative;
+}
+
+.header .notification .notificaton-pannel {
+  max-height: 318px;
+  z-index: 20;
+  margin-top: 8px;
+  position: absolute;
+  top: 100%;
+  right: -5px;
+  overflow-y: auto;
+  background: #22242c !important;
+}
+
 .pofileSetting-dilog .css-1fu2e3p-MuiPaper-root-MuiDialog-paper {
   background: #30323e;
   margin-top: 100px;
@@ -1133,6 +1148,41 @@ ul {
   background: #018f6ad9;
   border-radius: 4px;
   padding: 0;
+}
+
+.notificaton-container {
+  width: 394px;
+  padding: 10px;
+  background: #22242c !important;
+}
+
+.notificaton-container .notification-body {
+  color: #fffc;
+  padding: 0 8px;
+  font-family: Source Sans Pro;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 22px;
+}
+
+.notificaton-container .notification-footer {
+  color: #56ccf2;
+  font-family: Source Sans Pro;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 20px;
+}
+
+.notificaton-container .timestamp {
+  color: #e4e4e766;
+  white-space: nowrap;
+  font-family: Source Sans Pro;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 20px;
 }
 
 .dashboard {

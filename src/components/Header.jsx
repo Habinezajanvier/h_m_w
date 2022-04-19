@@ -4,13 +4,15 @@ import avatarImg from "../assets/images/man-profile.png";
 import notify from "../assets/images/notification.svg";
 import locationImg from "../assets/images/location.svg";
 import CloseIcon from "@mui/icons-material/Close";
-import { useState } from "react";
-import { Dialog } from "@mui/material";
+import React, { useRef, useState } from "react";
+import { Card, Dialog } from "@mui/material";
 import profileImage from "../assets/images/man-avatar-md.png";
 import editProfileIc from "../assets/images/pencil-pad-edit-icon.svg";
 import Button from "./Button";
 import Sidebar from "./Sidebar";
 import weather from "../assets/images/weather.png";
+import Notification from "./Notification";
+import { useOnClickOutside } from "../utils/hooks/useOnClickOutside";
 
 const HLabel = ({ icon, text, isLong, onClick }) => {
   return (
@@ -29,6 +31,11 @@ const HLabel = ({ icon, text, isLong, onClick }) => {
 const Header = ({ onLocationClick }) => {
   const [isProfileSettingOpened, setIsProfileSettingOpened] = useState(false);
   const [isSidebarActive, setIsSidebarActive] = useState(false);
+  const [showNotification, setShowNotification] = useState(false);
+  const notificationRef = useRef(null);
+
+  useOnClickOutside(notificationRef, () => setShowNotification(false));
+
   return (
     <>
       <div className="header flex justify-between items-center">
@@ -54,8 +61,20 @@ const Header = ({ onLocationClick }) => {
           </div>
         </div>
         <div className="flex items-center h-right ">
-          <div className="notification flex">
-            <img src={notify} alt="notification" />
+          <div
+            className="notification flex "
+            onClick={() => setShowNotification(true)}
+          >
+            <img src={notify} alt="notification" className="c-pointer" />
+            {showNotification && (
+              <Card className="notificaton-pannel" ref={notificationRef}>
+                {[...Array(3)].map((e, i) => (
+                  <React.Fragment key={i}>
+                    <Notification />
+                  </React.Fragment>
+                ))}
+              </Card>
+            )}
           </div>
           <HLabel
             isLong={false}

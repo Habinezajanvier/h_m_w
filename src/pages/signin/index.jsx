@@ -16,6 +16,7 @@ import successImg from "../../assets/images/green-correct-success.png";
 import { readIndexedDB } from "../../utils/indexedDBInteraction";
 import { getFromCredManager } from "../../utils/storeInCredManager";
 import { useNavigate } from "react-router-dom";
+import { readFromLevelDB } from "../../utils/levelDB";
 
 const AllowSearchQRCode = ({
   setIsSearchingScreen,
@@ -109,54 +110,42 @@ const Signin = ({ ...props }) => {
   useEffect(() => {}, []);
 
   const handleLogin = () => {
-    let request = window.indexedDB.open("userTokens", 1);
-    request.onsuccess = (e) => {
-      let db = e.target.result;
-      let tx = db.transaction("user_store", "readonly");
-      let userStore = tx.objectStore("user_store");
-      let openRequest = userStore.openCursor();
-      openRequest.onsuccess = (r) => {
-        const cursor = r.target.result;
+    // user id "SY4NLIiIuCYoF7xVeIDRwsHh1sW46T"
 
-        if (cursor) {
-          let value = cursor.value?.userData;
-          let userDataObj = JSON.parse(atob(value));
+    navigator.credentials
+      .get({
+        password: true,
+        federated: {
+          provider: ["http://localhost:1234/"],
+        },
+        unmediated: true,
+      })
+      .then(async (credentialInfoAssertion) => {
+        // getting did from browser credential manager
+        let did = credentialInfoAssertion.password;
+        let id = credentialInfoAssertion.id;
 
-          navigator.credentials
-            .get({
-              password: true,
-              federated: {
-                provider: ["http://localhost:1234/"],
-              },
-              unmediated: true,
-            })
-            .then(function (credentialInfoAssertion) {
-              let did = credentialInfoAssertion.password;
-              userDataObj.did = did;
+        // grabbing and combing other secrets and merge did into it
+        let secrets = await readFromLevelDB(id);
+        let signinPayload = JSON.parse(atob(secrets));
+        signinPayload.did = did;
 
-              console.log("userData:", userDataObj);
-
-              setUserData(userDataObj);
-              // making login request
-              signinReq(userDataObj)
-                .then((res) => {
-                  if (res.data) {
-                    console.log(res.data?.login);
-                  }
-
-                  setIsSuccessScreen(true);
-                  setIsConfirmResetPinScreen(false);
-                })
-                .catch((err) => {
-                  console.log(err);
-                });
-            })
-            .catch(function (err) {
-              console.error(err);
-            });
-        }
-      };
-    };
+        // making login request
+        signinReq(signinPayload)
+          .then((res) => {
+            if (res.data) {
+              console.log(res.data?.login);
+            }
+            setIsSuccessScreen(true);
+            setIsConfirmResetPinScreen(false);
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      })
+      .catch(function (err) {
+        console.error(err);
+      });
   };
 
   return (
@@ -332,7 +321,12 @@ const Signin = ({ ...props }) => {
           {isPhoneScreen && (
             <div className="label">
               <span>Don’t have an account? </span>
-              <span className="color-skyBlue c-pointer" onClick={() => naviate("/signup")}>Sign up</span>
+              <span
+                className="color-skyBlue c-pointer"
+                onClick={() => naviate("/signup")}
+              >
+                Sign up
+              </span>
             </div>
           )}
         </div>
