@@ -74,6 +74,7 @@ const Dashboard = () => {
   const [LocTrackerIcon, setLocTrackerIcon] = useState(null);
   const [isActivitySubPaused, setIsActivitySubPaused] = useState(false);
   const [activityList, setActivityList] = useState([]);
+  const [markerCoords, setMarkerCoords] = useState([]);
   const subscriptionVariables = {
     topic: "activities",
     memberdid,
@@ -97,11 +98,17 @@ const Dashboard = () => {
   useEffect(() => {
     setTimeout(() => {
       setIsActivitySubPaused(true);
-    }, 10000);
+    }, 2000);
   }, []);
 
   useEffect(() => {
-    console.log("activityList", activityList);
+    // console.log("activityList", activityList);
+    let newCoordsArray = [];
+    activityList?.map((e, i) => {
+      newCoordsArray.push(e.location);
+    });
+
+    setMarkerCoords(newCoordsArray);
   }, [activityList]);
 
   return (
@@ -110,7 +117,10 @@ const Dashboard = () => {
         <Header onLocationClick={() => setIsLocationView(true)} />
       </div>
       <div className="dashboard-map-bg">
-        <Map trackerIcon={isLocationView ? crystalIcon : false} />
+        <Map
+          trackerIcon={isLocationView ? crystalIcon : false}
+          markerCoords={markerCoords}
+        />
 
         {/* Side Panel */}
         {!isLocationView && (
