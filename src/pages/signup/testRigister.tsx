@@ -22,8 +22,8 @@ export const testRegisterUser = async (
   const response = await Promise.all([sig, pop]);
   const signature = {
     id: nanoid(32),
-    nonce: Buffer.from(nonce).toString("base64"),
-    aud: keypair.did,
+    // nonce: Buffer.from(nonce).toString("base64"),
+    // aud: keypair.did,
     proof: Buffer.from(response[0]).toString("base64"),
     // proof: Buffer.from(await keypair.proof(signature,nonce)).toString('base64')
   };

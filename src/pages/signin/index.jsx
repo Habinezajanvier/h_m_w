@@ -17,6 +17,9 @@ import { readIndexedDB } from "../../utils/indexedDBInteraction";
 import { getFromCredManager } from "../../utils/storeInCredManager";
 import { useNavigate } from "react-router-dom";
 import { readFromLevelDB } from "../../utils/levelDB";
+import { signinMutation } from "../../GQLQueries";
+import { useDispatch, useSelector } from "react-redux";
+import { signupCurrentView } from "../../redux/modules/signup/signupSlice";
 
 const AllowSearchQRCode = ({
   setIsSearchingScreen,
@@ -43,39 +46,6 @@ const AllowSearchQRCode = ({
   );
 };
 
-const signinMutation = `
-mutation(
-  $id: ID!, 
-  $did: String!,
-  $createdTime: String!,
-  $proofOfPossession: JSON,
-  $signature: Signature!
-) {
- login(login:{
-  id: $id,
-  createdTime: $createdTime,
-  proofOfPossession: $proofOfPossession,
-    graph: {},
-    root: "",
-    did: $did,
-    proof:{},
-    event: {},
-    role: "admin"
-    signature: $signature
-  }
-  ){
-    id,
-    accesstoken,
-    createdTime,
-    organisationDID,
-    approved,
-    approverDid,
-    registrationState,
-  }
-}
-
-`;
-
 const Signin = ({ ...props }) => {
   const [isMemonicScreen, setIsMemonicScreen] = useState(false);
   const [isSearchQRCodeScreen, setisSearchQRCodeScreen] = useState(false);
@@ -91,6 +61,8 @@ const Signin = ({ ...props }) => {
   const [allowMemonicPassSearch, setAllowMemonicPassSearch] = useState(false);
   const [updateSigninReq, signinReq] = useMutation(signinMutation);
   const naviate = useNavigate();
+  const currentView = useSelector((state) => state.signup.currentView);
+  const dispatch = useDispatch();
   // user data from device
   const [userData, setUserData] = useState(null);
 
@@ -104,14 +76,14 @@ const Signin = ({ ...props }) => {
       setTimeout(() => {
         setIsSearchingScreen(false);
         setIsResetPinScreen(true);
-      }, 3000);
+      }, 1000);
   }, [isSearchingScreen]);
 
-  useEffect(() => {}, []);
+  useEffect(() => {
+    currentView !== 0 && dispatch(signupCurrentView(0));
+  }, []);
 
   const handleLogin = () => {
-    // user id "SY4NLIiIuCYoF7xVeIDRwsHh1sW46T"
-
     navigator.credentials
       .get({
         password: true,
@@ -136,11 +108,13 @@ const Signin = ({ ...props }) => {
             if (res.data) {
               console.log(res.data?.login);
             }
-            setIsSuccessScreen(true);
-            setIsConfirmResetPinScreen(false);
+            naviate("/dashboard");
+            // setIsSuccessScreen(true);
+            // setIsConfirmResetPinScreen(false);
           })
           .catch((err) => {
             console.log(err);
+            alert("credentials not found, please signup");
           });
       })
       .catch(function (err) {
@@ -178,7 +152,7 @@ const Signin = ({ ...props }) => {
               />
             )}
 
-            {isResetPinScreen && (
+            {/* {isResetPinScreen && (
               <div className="reset-pin-label">
                 Your mnemonic password is found in the device DELL8937
               </div>
@@ -188,11 +162,11 @@ const Signin = ({ ...props }) => {
               <div className="reset-pin-label">
                 Your mnemonic password is found in the device DELL8937
               </div>
-            )}
+            )} */}
 
             {/* popups */}
-            <div className="login-popup-container">
-              {isSearchQRCodeScreen && (
+            {/* <div className="login-popup-container"> */}
+            {/* {isSearchQRCodeScreen && (
                 <div className="login-popup">
                   {!allowMemonicPassSearch && (
                     <AllowSearchQRCode
@@ -201,11 +175,11 @@ const Signin = ({ ...props }) => {
                     />
                   )}
                 </div>
-              )}
+              )} */}
 
-              {/* searching screen */}
+            {/* searching screen */}
 
-              {isSearchingScreen && (
+            {/* {isSearchingScreen && (
                 <div className="password-searching">
                   <div className="text-center">
                     <img
@@ -219,10 +193,10 @@ const Signin = ({ ...props }) => {
                     device
                   </div>
                 </div>
-              )}
+              )} */}
 
-              {/* success screen */}
-              {isSuccessScreen && (
+            {/* success screen */}
+            {/* {isSuccessScreen && (
                 <div className="success-panel">
                   <div className="text-center">
                     <img src={successImg} alt="loading" className={""} />
@@ -232,10 +206,10 @@ const Signin = ({ ...props }) => {
                     stored in the device RX45632
                   </div>
                 </div>
-              )}
+              )} */}
 
-              {/* reset Pin */}
-              {isResetPinScreen && (
+            {/* reset Pin */}
+            {/* {isResetPinScreen && (
                 <>
                   <DashedInput
                     getValue={(d) => console.log(d)}
@@ -243,9 +217,9 @@ const Signin = ({ ...props }) => {
                     isForgotHidden={true}
                   />
                 </>
-              )}
+              )} */}
 
-              {isConfirmResetPinScreen && (
+            {/* {isConfirmResetPinScreen && (
                 <>
                   <DashedInput
                     getValue={(d) => console.log(d)}
@@ -253,8 +227,8 @@ const Signin = ({ ...props }) => {
                     isForgotHidden={true}
                   />
                 </>
-              )}
-            </div>
+              )} */}
+            {/* </div> */}
           </div>
         </div>
         {/* Footer */}
@@ -274,13 +248,14 @@ const Signin = ({ ...props }) => {
               outlined={false}
               title={"Proceed"}
               onClick={() => {
-                setIsMemonicScreen(false);
-                setisSearchQRCodeScreen(true);
+                // setIsMemonicScreen(false);
+                handleLogin();
+                // setisSearchQRCodeScreen(true);
               }}
             />
           )}
 
-          {isResetPinScreen && (
+          {/* {isResetPinScreen && (
             <Button
               outlined={false}
               title={"Next"}
@@ -289,9 +264,9 @@ const Signin = ({ ...props }) => {
                 setIsConfirmResetPinScreen(true);
               }}
             />
-          )}
+          )} */}
 
-          {isConfirmResetPinScreen && (
+          {/* {isConfirmResetPinScreen && (
             <Button
               outlined={false}
               title={"Login"}
@@ -299,9 +274,9 @@ const Signin = ({ ...props }) => {
                 handleLogin();
               }}
             />
-          )}
+          )} */}
 
-          {isSuccessScreen && (
+          {/* {isSuccessScreen && (
             <Button
               outlined={false}
               title={"Continue"}
@@ -309,7 +284,7 @@ const Signin = ({ ...props }) => {
                 naviate("/dashboard");
               }}
             />
-          )}
+          )} */}
 
           {isMemonicScreen && (
             <div className="label">

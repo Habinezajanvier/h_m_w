@@ -14,7 +14,7 @@ import {
   authUserForToken,
   unauthUser,
 } from "./redux/modules/user/userAuthSlice";
-import store from "./redux/store";
+import store, { persistor } from "./redux/store";
 import theme from "./config/theme";
 import { BrowserRouter } from "react-router-dom";
 import "mapbox-gl/dist/mapbox-gl.css";
@@ -60,7 +60,7 @@ if (token) {
 
 ReactDOM.render(
   <Provider store={store}>
-    <PersistGate>
+    <PersistGate persistor={persistor}>
       <URQLProvider value={client}>
         <React.StrictMode>
           <ThemeProvider theme={theme}>

@@ -13,9 +13,17 @@ import MonitorIco from "../assets/images/icons/Monitor-station-side-menu.svg";
 import docsIco from "../assets/images/icons/folder.svg";
 import myQRIco from "../assets/images/icons/Qr-code-side-menu.svg";
 import feedbackIco from "../assets/images/icons/Feedback-side-menu.svg";
-
+import { sidePanel } from "../redux/modules/dashboard/dashboardSlice";
+import { useDispatch } from "react-redux";
 const Sidebar = ({ setIsSidebarActive, open }) => {
   const [selectedNav, setSelectedNav] = useState(0);
+
+  const dispatch = useDispatch();
+
+  const handleCloseSidebar = () => {
+    dispatch(sidePanel(false));
+    setIsSidebarActive(false);
+  };
 
   return (
     <>
@@ -23,7 +31,9 @@ const Sidebar = ({ setIsSidebarActive, open }) => {
         <div className="sidebarDrawr">
           <div className="sidebarDrawr-header">
             <CloseIcon
-              onClick={() => setIsSidebarActive(false)}
+              onClick={() => {
+                handleCloseSidebar();
+              }}
               className="c-pointer"
             />
           </div>
@@ -44,7 +54,7 @@ const Sidebar = ({ setIsSidebarActive, open }) => {
                 className="sidebar-navItem flex items-center "
                 onClick={() => {
                   setSelectedNav(1);
-                  setIsSidebarActive(false);
+                  handleCloseSidebar();
                 }}
               >
                 <div className="glow-border-left"></div>
@@ -55,7 +65,7 @@ const Sidebar = ({ setIsSidebarActive, open }) => {
                 className="sidebar-navItem flex items-center "
                 onClick={() => {
                   setSelectedNav(2);
-                  setIsSidebarActive(false);
+                  handleCloseSidebar();
                 }}
               >
                 <div className="glow-border-left"></div>
@@ -66,7 +76,7 @@ const Sidebar = ({ setIsSidebarActive, open }) => {
                 className="sidebar-navItem flex items-center "
                 onClick={() => {
                   setSelectedNav(3);
-                  setIsSidebarActive(false);
+                  handleCloseSidebar();
                 }}
               >
                 <div className="glow-border-left"></div>
@@ -77,7 +87,7 @@ const Sidebar = ({ setIsSidebarActive, open }) => {
                 className="sidebar-navItem flex items-center "
                 onClick={() => {
                   setSelectedNav(4);
-                  setIsSidebarActive(false);
+                  handleCloseSidebar();
                 }}
               >
                 <div className="glow-border-left"></div>
@@ -88,7 +98,7 @@ const Sidebar = ({ setIsSidebarActive, open }) => {
                 className="sidebar-navItem flex items-center "
                 onClick={() => {
                   setSelectedNav(5);
-                  setIsSidebarActive(false);
+                  handleCloseSidebar();
                 }}
               >
                 <div className="glow-border-left"></div>
@@ -99,7 +109,7 @@ const Sidebar = ({ setIsSidebarActive, open }) => {
                 className="sidebar-navItem flex items-center "
                 onClick={() => {
                   setSelectedNav(6);
-                  setIsSidebarActive(false);
+                  handleCloseSidebar();
                 }}
               >
                 <div className="glow-border-left"></div>

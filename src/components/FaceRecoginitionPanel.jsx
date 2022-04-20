@@ -24,9 +24,9 @@ const FaceRecoginitionPanel = () => {
       setInitializing(true);
       Promise.all([
         faceapi.nets.tinyFaceDetector.loadFromUri(Model_URI),
-        faceapi.nets.faceLandmark68Net.loadFromUri(Model_URI),
+        // faceapi.nets.faceLandmark68Net.loadFromUri(Model_URI),
         faceapi.nets.faceRecognitionNet.loadFromUri(Model_URI),
-        faceapi.nets.faceExpressionNet.loadFromUri(Model_URI),
+        // faceapi.nets.faceExpressionNet.loadFromUri(Model_URI),
       ]).then(startVideo);
     };
     loadModels();

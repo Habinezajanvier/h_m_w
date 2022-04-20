@@ -4,7 +4,7 @@ import avatarImg from "../assets/images/man-profile.png";
 import notify from "../assets/images/notification.svg";
 import locationImg from "../assets/images/location.svg";
 import CloseIcon from "@mui/icons-material/Close";
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Card, Dialog } from "@mui/material";
 import profileImage from "../assets/images/man-avatar-md.png";
 import editProfileIc from "../assets/images/pencil-pad-edit-icon.svg";
@@ -13,6 +13,12 @@ import Sidebar from "./Sidebar";
 import weather from "../assets/images/weather.png";
 import Notification from "./Notification";
 import { useOnClickOutside } from "../utils/hooks/useOnClickOutside";
+import { useSelector, useDispatch } from "react-redux";
+
+import {
+  notification as notificationPanel,
+  sidePanel,
+} from "../redux/modules/dashboard/dashboardSlice";
 
 const HLabel = ({ icon, text, isLong, onClick }) => {
   return (
@@ -33,8 +39,32 @@ const Header = ({ onLocationClick }) => {
   const [isSidebarActive, setIsSidebarActive] = useState(false);
   const [showNotification, setShowNotification] = useState(false);
   const notificationRef = useRef(null);
+  const isNotificationPanelActive = useSelector((state) => {
+    state.dashboard.isNotificationPanelActive;
+  });
 
-  useOnClickOutside(notificationRef, () => setShowNotification(false));
+  const isSidePanelActive = useSelector(
+    (state) => state.dashboard.isSidePanelActive
+  );
+
+  const dispatch = useDispatch();
+
+  useOnClickOutside(notificationRef, () => {
+    setShowNotification(false);
+    dispatch(notificationPanel(false));
+  });
+
+  useEffect(() => {
+    setShowNotification(isNotificationPanelActive);
+    console.log(isNotificationPanelActive);
+  }, [isNotificationPanelActive]);
+
+  useEffect(() => {
+    console.log("sidepanel", isSidePanelActive);
+    setIsSidebarActive(isSidePanelActive);
+  }, [isSidePanelActive]);
+
+
 
   return (
     <>
@@ -43,7 +73,10 @@ const Header = ({ onLocationClick }) => {
           <div className="ham">
             <MenuIcon
               className="c-pointer"
-              onClick={() => setIsSidebarActive(true)}
+              onClick={() => {
+                setIsSidebarActive(true);
+                dispatch(sidePanel(true));
+              }}
             />
           </div>
           <div className="h-labels flex ">
@@ -63,7 +96,10 @@ const Header = ({ onLocationClick }) => {
         <div className="flex items-center h-right ">
           <div
             className="notification flex "
-            onClick={() => setShowNotification(true)}
+            onClick={() => {
+              setShowNotification(true);
+              dispatch(notificationPanel(true));
+            }}
           >
             <img src={notify} alt="notification" className="c-pointer" />
             {showNotification && (
