@@ -4,14 +4,21 @@ import { useState, useEffect, useRef } from "react";
 import * as faceapi from "face-api.js";
 import { create } from "ipfs";
 import KeyboardBackspaceIcon from "@mui/icons-material/KeyboardBackspace";
+import { useNavigate } from "react-router-dom";
+import worker from "../workerThreads";
+import { create as createIPFSClient, urlSource } from "ipfs-http-client";
 
 const FaceRecoginitionPanel = () => {
   const [initalizing, setInitializing] = useState(false);
   const [init, setInit] = useState(false);
   const [isRecStart, setIsRecStart] = useState(false);
+  const [uploadPending, setIUploadPending] = useState(true);
   const videoRef = useRef();
   const canvasref = useRef();
   const panelRef = useRef();
+
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     console.log("adjk", init);
@@ -24,12 +31,30 @@ const FaceRecoginitionPanel = () => {
       setInitializing(true);
       Promise.all([
         faceapi.nets.tinyFaceDetector.loadFromUri(Model_URI),
-        // faceapi.nets.faceLandmark68Net.loadFromUri(Model_URI),
+        faceapi.nets.faceLandmark68Net.loadFromUri(Model_URI),
         faceapi.nets.faceRecognitionNet.loadFromUri(Model_URI),
-        // faceapi.nets.faceExpressionNet.loadFromUri(Model_URI),
+        faceapi.nets.faceExpressionNet.loadFromUri(Model_URI),
       ]).then(startVideo);
     };
+    startVideo();
     loadModels();
+
+    // worker.postMessage(
+    //   Promise.all([
+    //     faceapi.nets.tinyFaceDetector.loadFromUri(
+    //       process.env.REACT_APP_FACE_API_MODELS_URI
+    //     ),
+    //     // faceapi.nets.faceLandmark68Net.loadFromUri(Model_URI),
+    //     faceapi.nets.faceRecognitionNet.loadFromUri(
+    //       process.env.REACT_APP_FACE_API_MODELS_URI
+    //     ),
+    //     // faceapi.nets.faceExpressionNet.loadFromUri(Model_URI),
+    //   ]).then(startVideo)
+    // );
+
+    // worker.onmessage = function(message){
+    //   console.log(message)
+    // }
   }, []);
 
   const startVideo = () => {
@@ -51,8 +76,11 @@ const FaceRecoginitionPanel = () => {
   };
 
   useEffect(() => {
+    // if (isRecStart) {
+    //   console.log("rec btn clicked")
     videoRef.current &&
       videoRef.current.addEventListener("play", async () => {
+        console.log("rec startred");
         var node = await create();
         const results = await node.add("=^.^= meow meow");
         if (!results) console.log("Error Setting data to ipfs");
@@ -69,14 +97,17 @@ const FaceRecoginitionPanel = () => {
         };
         faceapi.matchDimensions(canvas, displaySize);
         var capturedFrameArray = [];
+
+        let isMyFileNotUploaded = true;
+        let ipfs_client = createIPFSClient();
         setInterval(async () => {
           const detections = await faceapi
             .detectAllFaces(
               videoRef.current,
               new faceapi.TinyFaceDetectorOptions()
             )
-            // .withFaceLandmarks()
-            // .withFaceExpressions();
+            .withFaceLandmarks()
+            .withFaceExpressions();
           const resizedDetections = faceapi.resizeResults(
             detections,
             displaySize
@@ -109,9 +140,20 @@ const FaceRecoginitionPanel = () => {
               console.log("No face found");
             } else {
               const outputImage = "";
-              faceImages.forEach((cnv) => {
+              faceImages.forEach(async (cnv) => {
                 let cnvImg = cnv.toDataURL();
-                console.log("face found ", cnvImg);
+                // console.log("face found ", cnvImg);
+                console.log("image found");
+                // const file = await ipfs.add(urlSource('https://ipfs.io/images/ipfs-logo.svg'))
+                if (isMyFileNotUploaded) {
+                  // console.log("ipfs", ipfs_client);
+                  const file = await ipfs_client.add("abcdef");
+                  console.log("uploaded file:", file);
+                  isMyFileNotUploaded = false
+                }
+                // setTimeout(() => {
+                //   navigate("/dashboard");
+                // }, 3000);
               });
             }
 
@@ -144,7 +186,8 @@ const FaceRecoginitionPanel = () => {
           // console.log(detections)
         }, 100);
       });
-  }, []);
+    // }
+  }, [isRecStart]);
 
   return (
     <div

@@ -264,8 +264,8 @@ const Signup = ({ ...props }) => {
                   dispatch(signupBackToPreviousView())
                 ))}
 
-              {signupScreen.QRCode === currentView && ( 
-                 mnenominPhrase ? (
+              {signupScreen.QRCode === currentView && (
+                //  mnenominPhrase ? (
                 <>
                   <label className="mnemonicPhraseLabel">
                     Your mnemonic password is encrypted as a QR code
@@ -274,9 +274,10 @@ const Signup = ({ ...props }) => {
                     <QRCode value={mnenominPassword} level={"H"} size={170} />
                   </div>
                 </>
-             ) : (
-              dispatch(signupCurrentView(3))
-            ))}
+                //  ) : (
+                // dispatch(signupCurrentView(3))
+                // ))}
+              )}
 
               {/* Footer */}
 
