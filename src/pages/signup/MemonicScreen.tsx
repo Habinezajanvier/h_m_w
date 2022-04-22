@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import Button from "../../components/Button";
 import DashedInput from "../../components/DashedInput";
 
-const MnemonicScreen = ({ btnText, getValue, label, onSubmit }) => {
+const MnemonicScreen = ({ btnText, getValue, label, onSubmit, value }) => {
   const [mnemonicPassword, setMnemonicPassword] = useState("");
 
   return (
@@ -13,6 +13,7 @@ const MnemonicScreen = ({ btnText, getValue, label, onSubmit }) => {
             getValue={(d: any) => setMnemonicPassword(d)}
             label={label}
             isForgotHidden={true}
+            value={value}
           />
         </div>
       </div>
@@ -25,12 +26,11 @@ const MnemonicScreen = ({ btnText, getValue, label, onSubmit }) => {
               title={btnText ? btnText : "Next"}
               onClick={() => {
                 getValue(mnemonicPassword);
-                onSubmit();
+                onSubmit(mnemonicPassword);
               }}
             />
           )}
         </div>
-        
       </div>
     </>
   );

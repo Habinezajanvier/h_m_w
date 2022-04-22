@@ -30,7 +30,11 @@ import { signupScreen } from "../../utils/screenOrder";
 import { useDispatch, useSelector } from "react-redux";
 import SendingOTP from "./SendingOTP";
 import MnemonicScreen from "./MemonicScreen";
-import { signupCurrentView } from "../../redux/modules/signup/signupSlice";
+import {
+  signupBackToPreviousView,
+  signupCurrentView,
+  signupValues,
+} from "../../redux/modules/signup/signupSlice";
 
 const styles = {
   display: "flex",
@@ -40,18 +44,15 @@ const styles = {
 };
 
 const Signup = ({ ...props }) => {
-  const [isMemonicScreen, setIsMemonicScreen] = useState(false);
-  const [isMemonicScreen2, setIsMemonicScreen2] = useState(false);
   const [isOtpSent, setIsOtpSent] = useState(false);
-  const [isPhoneTaken, setIsPhoneTaken] = useState(false);
-  const [memonicPassword, setMemonicPassword] = useState("");
-  const [memonicPassword2, setMemonicPassword2] = useState("");
-  const [countryCode, setCountryCode] = useState("");
+
+  const [mnenominPassword, setMnenominPassword] = useState("");
+  const [mnenominPassword2, setMnenominPassword2] = useState("");
+  const [countryCode, setCountryCode] = useState("+91");
   const [phone, setPhone] = useState("");
   const [invalidOTP, setInvalidOTP] = useState(false);
   const [OTP, setOTP] = useState("");
   const [regProcessing, setRegProcessing] = useState(false);
-  const [generateMnenominPhrase, setGenerateMnenominPhrase] = useState(false);
   const [showMnemonicPhrase, setShowMnemonicPhrase] = useState(false);
   const [showQRCode, setShowQRCode] = useState(false);
   const [mnenominPhrase, setMnenominPhrase] = useState("");
@@ -66,6 +67,7 @@ const Signup = ({ ...props }) => {
 
   // redux
   const currentView = useSelector((state) => state.signup.currentView);
+  const signupState = useSelector((state) => state.signup.signupData);
   const dispatch = useDispatch();
 
   // sendOTP mutation
@@ -75,7 +77,18 @@ const Signup = ({ ...props }) => {
         console.log("OTP sent", res);
         if (res.data !== undefined) {
           dispatch(signupCurrentView(1));
+          dispatch(
+            signupValues({
+              phone: phone,
+            })
+          );
+
           let newOTP = res?.data?.otp;
+          dispatch(
+            signupValues({
+              otp: newOTP,
+            })
+          );
           setTimeout(() => {
             setOTP(newOTP);
           }, 1000);
@@ -86,30 +99,17 @@ const Signup = ({ ...props }) => {
       });
   };
 
-  // handling data from inputbox
-  const handleInput = (data) => {
-    const { value, selectedValue } = data;
-    if (isOtpSent) {
-      // testing invalid otp err text
-      if (value === "123456") {
-        setInvalidOTP(true);
-      } else {
-        invalidOTP && setInvalidOTP(false);
-      }
-      setOTP(value);
-    } else {
-      setPhone(`${value}${selectedValue}`);
-    }
-  };
-
   const handlePhoneInput = (phoneNumber) => {
     const { value, selectedValue } = phoneNumber;
     setPhone(value);
-    setCountryCode(selectedValue);
+    // setCountryCode(selectedValue);
   };
 
   const handleVerifyOTP = () => {
-    verifyOTP({ token: OTP, target: `${countryCode}${phone}` })
+    let otpVerificationPayload = phone
+      ? `${countryCode}${phone}`
+      : `${countryCode}${signupState.phone}`;
+    verifyOTP({ token: OTP, target: otpVerificationPayload })
       .then((res) => {
         if (res?.data?.verifyotp) {
           console.log("OTP verification", res);
@@ -124,7 +124,7 @@ const Signup = ({ ...props }) => {
   const handleKeyPairGeneration = async () => {
     let registerObj = await testRegisterUser(
       `${countryCode}${phone}`,
-      memonicPassword
+      mnenominPassword
     );
     setMnenominPhrase(registerObj?.mnemonicPhrase);
 
@@ -187,7 +187,7 @@ const Signup = ({ ...props }) => {
               {/* Enter phone number */}
               {signupScreen.phoneNumber === currentView && (
                 <GrabPhone
-                  phone={phone}
+                  phone={phone ? phone : signupState.phone}
                   handleSendOTPRequest={handleSendOTPRequest}
                   handlePhoneInput={handlePhoneInput}
                 />
@@ -196,7 +196,7 @@ const Signup = ({ ...props }) => {
               {/* Enter OTP */}
               {signupScreen.otp === currentView && (
                 <SendingOTP
-                  OTP={OTP}
+                  OTP={OTP ? OTP : signupState.otp}
                   setOTP={setOTP}
                   otpImg={otpImg}
                   handleVerifyOTP={handleVerifyOTP}
@@ -209,12 +209,18 @@ const Signup = ({ ...props }) => {
 
               {signupScreen.mnemonic === currentView && (
                 <MnemonicScreen
+                  value={
+                    mnenominPassword
+                      ? mnenominPassword
+                      : signupState.mnenominPassword
+                  }
                   label={
                     "Set up a 6 digit pin to secure your mnemonic password"
                   }
-                  getValue={(d) => setMemonicPassword(d)}
-                  onSubmit={() => {
+                  getValue={(d) => setMnenominPassword(d)}
+                  onSubmit={(value) => {
                     dispatch(signupCurrentView(3));
+                    dispatch(signupValues({ mnenominPassword: value }));
                   }}
                 />
               )}
@@ -222,38 +228,55 @@ const Signup = ({ ...props }) => {
               {/* confirm mnemonic password screen */}
               {signupScreen.confirmMnemonic === currentView && (
                 <MnemonicScreen
+                  value={
+                    mnenominPassword2
+                      ? mnenominPassword2
+                      : signupState.confirmMnenominPassword
+                  }
                   label={"Re-enter the 6 digit password"}
-                  getValue={(d) => setMemonicPassword2(d)}
-                  onSubmit={() => {
-                    dispatch(signupCurrentView(4));
-                    handleKeyPairGeneration();
+                  getValue={(d) => setMnenominPassword2(d)}
+                  onSubmit={(value) => {
+                    signupState.mnenominPassword === value &&
+                      dispatch(signupCurrentView(4));
+                    signupState.mnenominPassword === value &&
+                      handleKeyPairGeneration();
+                    signupState.mnenominPassword === value &&
+                      dispatch(
+                        signupValues({
+                          confirmMnenominPassword: value,
+                        })
+                      );
                   }}
                 />
               )}
-              {/* </div>
-                </div> */}
 
-              {signupScreen.mnemonicPhrase === currentView && (
-                <>
-                  <label className="mnemonicPhraseLabel">
-                    Your mnemonic phrase is
-                  </label>
-                  <div className="mnemonicPhraseContainer">
-                    {mnenominPhrase}
-                  </div>
-                </>
-              )}
+              {signupScreen.mnemonicPhrase === currentView &&
+                (mnenominPhrase ? (
+                  <>
+                    <label className="mnemonicPhraseLabel">
+                      Your mnemonic phrase is
+                    </label>
+                    <div className="mnemonicPhraseContainer">
+                      {mnenominPhrase}
+                    </div>
+                  </>
+                ) : (
+                  dispatch(signupBackToPreviousView())
+                ))}
 
-              {signupScreen.QRCode === currentView && (
+              {signupScreen.QRCode === currentView && ( 
+                 mnenominPhrase ? (
                 <>
                   <label className="mnemonicPhraseLabel">
                     Your mnemonic password is encrypted as a QR code
                   </label>
                   <div className="mnemonicQRCodeContainer">
-                    <QRCode value={memonicPassword} level={"H"} size={170} />
+                    <QRCode value={mnenominPassword} level={"H"} size={170} />
                   </div>
                 </>
-              )}
+             ) : (
+              dispatch(signupCurrentView(3))
+            ))}
 
               {/* Footer */}
 

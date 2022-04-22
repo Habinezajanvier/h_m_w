@@ -75,8 +75,8 @@ const FaceRecoginitionPanel = () => {
               videoRef.current,
               new faceapi.TinyFaceDetectorOptions()
             )
-            .withFaceLandmarks()
-            .withFaceExpressions();
+            // .withFaceLandmarks()
+            // .withFaceExpressions();
           const resizedDetections = faceapi.resizeResults(
             detections,
             displaySize

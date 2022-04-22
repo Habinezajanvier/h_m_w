@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import "../assets/styles/components/dashedInput.scss";
 
-const DashedInput = ({ getValue, label, isForgotHidden }) => {
+const DashedInput = ({ getValue, label, isForgotHidden, value }) => {
   const [input, setInput] = useState([]);
   const inputRef1 = useRef(null);
   const inputRef2 = useRef(null);
@@ -20,9 +20,14 @@ const DashedInput = ({ getValue, label, isForgotHidden }) => {
     inputRef6,
   ];
 
+  useEffect(() => {
+    value && setInput([...value.split("")]);
+  }, [value]);
+
   // returning value when all input filled
   useEffect(() => {
     input.join("").length > 5 && getValue && getValue(input.join(""));
+    // input.join("").length > 5 && getValue && console.log(input.join(""));
   }, [input]);
 
   const handleInput = (value, nextref, id) => {
@@ -42,6 +47,7 @@ const DashedInput = ({ getValue, label, isForgotHidden }) => {
       <div className="input justify-center">
         {refArr.map((e, i) => (
           <input
+            value={input[i] ? input[i] : ""}
             key={i}
             ref={e}
             type="text"
