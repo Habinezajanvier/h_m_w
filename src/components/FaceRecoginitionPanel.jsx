@@ -7,6 +7,7 @@ import KeyboardBackspaceIcon from "@mui/icons-material/KeyboardBackspace";
 import { useNavigate } from "react-router-dom";
 import worker from "../workerThreads";
 import { create as createIPFSClient, urlSource } from "ipfs-http-client";
+import { setTimeout } from "timers";
 
 const FaceRecoginitionPanel = () => {
   const [initalizing, setInitializing] = useState(false);
@@ -16,7 +17,6 @@ const FaceRecoginitionPanel = () => {
   const videoRef = useRef();
   const canvasref = useRef();
   const panelRef = useRef();
-
 
   const navigate = useNavigate();
 
@@ -143,13 +143,18 @@ const FaceRecoginitionPanel = () => {
               faceImages.forEach(async (cnv) => {
                 let cnvImg = cnv.toDataURL();
                 // console.log("face found ", cnvImg);
+                // if (cnvImg) {
+                  setTimeout(() => {
+                    navigate("/dashboard");
+                  }, 3000);
+                // }
                 console.log("image found");
                 // const file = await ipfs.add(urlSource('https://ipfs.io/images/ipfs-logo.svg'))
                 if (isMyFileNotUploaded) {
                   // console.log("ipfs", ipfs_client);
                   const file = await ipfs_client.add("abcdef");
                   console.log("uploaded file:", file);
-                  isMyFileNotUploaded = false
+                  isMyFileNotUploaded = false;
                 }
                 // setTimeout(() => {
                 //   navigate("/dashboard");
