@@ -24,6 +24,7 @@ export const testRegisterUser = async (
     id: nanoid(32),
     // nonce: Buffer.from(nonce).toString("base64"),
     // aud: keypair.did,
+
     proof: Buffer.from(response[0]).toString("base64"),
     // proof: Buffer.from(await keypair.proof(signature,nonce)).toString('base64')
   };
@@ -49,3 +50,21 @@ export const testRegisterUser = async (
 
   return registerRequestObject;
 };
+
+// converting function into class
+export class KeyPairHandler {
+  // target: phone number
+  private target: string;
+  private mnemonicPassword?: string;
+
+  constructor(target: string, mnemonicPassword?: string) {
+    this.target = target;
+    this.mnemonicPassword = mnemonicPassword;
+  }
+
+  getRequestPayload() {};
+
+  getEncodedKeyPair() {};
+
+  decodeKeyPair(){};
+}
