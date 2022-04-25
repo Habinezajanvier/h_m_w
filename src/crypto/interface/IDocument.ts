@@ -9,7 +9,7 @@ type Ceveat = [
 	}
 ];
 
-export interface IDocument extends Record<string, any> {
+export interface IDocument  {
 
 	id: string // nanoid of the current document
 	did: string // did of the document

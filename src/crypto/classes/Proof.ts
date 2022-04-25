@@ -38,6 +38,8 @@ export class Proof implements IProof {
 
 	@Field({ nullable: true })
 	evidence: string;
+	@Field(type=>[Number],{ nullable: true })
+	revealed: number[];
 
 
 }

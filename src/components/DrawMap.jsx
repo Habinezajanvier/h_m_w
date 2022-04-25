@@ -2,7 +2,6 @@ import React, { useRef, useEffect, useState } from "react";
 import "../assets/styles/components/map.scss";
 import trackerImg from "../assets/images/tracker-marker.png";
 import { Dialog, hslToRgb } from "@mui/material";
-import ReactPlayer from "react-player";
 import ReactDOM from "react-dom";
 import mapboxgl from "mapbox-gl";
 import Hls from "hls.js";

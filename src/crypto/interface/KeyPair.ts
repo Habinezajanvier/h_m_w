@@ -2,11 +2,13 @@ import { SignKeyPair, BoxKeyPair } from "tweetnacl";
 import {
   Meta,
   KeyPairType,
-  BaseKeyPair
-} from "../KeyPair";
-import  DidResolutionDocument  from "../classes/DidResolutionDocument";
+  BaseKeyPair,
+  Response
+} from "../crypto/KeyPair";
+import DidResolutionDocument from "../classes/DidResolutionDocument";
 import { Bls12381G2KeyPair } from "@mattrglobal/bls12381-key-pair";
 import { JsonWebKey } from "@mattrglobal/bls12381-key-pair/lib/types";
+import { Proof, Signature } from "../classes";
 
 /**
  * Interface defination for ChokidrKeyPair
@@ -33,8 +35,8 @@ export interface KeyPair {
   readonly ed25519SignatureKeyPair: SignKeyPair;
   readonly verifierMode: boolean;
 
-  readonly eAddress:string;
-  
+  readonly eAddress: string;
+
 
   authenticate(params: any): Promise<DidResolutionDocument>;
 
@@ -48,6 +50,19 @@ export interface KeyPair {
    * @param pop
    */
   verifyPop(pop: JsonWebKey, did: string): Promise<Boolean>;
+
+  /**
+   * Get the fingerprint of the currentkeypair
+   */
+  getFingerPrint(): Promise<string>
+
+  /**
+   * verify fingerprint of the
+   * @param fingerprint 
+   * @param did 
+   */
+  verifyFingerPrint(fingerprint: string, did: string): Promise<boolean>
+
 
   /**
    * 
@@ -106,7 +121,14 @@ export interface KeyPair {
    */
   toJson();
 
-  
+  /**
+   * update eaddress locally to the key, does not persist in the local store at the moment
+   * @param address 
+   * @param organisationAddress 
+   */
+  updateAddress(address: string, organisationAddress?: string): Promise<boolean>;
+
+
   /**
    * Sign the payload using ed25519 Signature
    * @param clearText
@@ -129,7 +151,7 @@ export interface KeyPair {
    * @param clearText
    * @returns string the signature in base64encoded format
    */
-  blsSign(clearText: Buffer[]): Promise<Uint8Array>;
+  blsSign(clearText: Uint8Array[]): Promise<Response>;
   /**
    * Verify the signature
    * @param clearText
@@ -137,10 +159,26 @@ export interface KeyPair {
    * @param did
    */
   blsVerifySignature(
-    clearText: Uint8Array,
-    signature: Uint8Array,
-    did?: string
+    clearText: Uint8Array[],
+    signature: Signature
   ): Promise<boolean>;
+
+  /**
+   * Create Proof for the given singnature and data
+   * @param data 
+   * @param signature 
+   * @param nonce 
+   * @param revealed 
+   */
+  createProof(data: Uint8Array[], signature: Uint8Array, revealed?: number[], nonce?: Uint8Array): Promise<Proof>
+
+  /**
+   * Verify Proof for the given data, Proof and Siganture
+   * @param data 
+   * @param proof 
+   * @param signature 
+   */
+  verifyProof(data: Uint8Array[], proof: Proof): Promise<boolean>
   // /**
   //  * Verify the batch signature for given clearText, Signatures and DID.
   //  * The DID format must adher to ckdr did's in the system. If the dids do not match the specification, the function throws an error.
@@ -153,6 +191,6 @@ export interface KeyPair {
   //   signatures: Uint8Array,
   //   dids: Uint8Array | string[]
   // ): Promise<boolean>;
-  
+
 
 }

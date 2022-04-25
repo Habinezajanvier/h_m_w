@@ -119,7 +119,7 @@ const Dashboard = () => {
       <div className="dashboard-map-bg">
         <Map
           trackerIcon={isLocationView ? crystalIcon : false}
-          markerCoords={markerCoords}
+          // markerCoords={markerCoords}
         />
 
         {/* Side Panel */}

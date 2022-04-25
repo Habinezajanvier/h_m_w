@@ -1,21 +1,28 @@
 import * as bip39 from "bip39";
-import { BLAKE2Xs } from "@stablelib/blake2xs";
 import { deriveKey } from "@stablelib/scrypt";
-import { sign, SignKeyPair, BoxKeyPair, box, secretbox, hash } from "tweetnacl";
+import { sign, SignKeyPair, BoxKeyPair, box, secretbox } from "tweetnacl";
+// Web : Cryto
+// Reactnative- Cryto -RandomBytes()
 import { randomBytes } from "@stablelib/random";
-
-import { DateTime } from "luxon";
-
-// Re-use local assert function
-import { assert } from "ts-essentials";
-import { KeyPair } from "./interface/KeyPair";
-import  DidResolutionDocument  from "./classes/DidResolutionDocument";
-import Resolver from "./Resolver";
-import {BlsKeyPair} from '@mattrglobal/bbs-signatures';
-import BLS from "./BLS";
 import { Bls12381G2KeyPair } from "@mattrglobal/bls12381-key-pair";
 import { JsonWebKey } from "@mattrglobal/bls12381-key-pair/lib/types";
+import { DateTime } from "luxon";
+import { assert } from "ts-essentials";
+import {blakehasher} from './blakehasher';
+// Local Imports.
 
+import { KeyPair } from "./interface/KeyPair";
+import DidResolutionDocument from "./classes/DidResolutionDocument";
+import Resolver from "./Resolver";
+import BLS from "./BLS";
+import { Signature } from "./classes/Signature";
+import { Proof } from "./classes/Proof";
+import { nanoid } from "nanoid";
+import { blsVerifyProof } from "@mattrglobal/bbs-signatures";
+
+/**
+ * General Constants
+ */
 export const SALT_LENGTH = 16;
 export const SEED_LENGTH = 32;
 export const BLSPRIVATEKEYLENGTH = 32;
@@ -27,7 +34,18 @@ export const DEFAULTEXPIRY = 11352960000;
 export const ApplicationType = "@application/cbor";
 export const DEFAULTCONTEXT = "http://www.chokidr.ml/xmlns";
 export const DST_POP = "BLS_POP_BLS12381G2_XMD:SHA-256_SSWU_RO_POP_";
+export const CKDR_SMALL_ADDRESS = "chokidr";
+export const ADDRESS_SEPERATOR = "@";
+export const addressRegExPattern = `/^[a-zA-Z]+${ADDRESS_SEPERATOR}[a-zA-Z]+$/i`;
 
+/**
+ * Regex for DID
+ */
+export const DIDPLACEHOLDER = `did`;
+export const CKDRPLACEHOLDER = `ckdr`;
+export const BASE64REGEX = `(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?`;
+export const regexPattern = `^(${DIDPLACEHOLDER}):(${CKDRPLACEHOLDER}):(${BASE64REGEX})$`;
+export const DEFAULT_NETWORKIDENTIFIER = "public";
 
 /**
  *
@@ -54,8 +72,6 @@ export enum KeyPairType {
   HYBRID = "HYBRID",
 }
 
-
-
 /**
  * Keyset Interface
  */
@@ -76,15 +92,15 @@ export interface BaseKeyPair {
   mnemonic?: string;
 }
 
-  /**
-   *
-   */
-   export interface AuthParams {
-    audiance?: string[];
-    path?: string;
-    target?: string;
-    nonce?: string;
-  }
+/**
+ *
+ */
+export interface AuthParams {
+  audiance?: string[];
+  path?: string;
+  target?: string;
+  nonce?: string;
+}
 
 /**
  * PublicKeypair interface
@@ -99,27 +115,11 @@ export interface PublickeySet {
  */
 export type Meta = Record<string, unknown>;
 
-/**
- * BlakeHasher
- * @returns
- */
-export function blakehasher() {
-  return new BLAKE2Xs();
+
+export interface Response {
+  signature: Signature;
+  bytes: Uint8Array;
 }
-/**
- * Regex for DID
- */
-export const DIDPLACEHOLDER = `did`;
-export const CKDRPLACEHOLDER = `ckdr`;
-export const BASE64REGEX = `(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?`;
-export const regexPattern = `^(${DIDPLACEHOLDER}):(${CKDRPLACEHOLDER}):(${BASE64REGEX})$`;
-
-
-export const DEFAULT_NETWORKIDENTIFIER = "public";
-
-
-
-
 /**
  * Get currentAddress from the did
  * @param did
@@ -137,7 +137,7 @@ export function getAddress(did: string): Uint8Array {
     )
       throw new Error("Invalid DID Format");
     // const addr = u8a.fromString(match[3], "base64");
-    const addr = Buffer.from(match[3],'base64');
+    const addr = Buffer.from(match[3], "base64");
     console.log("address", addr);
     // TODO: Confirm Codec checking
     // if (addr[0] != ckdrcodec || addr[1] != edcodec || addr[2] != blscodec)
@@ -189,9 +189,10 @@ export function encodescrypt(
  */
 export function spiltkey(key: Uint8Array): keySet {
   if (key.length != 64) throw new Error("Keylength Must be of 64");
+  console.log(`Sub Length`, key.subarray(32, key.length + 1).length);
   return {
     key1: key.subarray(0, 32),
-    key2: key.subarray(32, 64),
+    key2: key.subarray(32, key.length + 1),
   };
 }
 
@@ -262,7 +263,7 @@ export function encodeDID(
   if (blspublickey) {
     padding[2] = 0xea;
     bytes = Buffer.concat([padding, edspublickey, blspublickey]);
-    return `did:ckdr:${bytes.toString('base64')}`;
+    return `did:ckdr:${bytes.toString("base64")}`;
   }
   bytes = Buffer.concat([padding, edspublickey]);
   return `did:ckdr:${bytes.toString("base64")}`;
@@ -288,6 +289,34 @@ export function decodeDid(did: string): PublickeySet {
   }
 }
 
+export class Address {
+  /**
+   * Generate User address for the data given.
+   * Pass Organisation Address to create organisation address format
+   * @param data
+   * @param organisationAddress
+   * @returns
+   */
+  static generateAddress(data: string, organisationAddress?: string): string {
+    try {
+      const orgAdd = organisationAddress
+        ? organisationAddress
+        : CKDR_SMALL_ADDRESS;
+      const address = `${data}${ADDRESS_SEPERATOR}${orgAdd}`;
+      return address;
+    } catch (error) {
+      return error;
+    }
+  }
+
+  static verifyAddressFormat(address: string) {
+    try {
+      return new RegExp(addressRegExPattern, "idg").test(address);
+    } catch (error) {
+      return error;
+    }
+  }
+}
 
 /**
  * Creates a new keypair function holding the did and encryption and decryption
@@ -305,9 +334,9 @@ export function createKeypair(): KeyPair {
   let ed25519SignatureKeyPair: SignKeyPair;
   let target: string;
   let verifierMode: boolean = false;
-  let eAddress:string;
+  let eAddress: string;
   return {
-    get eAddress():string{
+    get eAddress(): string {
       return eAddress;
     },
     get did(): string {
@@ -342,6 +371,13 @@ export function createKeypair(): KeyPair {
     get seed() {
       return seed;
     },
+    async updateAddress(
+      address: string,
+      organisationAddress?: string
+    ): Promise<boolean> {
+      eAddress = Address.generateAddress(address, organisationAddress);
+      return Address.verifyAddressFormat(eAddress);
+    },
     async authenticate(params?: AuthParams): Promise<DidResolutionDocument> {
       return new Promise<DidResolutionDocument>((resolve, reject) => {
         try {
@@ -368,11 +404,9 @@ export function createKeypair(): KeyPair {
     async createPop(): Promise<JsonWebKey> {
       return new Promise<JsonWebKey>(async (resolve, reject) => {
         try {
-          // if (type != KeyPairType.HYBRID)
-            // reject(`Usable only in hybrid keypair mode`);
           if (!did) throw new Error(`Keypair did not generated`);
-          const jwk = signatureKeyPair.publicKeyJwk
-          resolve(jwk)
+          const jwk = signatureKeyPair.publicKeyJwk;
+          resolve(jwk);
         } catch (error) {
           reject(error);
         }
@@ -381,27 +415,46 @@ export function createKeypair(): KeyPair {
     async verifyPop(pop: JsonWebKey, did: string): Promise<Boolean> {
       return new Promise<Boolean>(async (resolve, reject) => {
         try {
-          // if (type != KeyPairType.HYBRID)
-          //   reject(`Usable only in hybrid keypair mode`);
-          if(!pop) throw new Error(`JsonWebKey must be provided`)
+          if (!pop) throw new Error(`JsonWebKey must be provided`);
           const decodedDid = decodeDid(did);
-          const keypair = await Bls12381G2KeyPair.fromJwk({publicKeyJwk:pop})
-          if(Buffer.from(decodedDid.signaturePublickey).equals(keypair.publicKeyBuffer)) resolve(true)
-          else resolve(false)
+          const keypair = await Bls12381G2KeyPair.fromJwk({
+            publicKeyJwk: pop,
+          });
+          if (
+            Buffer.from(decodedDid.signaturePublickey).equals(
+              keypair.publicKeyBuffer
+            )
+          )
+            resolve(true);
+          else resolve(false);
         } catch (error) {
           reject(false);
         }
       });
     },
+    async getFingerPrint(): Promise<string> {
+      return signatureKeyPair.fingerprint();
+    },
+    async verifyFingerPrint(
+      fingerprint: string,
+      did: string
+    ): Promise<boolean> {
+      const decodedDid = decodeDid(did);
+      const kp = Bls12381G2KeyPair.fromFingerprint({
+        fingerprint: fingerprint,
+      });
+      if (Buffer.from(kp.publicKeyBuffer).equals(decodedDid.signaturePublickey))
+        return true;
+      return false;
+    },
     async resolve(did: string): Promise<DidResolutionDocument> {
       return new Promise<DidResolutionDocument>((resolve, reject) => {
         try {
           const resolutionDocument = Resolver().resolve(did);
-        resolve(resolutionDocument);  
+          resolve(resolutionDocument);
         } catch (error) {
-          reject(error)
+          reject(error);
         }
-        
       });
     },
     async derive(
@@ -545,10 +598,7 @@ export function createKeypair(): KeyPair {
           let decrypted: Buffer;
           if (password) {
             const salt = bytes.slice(0, SALT_LENGTH);
-            const encodedpassword = encodescrypt(
-              Buffer.from(password),
-              salt
-            );
+            const encodedpassword = encodescrypt(Buffer.from(password), salt);
             const nonce = bytes.slice(SALT_LENGTH, SALT_LENGTH + NONCE_LENGTH);
             const encrypted = bytes.subarray(
               SALT_LENGTH + NONCE_LENGTH,
@@ -569,12 +619,12 @@ export function createKeypair(): KeyPair {
           }
           if (!decrypted) throw new Error("Value is not available.");
           ed25519 = decrypted.slice(0, 117);
-          bls = Buffer.from(decrypted.subarray(117, 267))
+          bls = Buffer.from(decrypted.subarray(117, 267));
           seed = decrypted.subarray(266, 314);
           target = decrypted.subarray(313, decrypted.length + 1);
           const blsheader = Buffer.from(bls.slice(0, PKCS8_HEADER.length));
           assert(blsheader.equals(PKCS8_HEADER), "Header format invalid");
-          const edheader = Buffer.from(ed25519.slice(0, PKCS8_HEADER.length))
+          const edheader = Buffer.from(ed25519.slice(0, PKCS8_HEADER.length));
           assert(edheader.equals(PKCS8_HEADER), "Header format invalid");
           const privatekey = ed25519.subarray(
             PKCS8_HEADER.length + 1,
@@ -588,15 +638,14 @@ export function createKeypair(): KeyPair {
               PKCS8_HEADER.length + BLSPRIVATEKEYLENGTH + 1
             )
           );
-          const seedvalue = Buffer.from(seed.slice(PKCS8_HEADER.length, seed.length));
-          const seedheader = seed.slice(0, PKCS8_HEADER.length);
-          assert(
-            seedvalue.equals(PKCS8_HEADER),
-            "Seed Header format invalid"
+          const seedvalue = Buffer.from(
+            seed.slice(PKCS8_HEADER.length, seed.length)
           );
+          const seedheader = Buffer.from(seed.slice(0, PKCS8_HEADER.length));
+          assert(seedheader.equals(PKCS8_HEADER), "Seed Header format invalid");
           const targetvalue = Buffer.from(
             target.slice(PKCS8_HEADER.length + 1, target.length + 1)
-          ).toString()
+          ).toString();
           const targetheader = Buffer.from(seed.slice(0, PKCS8_HEADER.length));
           assert(
             targetheader.equals(PKCS8_HEADER),
@@ -610,7 +659,7 @@ export function createKeypair(): KeyPair {
           });
         } catch (error) {
           console.log(error);
-          reject(error)
+          reject(error);
         }
       });
     },
@@ -625,57 +674,128 @@ export function createKeypair(): KeyPair {
     },
     toJson() {
       return {
-        encryptionprivatekey: Buffer.from(encryptionKeyPair.secretKey).toString('base64'),
-        encryptionpublickey: Buffer.from(encryptionKeyPair.publicKey).toString('base64'),
+        encryptionprivatekey: Buffer.from(encryptionKeyPair.secretKey).toString(
+          "base64"
+        ),
+        encryptionpublickey: Buffer.from(encryptionKeyPair.publicKey).toString(
+          "base64"
+        ),
         ed25519Signaturepublickey: Buffer.from(
           ed25519SignatureKeyPair.publicKey
-        ).toString('base64'),
+        ).toString("base64"),
         ed25519Signatureprivatekey: Buffer.from(
           ed25519SignatureKeyPair.secretKey
-        ).toString('base64'),
+        ).toString("base64"),
         signatureprivatekey: Buffer.from(
           signatureKeyPair.privateKeyBuffer
-        ).toString('base64'),
-        signaturepublickey: Buffer.from(
-          signatureKeyPair.publicKey
-        ).toString('base64'),
-        seed: Buffer.from(seed).toString('base64'),
+        ).toString("base64"),
+        signaturepublickey: Buffer.from(signatureKeyPair.publicKey).toString(
+          "base64"
+        ),
+        seed: Buffer.from(seed).toString("base64"),
         target: target,
         meta: meta,
       };
     },
-    
-    async blsSign(
-      data: Buffer[]
-    ): Promise<Uint8Array> {
+
+    async blsSign(data: Uint8Array[]): Promise<Response> {
       return new Promise(async (resolve, reject) => {
         try {
-          resolve(await BLS.sign({publicKey:signatureKeyPair.publicKeyBuffer,secretKey:signatureKeyPair.privateKeyBuffer},data));
+          const keypair = signatureKeyPair;
+          const bytes = await BLS.sign(keypair, data);
+          const isSignatureVerificaton = await BLS.verifySignature(
+            new Uint8Array(keypair.publicKeyBuffer),
+            data,
+            bytes
+          );
+          if (isSignatureVerificaton) {
+            const signature = {
+              id: nanoid(32),
+              algo: "BLS_BBS2022_SIG",
+              created: DateTime.now().toISO(),
+              controller: did,
+              proof: Buffer.from(bytes).toString("base64"),
+            } as Signature;
+            resolve({ signature, bytes });
+          } else {
+            reject(isSignatureVerificaton.error);
+          }
         } catch (error) {
           reject(error);
         }
       });
     },
-    /**
-     * Verify data with single signature
-     * @param clearText
-     * @param signature
-     * @param aud
-     * @returns
-     */
     async blsVerifySignature(
-      clearText: Uint8Array,
-      signature: Uint8Array,
-      aud?: string
+      clearText: Uint8Array[],
+      signature: Signature
     ): Promise<boolean> {
       return new Promise<boolean>(async (resolve, reject) => {
         try {
-          const pubkeys = aud ? decodeDid(aud) : decodeDid(did);
-          const response = await BLS.verifySignature(pubkeys.signaturePublickey,[Buffer.from(clearText)],Buffer.from(signature))
-          if(response.error){
-            reject(response.error)
-          }else {
-            resolve(response.verified)
+          const response = await BLS.verifySignature(
+            new Uint8Array(decodeDid(signature.controller).signaturePublickey),
+            clearText,
+            new Uint8Array(Buffer.from(signature.proof, "base64"))
+          );
+          if (response.error) {
+            console.log(response.error);
+            resolve(false);
+          } else {
+            resolve(response.verified);
+          }
+        } catch (error) {
+          reject(error);
+        }
+      });
+    },
+    async createProof(
+      data: Uint8Array[],
+      signature: Uint8Array,
+      revealed?: number[],
+      nonce?: Uint8Array
+    ): Promise<Proof> {
+      return new Promise<Proof>(async (resolve, reject) => {
+        try {
+          // why do we have to copy the signature to a local memory
+          // lets come back and check this
+          const keypair = signatureKeyPair;
+          const generatedNonce = nonce ? nonce : randomBytes(24);
+          const reveal = revealed || data.map((value, index) => index);
+          const proofValue = await BLS.createProof({
+            signature: signature,
+            publicKey: new Uint8Array(keypair.publicKeyBuffer),
+            messages: data,
+            nonce: generatedNonce,
+            revealed: reveal,
+          });
+          const proof = {
+            created: DateTime.now().toISO(),
+            creator: did,
+            verificationMethod: "AssertionProof",
+            nonce: Buffer.from(generatedNonce).toString("base64"),
+            proofValue: Buffer.from(proofValue).toString("base64"),
+            revealed: reveal,
+          } as Proof;
+          resolve(proof);
+        } catch (error) {
+          reject(error);
+        }
+      });
+    },
+    async verifyProof(data: Uint8Array[], proof: Proof): Promise<boolean> {
+      return new Promise<boolean>(async (resolve, reject) => {
+        try {
+          const result = await blsVerifyProof({
+            proof: new Uint8Array(Buffer.from(proof.proofValue, "base64")),
+            messages: data,
+            publicKey: new Uint8Array(
+              decodeDid(proof.creator).signaturePublickey
+            ),
+            nonce: new Uint8Array(Buffer.from(proof.nonce, "base64")),
+          });
+          if (result.error) {
+            reject(result.error);
+          } else {
+            resolve(result.verified);
           }
         } catch (error) {
           reject(error);
@@ -684,4 +804,3 @@ export function createKeypair(): KeyPair {
     },
   };
 }
-
