@@ -122,51 +122,57 @@ const Signup = ({ ...props }) => {
   };
 
   const handleKeyPairGeneration = async () => {
+    console.log(`${countryCode}${phone}`, mnenominPassword)
     let registerObj = await testRegisterUser(
       `${countryCode}${phone}`,
       mnenominPassword
     );
-    setMnenominPhrase(registerObj?.mnemonicPhrase);
+    let keypair = registerObj.kayPair;
+    registerObj = registerObj.payload;
+
+    // console.log("payload:", registerObj, "keypair:", keypair)
+
+    // setMnenominPhrase(registerObj?.mnemonicPhrase);
 
     // delete registerObj?.mnemonicPhrase;
 
-    update(registerObj)
-      .then((res) => {
-        console.log(res?.data);
+    // update(registerObj)
+    //   .then((res) => {
+    //     console.log(res?.data);
 
-        if (res?.data) {
-          const storedInCred = storeInCredManager(
-            registerObj.id,
-            registerObj.metaInformation.firstName,
-            registerObj.did
-          );
+    //     if (res?.data) {
+    //       const storedInCred = storeInCredManager(
+    //         registerObj.id,
+    //         registerObj.metaInformation.firstName,
+    //         registerObj.did
+    //       );
 
-          if (storedInCred) {
-            console.log("user cred stored");
-          }
+    //       if (storedInCred) {
+    //         console.log("user cred stored");
+    //       }
 
-          delete registerObj?.did;
+    //       delete registerObj?.did;
 
-          let stringifiedRegisterObj = JSON.stringify(registerObj);
-          console.log(stringifiedRegisterObj);
+    //       let stringifiedRegisterObj = JSON.stringify(keypair);
+    //       console.log(stringifiedRegisterObj);
 
-          let registeredBuffer = Buffer.from(stringifiedRegisterObj).toString(
-            "base64"
-          );
-          console.log(registeredBuffer);
+    //       let registeredBuffer = Buffer.from(stringifiedRegisterObj).toString(
+    //         "base64"
+    //       );
+    //       console.log(registeredBuffer);
 
-          // createIndexedDB({ id: registerObj.id, userData: registeredBuffer });
-          storeTokensInLevelDB(registerObj.id, registeredBuffer);
+    //       // createIndexedDB({ id: registerObj.id, userData: registeredBuffer });
+    //       storeTokensInLevelDB(keypair.id, registeredBuffer);
 
-          console.log("after idb stoage");
+    //       console.log("after idb stoage");
 
-          setShowMnemonicPhrase(true);
-          console.log(registerObj);
-        }
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    //       setShowMnemonicPhrase(true);
+    //       console.log(registerObj);
+    //     }
+    //   })
+    //   .catch((err) => {
+    //     console.log(err);
+    //   });
   };
 
   return (

@@ -27,6 +27,7 @@ import {
   ActivityType,
 } from "../../utils/activitiesList";
 import moment from "moment";
+import { testVCGeneration } from "../../utils/testVCGeneration";
 
 const memberdid =
   "did:ckdr:Ee3qAFcbDNAdq9GvYG9pBPkgr3Q3C2NqbScjdxhXymoF53VNkyVbR8p1O3jgtIVRhb6Yv9QRNFdsf1uPfANviuR5pH0BoJdmCOcZitfZvcXmp5+gF1KHlRaUTb7PRBws+9iUcmPCl166ad8Q10TCTC8FapG5nonsv071Z30ODSHCYPGm";
@@ -111,6 +112,11 @@ const Dashboard = () => {
     setMarkerCoords(newCoordsArray);
   }, [activityList]);
 
+  useEffect(() => {
+    console.log("vc testing")
+    testVCGeneration()
+  }, []);
+
   return (
     <div className="dashboard">
       <div className="headerContainer">
@@ -119,7 +125,7 @@ const Dashboard = () => {
       <div className="dashboard-map-bg">
         <Map
           trackerIcon={isLocationView ? crystalIcon : false}
-          // markerCoords={markerCoords}
+          markerCoords={markerCoords}
         />
 
         {/* Side Panel */}
