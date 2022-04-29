@@ -1,0 +1,106 @@
+
+.quick-start-container{
+    width: 425px;
+    height: auto;
+    background: #24262E !important;
+    display: flex;
+    flex-direction: column;
+    padding-top: 24px;
+}
+
+.package-accordon{
+    max-width: 376px !important;
+    margin: 0% auto;
+    border-radius: 6px !important;
+    background-color: #14161F !important;
+    margin-bottom: 5%;
+ 
+}
+.quickstart-accordon{
+    margin: 0 auto;
+}
+.accordon-heading{
+    border-radius: 6px !important;
+    background: #14161F !important;
+    padding: none;
+    height: 25px;
+    h1{
+    margin: 0;
+    width: 350px !important;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 20px;
+    letter-spacing: -0.015em;
+    color: rgba(228, 228, 231, 0.8);
+    }
+}
+.package-accordon-content{
+    margin: 0% !important;
+    padding: 0% !important;
+}
+.quickstart{
+    height: auto;
+    margin: 0% auto;
+    background: #14161F !important;
+    .quickstart-list{
+        padding: 44px 2.5% 16px 7.5%;
+        li{
+            font-weight: 400;
+            font-size: 16px;
+            line-height: 20px !important;
+            letter-spacing: -0.015em;
+            color: rgba(228, 228, 231,0.8);
+            margin: 0% auto !important;
+            padding-bottom: 1px;
+        }
+    }
+    .help-video{
+        width: 350px !important;
+        height: 197px !important;
+        margin: 0 auto;
+        background: linear-gradient(180deg, rgba(48, 45, 45, 0.88) 15.57%, rgba(15, 13, 13, 0) 85.71%);;
+    }
+}
+
+
+.quick-start-header{
+    margin-left: 6%;
+    display: flex;
+    gap: 16px;
+    h1{
+        font-family: 'Source Sans Pro';
+        font-style: normal;
+        font-weight: 600;
+        font-size: 14px;
+        line-height: 36px;
+        letter-spacing: -0.015em;
+        color: rgba(228, 228, 231, 0.8);
+    }
+}
+
+.e-bill-format{
+    height: 50px;  
+    background: #F2FFF6;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: 5% auto auto auto;
+    h1{
+        font-weight: 600;
+        font-size: 12px;
+        line-height: 20px;
+        color: #000000;
+        margin: 0;
+    }
+    button{
+        margin-top: -.5px;
+        height: 26px;
+        border: 1px solid #22C826;
+        box-sizing: border-box;
+        font-weight: 600;
+        font-size: 14px;
+        line-height: 20px;
+        color: #000000;
+    }
+}

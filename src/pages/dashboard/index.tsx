@@ -28,6 +28,10 @@ import {
 } from "../../utils/activitiesList";
 import moment from "moment";
 import { testVCGeneration } from "../../utils/testVCGeneration";
+import AddPackage from "../../components/AddPackage";
+import AddPackageDialog from "../../components/flows/clients/AddPackage";
+import SubmitPackageDialog from "../../components/flows/clients/SubmitPackage";
+import SubmitPackageSuccessDialog from "../../components/flows/clients/SuccessDialog";
 
 const memberdid =
   "did:ckdr:Ee3qAFcbDNAdq9GvYG9pBPkgr3Q3C2NqbScjdxhXymoF53VNkyVbR8p1O3jgtIVRhb6Yv9QRNFdsf1uPfANviuR5pH0BoJdmCOcZitfZvcXmp5+gF1KHlRaUTb7PRBws+9iUcmPCl166ad8Q10TCTC8FapG5nonsv071Z30ODSHCYPGm";
@@ -76,6 +80,16 @@ const Dashboard = () => {
   const [isActivitySubPaused, setIsActivitySubPaused] = useState(false);
   const [activityList, setActivityList] = useState([]);
   const [markerCoords, setMarkerCoords] = useState([]);
+  const [dialogOpen, setDialogOpen] = useState<string>("");
+
+  const handleDialogOpen = (dialog) => {
+    setDialogOpen(dialog);
+  };
+
+  const handleDialogClose = () => {
+    setDialogOpen("");
+  };
+
   const subscriptionVariables = {
     topic: "activities",
     memberdid,
@@ -113,12 +127,28 @@ const Dashboard = () => {
   }, [activityList]);
 
   useEffect(() => {
-    console.log("vc testing")
-    testVCGeneration()
+    console.log("vc testing");
+    testVCGeneration();
   }, []);
 
   return (
     <div className="dashboard">
+      <AddPackageDialog
+        open={dialogOpen === "addpackage"}
+        handleClose={handleDialogClose}
+        handleContinue={() => handleDialogOpen("subpackage")}
+      />
+      <SubmitPackageSuccessDialog
+        open={dialogOpen === "subpackagesuccess"}
+        handleClose={handleDialogClose}
+        handleContinue={handleDialogClose}
+      />
+      <SubmitPackageDialog
+        open={dialogOpen === "subpackage"}
+        handleClose={handleDialogClose}
+        handleContinue={() => handleDialogOpen("subpackagesuccess")}
+      />
+
       <div className="headerContainer">
         <Header onLocationClick={() => setIsLocationView(true)} />
       </div>
@@ -128,6 +158,9 @@ const Dashboard = () => {
           markerCoords={markerCoords}
         />
 
+        <div className="add-package-wrapper">
+          <AddPackage onClick={() => handleDialogOpen("addpackage")} />
+        </div>
         {/* Side Panel */}
         {!isLocationView && (
           <div
@@ -136,80 +169,84 @@ const Dashboard = () => {
             }`}
           >
             {!detailView ? (
-              <>
-                <div className="panel-header flex items-center justify-between">
-                  <div className="panel-header-label">All Activities</div>
-                  <div className="flex items-center panel-header-ext">
-                    <div className="activities-filter c-pointer">
-                      <img src={filterIc} alt="filter icon" />
-                    </div>
-                    <div className="close-activity c-pointer">
-                      <KeyboardArrowDownIcon style={{ color: "lightgray" }} />
+              <div className="dashboard">
+                <div>
+                  <div className="panel-header flex items-center justify-between">
+                    <div className="panel-header-label">All Activities</div>
+                    <div className="flex items-center panel-header-ext">
+                      <div className="activities-filter c-pointer">
+                        <img src={filterIc} alt="filter icon" />
+                      </div>
+                      <div className="close-activity c-pointer">
+                        <KeyboardArrowDownIcon style={{ color: "lightgray" }} />
+                      </div>
                     </div>
                   </div>
+                  <ul className="activities-list">
+                    {activityList.map((e, i) => (
+                      <li className="activity-item" key={i}>
+                        <div className="activity-label">
+                          <div className="activity-title">
+                            <img
+                              src={
+                                activitiesIcons[e.type]
+                                  ? activitiesIcons[e.type]
+                                  : redLocIc
+                              }
+                              alt="red location"
+                              className="c-pointer"
+                            />
+                            <span
+                              className="c-pointer"
+                              onClick={() => setDetailVidew(true)}
+                            >
+                              {activitiesTitle[e.type]}
+                            </span>
+                          </div>
+                          <div className="activity-time c-pointer">
+                            {moment().diff(
+                              moment(e.activity_start_time),
+                              "days"
+                            ) > 0
+                              ? `${moment().diff(
+                                  moment(e.activity_start_time),
+                                  "days"
+                                )} days ago`
+                              : moment().diff(
+                                  moment(e.activity_start_time),
+                                  "hours"
+                                ) > 0
+                              ? `${moment().diff(
+                                  moment(e.activity_start_time),
+                                  "hours"
+                                )} hrs ago`
+                              : `${moment().diff(
+                                  moment(e.activity_start_time),
+                                  "minutes"
+                                )} min ago`}
+                          </div>
+                        </div>
+                        <div className="activity-info">
+                          <div className="activity-info-labels">
+                            <div className="activity-member c-pointer">
+                              Members
+                            </div>
+                            <div className="activity-priority c-pointer">
+                              {"Priority "}
+                              {e.detections.priority
+                                ? e.detections.priority
+                                : 0}
+                            </div>
+                          </div>
+                          <div className="acitivity-viewDoc c-pointer">
+                            View Docs
+                          </div>
+                        </div>
+                      </li>
+                    ))}
+                  </ul>
                 </div>
-                <ul className="activities-list">
-                  {activityList.map((e, i) => (
-                    <li className="activity-item" key={i}>
-                      <div className="activity-label">
-                        <div className="activity-title">
-                          <img
-                            src={
-                              activitiesIcons[e.type]
-                                ? activitiesIcons[e.type]
-                                : redLocIc
-                            }
-                            alt="red location"
-                            className="c-pointer"
-                          />
-                          <span
-                            className="c-pointer"
-                            onClick={() => setDetailVidew(true)}
-                          >
-                            {activitiesTitle[e.type]}
-                          </span>
-                        </div>
-                        <div className="activity-time c-pointer">
-                          {moment().diff(
-                            moment(e.activity_start_time),
-                            "days"
-                          ) > 0
-                            ? `${moment().diff(
-                                moment(e.activity_start_time),
-                                "days"
-                              )} days ago`
-                            : moment().diff(
-                                moment(e.activity_start_time),
-                                "hours"
-                              ) > 0
-                            ? `${moment().diff(
-                                moment(e.activity_start_time),
-                                "hours"
-                              )} hrs ago`
-                            : `${moment().diff(
-                                moment(e.activity_start_time),
-                                "minutes"
-                              )} min ago`}
-                        </div>
-                      </div>
-                      <div className="activity-info">
-                        <div className="activity-info-labels">
-                          <div className="activity-member c-pointer">
-                            Members
-                          </div>
-                          <div className="activity-priority c-pointer">
-                            {"Priority "}
-                            {e.detections.priority ? e.detections.priority : 0}
-                          </div>
-                        </div>
-                        <div className="acitivity-viewDoc c-pointer">
-                          View Docs
-                        </div>
-                      </div>
-                    </li>
-                  ))}
-                </ul>
-              </>
+              </div>
             ) : (
               <div className="activity-detail-view">
                 <div className="panel-header">
@@ -445,7 +482,6 @@ const Dashboard = () => {
             )}
           </div>
         )}
-
         {/* Location Panel */}
         {isLocationView && (
           <>

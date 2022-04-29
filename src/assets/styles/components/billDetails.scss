@@ -1,0 +1,89 @@
+.bill-details-container{
+    display: flex;
+    flex-direction: column;
+    h1{
+        font-weight: 600;
+        font-size: 20px;
+        color: rgba(255, 255, 255, 0.8);
+        line-height: 20px;
+        margin: 0%;
+    }
+   .example-text{
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 20px;
+    color: rgba(228, 228, 231, 0.4);
+    padding: 9px 0px;
+    }
+    .or-separator{
+        padding: 40px 0px;
+    }
+    .bill-type-selector{
+        margin-top: 32px;
+        h1{
+            font-weight: 400;
+            font-size: 16px;
+            line-height: 20px;
+            color: rgba(228, 228, 231, 0.4);
+        }
+        .select-input{
+            border-bottom: 1px solid rgba(228, 228, 231, 0.4);
+            margin: 0%;
+            padding-left: 0%;
+        }
+        
+    }
+    .scan-qr{
+        .scan-title{
+            font-weight: 700;
+            font-size: 16px;
+            line-height: 30px;
+            text-align: center;
+            color: rgba(1, 143, 106, 0.85);
+            margin: 0%;
+        }
+    }
+    .bill-details-format{
+        width: 319px;
+        height: 124px;
+        left: 280px;
+        top: 317px;
+        background: #14161F;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        justify-content: center;
+        align-content: center;
+        align-items: center;
+        h1{
+            font-weight: 600;
+            font-size: 16px;
+            line-height: 20px;
+            color: #E4E4E7;
+        }
+        button{
+            background: #14161F;
+            width: 164.54px;
+            height: 44.04px;
+            border: 1px solid #22C826;
+            box-sizing: border-box;
+            font-weight: 600;
+            font-size: 20px;
+            line-height: 20px;
+            color: #E4E4E7;
+        }
+    }
+}
+
+//selector
+.selector-input{
+    border-bottom: 1px solid rgba(228, 228, 231, 0.4);
+    margin-left: 0%;
+    div{
+     
+        ul{
+            background-color: #14161F !important;
+            border: 2px solid red;
+        }
+    }
+}

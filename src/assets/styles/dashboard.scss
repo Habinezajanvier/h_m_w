@@ -1,3 +1,4 @@
+
 .dashboard {
     background: rgba(38, 40, 50, 0.8);
     padding: 20px 20px 0 20px;
@@ -8,6 +9,12 @@
       position: relative;
     }
   
+    .add-package-wrapper{
+      position: absolute !important;
+      top: 4%;
+      right: 22.5%;
+    }
+    
     .dashboard-side-panel,
     .location-panel {
       position: absolute;

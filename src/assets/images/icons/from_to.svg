@@ -1,0 +1,7 @@
+<svg width="20" height="54" viewBox="0 0 20 54" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M15.625 8.125C15.625 13.125 10 17.5 10 17.5C10 17.5 4.375 13.125 4.375 8.125C4.375 5 6.875 2.5 10 2.5C13.125 2.5 15.625 5 15.625 8.125Z" stroke="#E03761" stroke-opacity="0.8" stroke-width="2" stroke-miterlimit="10" stroke-linejoin="round"/>
+<path d="M10 10C11.0355 10 11.875 9.16053 11.875 8.125C11.875 7.08947 11.0355 6.25 10 6.25C8.96447 6.25 8.125 7.08947 8.125 8.125C8.125 9.16053 8.96447 10 10 10Z" stroke="#E03761" stroke-opacity="0.8" stroke-width="2" stroke-miterlimit="10" stroke-linejoin="round"/>
+<path d="M15.625 42.125C15.625 47.125 10 51.5 10 51.5C10 51.5 4.375 47.125 4.375 42.125C4.375 39 6.875 36.5 10 36.5C13.125 36.5 15.625 39 15.625 42.125Z" stroke="#3C5CFF" stroke-opacity="0.73" stroke-width="2" stroke-miterlimit="10" stroke-linejoin="round"/>
+<path d="M10 44C11.0355 44 11.875 43.1605 11.875 42.125C11.875 41.0895 11.0355 40.25 10 40.25C8.96447 40.25 8.125 41.0895 8.125 42.125C8.125 43.1605 8.96447 44 10 44Z" stroke="#3C5CFF" stroke-opacity="0.73" stroke-width="2" stroke-miterlimit="10" stroke-linejoin="round"/>
+<line x1="10.5" y1="17" x2="10.5" y2="37" stroke="#E4E4E7" stroke-opacity="0.3" stroke-dasharray="2 2"/>
+</svg>
