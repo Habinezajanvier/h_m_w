@@ -3,6 +3,11 @@
   grid-template-columns: 10% auto;
   gap: 10px;
   padding-top: 11px;
+  &:nth-child(1) {
+    .image_container {
+      padding-left: 10px;
+    }
+  }
   .content {
     .content_header {
       h1 {
@@ -15,8 +20,9 @@
     }
 
     div {
-      display: flex;
-      flex-direction: column;
+      display: grid;
+      grid-template-rows: auto auto;
+
       h1 {
         font-weight: 400;
         font-size: 16px;
@@ -27,5 +33,23 @@
         }
       }
     }
+  }
+}
+
+.vehicle_number_select {
+  color: white;
+  max-width: 100px !important;
+}
+
+.transporter_dropdown {
+  display: grid;
+  grid-template-columns: auto auto;
+  align-items: center;
+  margin-right: auto;
+  .vehicle_number_select,
+  .transporter_select {
+    margin-top: 5%;
+    padding: 0%;
+    margin-left: 10%;
   }
 }

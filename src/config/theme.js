@@ -1,4 +1,4 @@
-import createTheme from "@mui/material/styles/createTheme"
+import createTheme from "@mui/material/styles/createTheme";
 
 // TO-DO: upgrade to v5 structure
 export default createTheme({
@@ -21,6 +21,19 @@ export default createTheme({
     button: {
       textTransform: "none",
     },
+    fontFamily: [
+      "Source Sans Pro",
+      "-apple-system",
+      "BlinkMacSystemFont",
+      '"Segoe UI"',
+      "Roboto",
+      '"Helvetica Neue"',
+      "Arial",
+      "sans-serif",
+      '"Apple Color Emoji"',
+      '"Segoe UI Emoji"',
+      '"Segoe UI Symbol"',
+    ].join(","),
   },
   props: {
     MuiLink: {
@@ -47,4 +60,4 @@ export default createTheme({
       },
     },
   },
-})
+});

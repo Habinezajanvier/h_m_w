@@ -28,7 +28,7 @@ export const useStyles = makeStyles(() => ({
   },
   selectIcon: {
     position: "relative",
-    color: "rgba(228, 228, 231, 0.2)",
+    color: "#e4e4e733 !important",
     fontSize: "24px",
   },
   paper: {

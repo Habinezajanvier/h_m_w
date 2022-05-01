@@ -1,0 +1,47 @@
+.crypto_details_wrapper {
+  max-width: 300px;
+  .heading {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 15px;
+    h1 {
+      font-weight: 600;
+      font-size: 16px;
+      line-height: 20px;
+      color: rgba(228, 228, 231, 0.8);
+    }
+  }
+  .crypto_details {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    h1 {
+      font-weight: 600;
+      font-size: 14px;
+      line-height: 20px;
+      color: rgba(228, 228, 231, 0.6);
+      margin: 0%;
+    }
+    .proof_value {
+      span {
+        padding-left: 5px;
+        color: #5794f7;
+      }
+    }
+    span,
+    p {
+      font-weight: 400;
+      font-size: 12px;
+      line-height: 20px;
+      color: rgba(228, 228, 231, 0.6);
+    }
+    .verification_method {
+      p {
+        word-wrap: break-word;
+        max-width: 300px !important;
+        margin: 0% !important;
+        color: rgba(228, 228, 231, 0.6);
+      }
+    }
+  }
+}

@@ -3,10 +3,10 @@ import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
-import { useStyles } from "./styles/selectorStyles";
+import { useStyles } from "./styles/simpleSelectorStyles";
 import "../../../assets/styles/components/flowDialog.scss";
 
-export default function SelectorInput({ label, options, className }) {
+export default function SimpleSelectorInput({ label, options, className }) {
   const classes = useStyles();
 
   const menuProps = {
@@ -14,6 +14,7 @@ export default function SelectorInput({ label, options, className }) {
       list: classes.list,
       paper: classes.paper,
     },
+    disableScrollLock: true,
     anchorOrigin: {
       vertical: "bottom",
       horizontal: "center",
@@ -26,7 +27,7 @@ export default function SelectorInput({ label, options, className }) {
   };
 
   const [option, setOption] = React.useState(
-    (options?.length && options[0].value) || ""
+    (options.length && options[0].value) || "value"
   );
 
   const handleChange = (event: SelectChangeEvent) => {
@@ -36,7 +37,7 @@ export default function SelectorInput({ label, options, className }) {
   return (
     <FormControl
       variant="standard"
-      sx={{ minWidth: 320 }}
+      sx={{ minWidth: 100 }}
       className="selector-input-form"
     >
       <InputLabel id="demo-simple-select-standard-label">{label}</InputLabel>
@@ -47,6 +48,7 @@ export default function SelectorInput({ label, options, className }) {
         onChange={handleChange}
         label={label}
         className={className}
+        disableUnderline
         MenuProps={menuProps}
         classes={{
           select: classes.select,
@@ -54,23 +56,15 @@ export default function SelectorInput({ label, options, className }) {
         }}
       >
         <MenuItem disabled value="" className="select-header">
-          <h1>E-way Bill No.</h1>
-          <h1>Valid From</h1>
-          <h1>Delivery Loc</h1>
+          {options[0]?.value}
         </MenuItem>
-        {options.map(({ label, value, valid_from, delivery_loc }) => (
-<<<<<<< HEAD
+        {options.map(({ label, value }) => (
           <MenuItem
             value={value}
             className="selector-content"
             aria-label={label}
           >
-=======
-          <MenuItem value={value} className="selector-content">
->>>>>>> e4f8383 (ft:(bill): eway-bill flow)
-            <h1 className="bill-number">{value}</h1>
-            <h1 className="bill-valid">{valid_from}</h1>
-            <h1 className="bill-deliv">{delivery_loc}</h1>
+            {value}
           </MenuItem>
         ))}
       </Select>

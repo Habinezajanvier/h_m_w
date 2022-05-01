@@ -1,0 +1,55 @@
+.proof-report-dialog-container {
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25), 0px 4px 4px rgba(0, 0, 0, 0.25),
+    inset 0px 4px 4px rgba(0, 0, 0, 0.25);
+}
+
+.proof-report-dialog {
+  width: 338px;
+  height: 583px;
+  background: #22242c;
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+  .upper {
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+    .top .sub-header,
+    .bottom .sub-header {
+      font-weight: 400;
+      font-size: 14px;
+      line-height: 20px;
+      color: rgba(228, 228, 231, 0.6);
+      padding-bottom: 2%;
+    }
+    .bottom {
+      .content-wrapper {
+        display: flex;
+        gap: 15px;
+        .content-left,
+        .content-right {
+          display: flex;
+          flex-direction: column;
+          gap: 15px;
+        }
+      }
+    }
+  }
+}
+.proof-report-dialog-title {
+  background: #22242c;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+.report-heading {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  h1 {
+    font-weight: 600;
+    font-size: 16px;
+    line-height: 20px;
+    color: rgba(228, 228, 231, 0.8);
+  }
+}

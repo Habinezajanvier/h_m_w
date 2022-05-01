@@ -20,9 +20,13 @@ import "../../../assets/styles/components/flowDialog.scss";
 import CargoEvidence from "./CargoEvidence";
 import DocPanel from "../common/DocPanel";
 import PackageDetail from "../common/PackageDetail";
+import SimpleSelectorInput from "../common/SimpleSelector";
+import ProofDialog from "../common/ProofReport";
+import { useState } from "react";
 
 const DialogTitle = ({ handleContinue }) => {
   const classes = useStyles();
+
   return (
     <div className={classes.submit_title_container}>
       <h1
@@ -37,6 +41,62 @@ const DialogTitle = ({ handleContinue }) => {
 };
 const SubmitPackageDialog = ({ open, handleClose, handleContinue }) => {
   const classes = useStyles();
+
+  const vehicles = [
+    {
+      value: "666AA6-09",
+      label: "666AA6-09",
+    },
+    {
+      value: "874AA6-73",
+      label: "729AA6-92",
+    },
+    {
+      value: "820AA6-27",
+      label: "640AA6-89",
+    },
+    {
+      value: "840AA6-64",
+      label: "749AA6-02",
+    },
+    {
+      value: "082AA9-00",
+      label: "937AA1-63",
+    },
+  ];
+
+  const transporters = [
+    {
+      value: "Ashglow Trucks and Logistics",
+      label: "",
+    },
+    {
+      value: "DTDC",
+      label: "",
+    },
+    {
+      value: "Speed Delivery ",
+      label: "Speed Delivery ",
+    },
+    {
+      value: "Big trucks ",
+      label: "Big trucks ",
+    },
+    {
+      value: "Truckz India",
+      label: "Truckz India",
+    },
+    {
+      value: "Express",
+      label: "Express",
+    },
+  ];
+
+  const [reportShow, setReportShow] = useState(false);
+
+  const handleReportShow = () => {
+    setReportShow(!reportShow);
+  };
   return (
     <DialogLayout
       open={open}
@@ -45,6 +105,7 @@ const SubmitPackageDialog = ({ open, handleClose, handleContinue }) => {
       title={<DialogTitle handleContinue={handleContinue} />}
       showArrow={true}
     >
+      <ProofDialog show={reportShow} handleShow={handleReportShow} />
       <div
         className={`${classes.dialog_content_wrapper} dialog_submit_package_container`}
       >
@@ -108,18 +169,33 @@ const SubmitPackageDialog = ({ open, handleClose, handleContinue }) => {
           </div>
         </div>
         <div className="middle_panel">
-          <div className="child">
+          <div className="child left">
             <PackageDetail
               icon={transporterTruckImg}
               header={"Transporter info"}
             >
               <div>
-                <h1>Transporter:</h1>
+                <div className="transporter_dropdown">
+                  <h1>Transporter:</h1>
+                  <SimpleSelectorInput
+                    options={transporters}
+                    label={null}
+                    className="transporter_select"
+                  />
+                </div>
               </div>
             </PackageDetail>
             <PackageDetail icon={vehicleInfoImg} header={"Vehicle info"}>
               <div>
-                <h1>Transporter:</h1>
+                <div className="transporter_dropdown">
+                  <h1>Vehicle Number:</h1>
+
+                  <SimpleSelectorInput
+                    options={vehicles}
+                    label={null}
+                    className="vehicle_number_select"
+                  />
+                </div>
                 <h1>
                   Vehicle Health: <span className="green_txt">90%</span>
                 </h1>
@@ -146,19 +222,33 @@ const SubmitPackageDialog = ({ open, handleClose, handleContinue }) => {
                 <h1>Generated Documents</h1>
                 <div className="child_content">
                   <div className="left_side">
-                    <DocPanel text={"Quality Check Report"} icon={reportImg} />
+                    <DocPanel
+                      text={"Quality Check Report"}
+                      icon={reportImg}
+                      onClick={handleReportShow}
+                    />
                     <DocPanel
                       text={"Certificate of origin"}
                       icon={locationImg}
+                      onClick={handleReportShow}
                     />
                     <DocPanel
                       text={"Proforma Invoice"}
                       icon={performaInvoiceImg}
+                      onClick={handleReportShow}
                     />
                   </div>
                   <div className="left_side">
-                    <DocPanel text={"Declaration Form"} icon={formImg} />
-                    <DocPanel text={"Bill of lading"} icon={formImg} />
+                    <DocPanel
+                      text={"Declaration Form"}
+                      icon={formImg}
+                      onClick={handleReportShow}
+                    />
+                    <DocPanel
+                      text={"Bill of lading"}
+                      icon={formImg}
+                      onClick={handleReportShow}
+                    />
                   </div>
                 </div>
               </div>
