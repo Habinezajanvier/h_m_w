@@ -82,13 +82,6 @@ const FaceRecoginitionPanel = () => {
       videoRef.current.addEventListener("play", async () => {
         console.log("rec startred");
         var node = await create();
-        const results = await node.add("=^.^= meow meow");
-        if (!results) console.log("Error Setting data to ipfs");
-        else console.log(results);
-        const cid = results.path;
-        console.log("CID created via ipfs.add:", cid);
-        const data = await node.cat(cid);
-        console.log("Data read back via ipfs.cat:", data);
         const canvas = faceapi.createCanvasFromMedia(videoRef.current);
         panelRef.current.append(canvas);
         const displaySize = {
@@ -99,7 +92,9 @@ const FaceRecoginitionPanel = () => {
         var capturedFrameArray = [];
 
         let isMyFileNotUploaded = true;
-        let ipfs_client = createIPFSClient();
+        let ipfs_client = createIPFSClient({
+          
+        });
         setInterval(async () => {
           const detections = await faceapi
             .detectAllFaces(
@@ -173,22 +168,14 @@ const FaceRecoginitionPanel = () => {
           if (capturedFrameArray.length < 30) {
             capturedFrameArray.push(canvas.toDataURL());
             if (node) {
-              window.ipfs = node;
               const data = await node.add(canvas.toDataURL("image/jpeg"), 0.1);
               // sign the data
               // call the mutation
-              window.data = data;
               console.log(data.pat);
             }
           }
-
           canvas.getContext("2d").clearRect(0, 0, canvas.width, canvas.height);
           faceapi.draw.drawDetections(canvas, resizedDetections);
-
-          // faceapi.draw.drawFaceLandmarks(canvas, resizedDetections);
-          // faceapi.draw.drawFaceExpressions(canvas, resizedDetections);
-          // console.log(resizedDetections)
-          // console.log(detections)
         }, 100);
       });
     // }

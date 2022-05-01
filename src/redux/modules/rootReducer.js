@@ -3,6 +3,7 @@ import { ckdrNodeApi } from "../services/ckdrNodeApi";
 import dashboardSlice from "./dashboard/dashboardSlice";
 import signupSlice from "./signup/signupSlice";
 import userAuthSlice from "./user/userAuthSlice";
+import authSlice from "./auth/authSlice";
 
 // combine reducers
 export const rootReducer = combineReducers({
@@ -11,4 +12,5 @@ export const rootReducer = combineReducers({
   currentUser: userAuthSlice,
   dashboard: dashboardSlice,
   signup: signupSlice,
+  auth:authSlice
 });

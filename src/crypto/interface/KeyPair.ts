@@ -4,11 +4,11 @@ import {
   KeyPairType,
   BaseKeyPair,
   Response
-} from "../crypto/KeyPair";
+} from "../KeyPair";
 import DidResolutionDocument from "../classes/DidResolutionDocument";
 import { Bls12381G2KeyPair } from "@mattrglobal/bls12381-key-pair";
 import { JsonWebKey } from "@mattrglobal/bls12381-key-pair/lib/types";
-import { Proof, Signature } from "../classes";
+import { Proof, Signature } from "../classes/";
 
 /**
  * Interface defination for ChokidrKeyPair

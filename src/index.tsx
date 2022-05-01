@@ -3,7 +3,6 @@ import ReactDOM from "react-dom";
 import { Provider } from "react-redux";
 import { ThemeProvider } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
-import * as axios from "./config/axios";
 
 // Relative imports
 import App from "./App";
@@ -47,20 +46,20 @@ const client = createClient({
   ],
 });
 
-axios.init();
 
 const token = localStorage.getItem("token");
 if (token) {
-  axios.setAuthToken(token);
   store.dispatch(authUserForToken()); // Keep sesstion as token exists
   store.dispatch(authUser()); // Re-fetch session information
 } else {
   store.dispatch(unauthUser());
 }
 
+
+
 ReactDOM.render(
   <Provider store={store}>
-    <PersistGate persistor={persistor}>
+    <PersistGate loading={null} persistor={persistor}>
       <URQLProvider value={client}>
         <React.StrictMode>
           <ThemeProvider theme={theme}>

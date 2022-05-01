@@ -19,21 +19,8 @@ export const testRegisterUser = async (
 
   const mnemonicPhrase = await keypair.derive(target, KeyPairType.HYBRID);
 
-  const sig = keypair.blsSign([Buffer.from(JSON.stringify(meta))]);
-  const pop = keypair.createPop();
-  const response = await Promise.all([sig, pop]);
-  const signature = {
-    id: nanoid(32),
-    // nonce: Buffer.from(nonce).toString("base64"),
-    // aud: keypair.did,
-
-    proof: Buffer.from(response[0]).toString("base64"),
-    // proof: Buffer.from(await keypair.proof(signature,nonce)).toString('base64')
-  };
-
-  const resolvedPoP = { ...response[1] };
-  console.log("nweaajdkfjaklsd", resolvedPoP);
-
+  const sig = await keypair.blsSign([Buffer.from(JSON.stringify(meta))]);
+  const pop = await keypair.createPop();
   // const passPhrase = await keypair.encodePkcs8(mnemonicPassword);
 
   const registerRequestObject = {
@@ -41,13 +28,13 @@ export const testRegisterUser = async (
       id: nanoId,
       did: keypair.did,
       createdTime,
-      proofOfPossession: resolvedPoP,
+      proofOfPossession: pop,
       role: "admin",
       metaInformation: meta,
       odid: "",
       invited_by: "",
       event: undefined,
-      signature: signature,
+      signature: sig,
       mnemonicPhrase: mnemonicPhrase.mnemonic,
     },
 
@@ -56,13 +43,13 @@ export const testRegisterUser = async (
       did: keypair.did,
       keypair: keypair.encodePkcs8(),
       createdTime,
-      proofOfPossession: resolvedPoP,
+      proofOfPossession: pop,
       role: "admin",
       metaInformation: meta,
       odid: "",
       invited_by: "",
       event: undefined,
-      signature: signature,
+      signature: sig,
       mnemonicPhrase: mnemonicPhrase.mnemonic,
     },
   };

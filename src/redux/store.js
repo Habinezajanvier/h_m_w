@@ -1,7 +1,7 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { setupListeners } from "@reduxjs/toolkit/query";
 import { ckdrNodeApi } from "./services/ckdrNodeApi";
-import userAuthSlice from "./modules/user/userAuthSlice";
+import { encryptTransform } from 'redux-persist-transform-encrypt';
 
 // redux persist
 import { persistStore, persistReducer } from "redux-persist";
@@ -18,14 +18,17 @@ const persistedReducer = persistReducer(persistConfig, rootReducer);
 
 const store = configureStore({
   reducer: persistedReducer,
-  // {
-  //   // Add the generated reducer as a specific top-level slice
-  //   [ckdrNodeApi.reducerPath]: ckdrNodeApi.reducer,
-  //   currentUser: userAuthSlice,
-  // },
   middleware: (getDefaultMiddleware) => {
     return getDefaultMiddleware().concat(ckdrNodeApi.middleware);
   },
+  transforms:[
+    encryptTransform({
+      secretKey: '9138nn89nc2983nv28vn823vn928vb982v982n8', // TODO: Move this to process env storage
+      onError: function (error) {
+        console.log(`Error in Encryption Transformer`, error)
+      },
+    }),
+  ],
 });
 
 // optional, but required for refetchOnFocus/refetchOnReconnect behaviors

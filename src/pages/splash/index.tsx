@@ -30,7 +30,7 @@ const Splash = () => {
             <div className="splash-boldText">Flagship Features</div>
             <div>
               <div className="splash-para">
-                Amet, consectetur adipiscing elit, sed do eiusmod tempor.
+                Decentralized, Connected, Simplified.
               </div>
               <div className="text-center">
                 <img
@@ -50,10 +50,10 @@ const Splash = () => {
             </div>
           </div>
           <div className="splash-navigation flex-center-center fd-column flex-1 w100 h100">
-            <div>
+            {/* <div>
               <div className="chokidr-title">C H O K I D R</div>
-            </div>
-            <div className="btn">
+            </div> */}
+            <div className="splash-signup-btn btn">
               <Button
                 outlined={false}
                 title={"Sign Up"}

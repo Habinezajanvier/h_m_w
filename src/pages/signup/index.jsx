@@ -8,7 +8,7 @@ import KeyboardBackspaceIcon from "@mui/icons-material/KeyboardBackspace";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import otpImg from "../../assets/images/otp.png";
-
+import { login } from "../../redux/modules/auth/authSlice";
 import FaceRecoginitionPanel from "../../components/FaceRecoginitionPanel";
 import { registerUser } from "./registerUser";
 import SearchQRCode from "./SearchQRCode";
@@ -68,6 +68,7 @@ const Signup = ({ ...props }) => {
   // redux
   const currentView = useSelector((state) => state.signup.currentView);
   const signupState = useSelector((state) => state.signup.signupData);
+  
   const dispatch = useDispatch();
 
   // sendOTP mutation
@@ -130,49 +131,49 @@ const Signup = ({ ...props }) => {
     let keypair = registerObj.kayPair;
     registerObj = registerObj.payload;
 
-    // console.log("payload:", registerObj, "keypair:", keypair)
+    console.log("payload:", registerObj, "keypair:", keypair)
 
-    // setMnenominPhrase(registerObj?.mnemonicPhrase);
+    setMnenominPhrase(registerObj?.mnemonicPhrase);
 
-    // delete registerObj?.mnemonicPhrase;
+    delete registerObj?.mnemonicPhrase;
 
-    // update(registerObj)
-    //   .then((res) => {
-    //     console.log(res?.data);
+    update(registerObj)
+      .then((res) => {
+        console.log(res?.data);
 
-    //     if (res?.data) {
-    //       const storedInCred = storeInCredManager(
-    //         registerObj.id,
-    //         registerObj.metaInformation.firstName,
-    //         registerObj.did
-    //       );
+        if (res?.data) {
+          const storedInCred = storeInCredManager(
+            registerObj.id,
+            registerObj.metaInformation.firstName,
+            registerObj.did
+          );
 
-    //       if (storedInCred) {
-    //         console.log("user cred stored");
-    //       }
+          if (storedInCred) {
+            console.log("user cred stored");
+          }
 
-    //       delete registerObj?.did;
+          delete registerObj?.did;
 
-    //       let stringifiedRegisterObj = JSON.stringify(keypair);
-    //       console.log(stringifiedRegisterObj);
+          let stringifiedRegisterObj = JSON.stringify(keypair);
+          console.log(stringifiedRegisterObj);
 
-    //       let registeredBuffer = Buffer.from(stringifiedRegisterObj).toString(
-    //         "base64"
-    //       );
-    //       console.log(registeredBuffer);
+          let registeredBuffer = Buffer.from(stringifiedRegisterObj).toString(
+            "base64"
+          );
+          console.log(registeredBuffer);
 
-    //       // createIndexedDB({ id: registerObj.id, userData: registeredBuffer });
-    //       storeTokensInLevelDB(keypair.id, registeredBuffer);
+          // createIndexedDB({ id: registerObj.id, userData: registeredBuffer });
+          storeTokensInLevelDB(keypair.id, registeredBuffer);
 
-    //       console.log("after idb stoage");
+          console.log("after idb stoage");
 
-    //       setShowMnemonicPhrase(true);
-    //       console.log(registerObj);
-    //     }
-    //   })
-    //   .catch((err) => {
-    //     console.log(err);
-    //   });
+          setShowMnemonicPhrase(true);
+          console.log(registerObj);
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   return (
@@ -182,7 +183,7 @@ const Signup = ({ ...props }) => {
       ) : (
         <>
           <AuthHeader />
-          <div className="chokidr-title">C H O K I D R</div>
+          {/* <div className="chokidr-title">C H O K I D R</div> */}
 
           {readyForFaceRegistration ? (
             <div style={styles}>
@@ -310,8 +311,11 @@ const Signup = ({ ...props }) => {
                       outlined={false}
                       title={"Save QR code on this device"}
                       onClick={() => {
-                        setReadyForFaceRegistration(true);
+                        console.log(`Saving QR Code and dispatching`)
+                        dispatch(login())
+                        console.log(`login dispatched, moving to dashboard`)
                         setShowQRCode(false);
+                        navigate('/dashboard')
                         // dispatch(signupCurrentView(6))
                       }}
                     />

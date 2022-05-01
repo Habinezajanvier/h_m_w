@@ -20,6 +20,7 @@ import { readFromLevelDB } from "../../utils/levelDB";
 import { signinMutation } from "../../GQLQueries";
 import { useDispatch, useSelector } from "react-redux";
 import { signupCurrentView } from "../../redux/modules/signup/signupSlice";
+import {Helmet} from "react-helmet";
 
 const AllowSearchQRCode = ({
   setIsSearchingScreen,
@@ -125,7 +126,10 @@ const Signin = ({ ...props }) => {
   return (
     <div className="login">
       <AuthHeader />
-      <div className="title">C H O K I D R</div>
+      <Helmet>
+        <title>CHOKIDR | Register</title>
+        <meta name="description" content="Register User" />
+    </Helmet>
       <SigninWrapper
         isMemonicScreen={isMemonicScreen}
         setIsMemonicScreen={setIsMemonicScreen}
