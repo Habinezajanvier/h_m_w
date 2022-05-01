@@ -1,0 +1,21 @@
+.package-details-dialog {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-content: center;
+  align-items: center;
+  padding: 25px 0;
+  .bill-details {
+    margin-bottom: 25px;
+  }
+  //   gap: 25px;
+  .transport-details,
+  .package_documents,
+  .bill-details {
+    min-width: 456px;
+    max-width: 456px;
+  }
+  .button-wrapper {
+    padding: 25px;
+  }
+}

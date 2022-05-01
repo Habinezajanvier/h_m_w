@@ -1,0 +1,23 @@
+.view-docs {
+  display: flex;
+  align-items: flex-start;
+  gap: 25px;
+  margin-top: 10px;
+  img {
+    margin-top: 10px;
+    transform: scale(1.2);
+  }
+  div {
+    p {
+      margin: 0%;
+      font-weight: 400;
+      font-size: 16px !important;
+      line-height: 20px;
+      color: #e4e4e7 !important;
+      span {
+        color: white !important;
+      }
+      margin-bottom: 15px;
+    }
+  }
+}

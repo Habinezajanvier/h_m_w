@@ -1,0 +1,74 @@
+.agency-confirm-status {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  align-content: center;
+  transition: ease-in-out 1s;
+  &:hover {
+    .data-div {
+      .status {
+        transition: ease-in-out 1s;
+        display: block !important;
+      }
+    }
+  }
+  gap: 10px;
+  .image-wrapper {
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    align-items: center;
+
+    img.pcs_color {
+      padding: 2px;
+      border-radius: 50%;
+      border: 2px dashed #e0a515;
+    }
+    img.vahan_color,
+    img.fois_color,
+    img.acme_color {
+      border-radius: 50%;
+      padding: 1px;
+      border: 2px solid rgba(1, 143, 106, 0.85);
+      box-sizing: border-box;
+    }
+  }
+  .data-div {
+    h1 {
+      font-family: "Outfit" !important;
+      font-style: normal;
+      font-weight: 400;
+      font-size: 16px;
+      line-height: 30px;
+    }
+    .status {
+      display: none;
+      transition: ease-in-out 1s;
+      font-weight: 400 !important;
+      font-size: 14px !important;
+      line-height: 5px !important;
+      color: rgba(228, 228, 231, 0.8) !important;
+      margin: 0%;
+      text-align: center !important;
+    }
+  }
+}
+
+//agencies' colors
+
+.icegate_color {
+  color: #24829f !important;
+}
+.acme_color {
+  color: #2b7f6c !important;
+}
+.pcs_color {
+  color: #7f722b !important;
+}
+.fois_color {
+  color: #2b7f6c !important;
+}
+.vahan_color {
+  color: #2b7f6c !important;
+}

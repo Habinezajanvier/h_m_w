@@ -9,10 +9,15 @@ export const useStyles = makeStyles({
     transition: "ease-in-out .5s",
     backgroundColor: "#22242C",
   },
+  closeIcon: {
+    marginTop: "32px !important",
+    marginRight: "43px !important",
+    zIndex: 99,
+    border: "2px solid red",
+  },
   title_container: {
     display: "flex",
     gap: "25px",
-    paddingTop: "25px",
   },
   submit_title_container: {
     display: "flex",

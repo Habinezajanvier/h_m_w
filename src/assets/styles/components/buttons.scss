@@ -1,0 +1,29 @@
+.flow-btn {
+}
+
+.btn-icon {
+  margin-right: 5px;
+}
+
+.accept-btn {
+  background: #27ae60 !important;
+  border-radius: 6px;
+}
+
+.reject-btn {
+  background: #eb5757 !important;
+  border-radius: 6px;
+}
+
+.details-btn {
+  background: #27ae60 !important;
+  border-radius: 6px;
+}
+//grouped
+
+.package-agency-action-btns {
+  display: flex;
+  gap: 25px;
+  justify-content: center;
+  margin-top: 40px;
+}

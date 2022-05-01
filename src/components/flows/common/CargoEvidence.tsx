@@ -17,7 +17,7 @@ const CargoEvidence: FC<CargoProps> = ({ title, icon, images }) => {
         <h1>{title}</h1>
         <div className="images_wrapper">
           {images.map((image) => (
-            <img src={image} alt="evidence" />
+            <img src={image} alt="evidence" key={Math.random()} />
           ))}
         </div>
       </div>

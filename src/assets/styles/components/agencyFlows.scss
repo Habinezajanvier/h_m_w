@@ -1,0 +1,159 @@
+.icegate-cargo-evidence-wrapper {
+  padding: 0% !important;
+  margin-top: 0% !important;
+  h1 {
+    margin: 0%;
+  }
+  .cargo-evidence {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 25px;
+    margin-top: 10px;
+    .cargo_evidence_wrapper {
+      .right_panel {
+        h1 {
+          margin-bottom: 15px;
+        }
+        .images_wrapper {
+          display: grid;
+          grid-template-columns: auto;
+          gap: 9px;
+          img {
+            width: 250px;
+            height: 125px;
+          }
+        }
+      }
+    }
+  }
+}
+
+.agencies-approval-tab {
+  width: 800px;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  margin-left: 10rem;
+  div {
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    .image-wrapper {
+      img {
+        margin: 0 auto;
+      }
+    }
+    h1 {
+      margin: 0%;
+      text-align: center;
+    }
+  }
+  h1 {
+    font-family: "Outfit" !important;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 30px;
+  }
+}
+
+.low-panel {
+  display: grid;
+  grid-template-columns: 40% auto;
+  margin-top: 25px;
+  gap: 25px;
+  .left-side,
+  .right-side {
+    background: #181a23;
+    box-shadow: inset 0px 4px 4px rgba(0, 0, 0, 0.25);
+    border-radius: 6px;
+  }
+  .right-side {
+    display: grid;
+    grid-template-columns: 55% auto;
+    .videos-wrapper {
+      display: flex;
+      align-content: center;
+      align-items: center;
+      .videos-container {
+        h1 {
+          margin-bottom: 8px;
+          font-weight: 400;
+          font-size: 16px;
+          line-height: 20px;
+          color: rgba(228, 228, 231, 0.4);
+        }
+        .videos-wrapper {
+          display: flex;
+          gap: 15px;
+          img {
+            max-width: 146px;
+            max-height: 91px;
+            min-width: 146px;
+            min-height: 91px;
+          }
+        }
+      }
+    }
+  }
+}
+
+.dashed-divider {
+  color: yellow;
+  border: 0.4px dashed rgba(228, 228, 231, 0.4);
+}
+
+.agencies-divider {
+  max-width: 50px;
+  margin-top: -2rem;
+}
+
+.icegate_rejection_reason_container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  align-content: center;
+  padding: 10rem 0;
+  width: auto;
+  .rejection-reason-form {
+    width: auto;
+    padding-top: 5rem;
+    .form-title {
+      font-weight: 700;
+      font-size: 24px;
+      line-height: 20px;
+      text-align: center;
+      color: rgba(228, 228, 231, 0.8);
+    }
+    .form-content {
+      margin: 30px auto;
+    }
+  }
+}
+
+.rejection-radio-btn {
+  color: red;
+  background-color: red;
+  border: #181a23;
+}
+
+.other-textfield {
+  // border: 2px solid red !important;
+  input {
+    width: 371px;
+    height: 87px;
+    background: #1c1d22;
+    border-radius: 10px;
+    fill: #1c1d22;
+  }
+  border: 2px solid red;
+  color: red !important;
+}
+
+//signaure proof
+
+.icegate-signature-proof {
+  display: flex;
+  flex-direction: column;
+}

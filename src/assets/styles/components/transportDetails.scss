@@ -1,0 +1,32 @@
+.transport-details {
+  background-color: #14161f !important;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25), 0px 4px 4px rgba(0, 0, 0, 0.25) !important;
+  border-radius: 6px 6px 0 0px;
+  padding: 5px 15px;
+  min-width: 535px;
+
+  .child_header {
+    display: grid;
+    grid-template-columns: 5% auto;
+    padding-top: 10px;
+    padding-bottom: 10%;
+    h1 {
+      font-weight: 600;
+      font-size: 16px;
+      line-height: 30px;
+      color: rgba(255, 255, 255, 0.8);
+      margin: 0 0 35px 0;
+    }
+  }
+  .content {
+    .h1,
+    .ransporter_dropdown h1 {
+      span {
+        font-weight: 400;
+        font-size: 16px;
+        line-height: 20px;
+        color: rgba(228, 228, 231, 0.4);
+      }
+    }
+  }
+}

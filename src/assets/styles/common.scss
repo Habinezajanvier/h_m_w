@@ -3,6 +3,15 @@
 $green: rgba(1, 143, 106, 0.85);
 
 // Classes
-.green_txt {
+.green-txt {
   color: $green !important;
+}
+
+.gray-txt {
+  font-weight: 400;
+  color: rgba(228, 228, 231, 0.4);
+}
+
+.italic-txt {
+  font-style: italic;
 }

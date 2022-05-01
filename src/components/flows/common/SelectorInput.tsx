@@ -59,15 +59,11 @@ export default function SelectorInput({ label, options, className }) {
           <h1>Delivery Loc</h1>
         </MenuItem>
         {options.map(({ label, value, valid_from, delivery_loc }) => (
-<<<<<<< HEAD
           <MenuItem
             value={value}
             className="selector-content"
-            aria-label={label}
+            key={Math.random()}
           >
-=======
-          <MenuItem value={value} className="selector-content">
->>>>>>> e4f8383 (ft:(bill): eway-bill flow)
             <h1 className="bill-number">{value}</h1>
             <h1 className="bill-valid">{valid_from}</h1>
             <h1 className="bill-deliv">{delivery_loc}</h1>

@@ -1,7 +1,7 @@
 import QuickStart from "./QuickStart";
 import BillDetails from "./BillDetails";
 import DialogLayout from "../../layouts/DialogLayout";
-import { useStyles } from "./styles";
+import { useStyles } from "../styles";
 import "../../../assets/styles/components/flowDialog.scss";
 
 export default function AddPackageDialog({

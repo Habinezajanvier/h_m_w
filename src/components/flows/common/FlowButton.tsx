@@ -1,5 +1,7 @@
 import Button from "@material-ui/core/Button";
 import { withStyles } from "@material-ui/core/styles";
+import { FC } from "react";
+import "../../../assets/styles/components/buttons.scss";
 
 const CustomButton = withStyles({
   root: {
@@ -22,8 +24,25 @@ const CustomButton = withStyles({
   },
 })((props) => <Button {...props} />);
 
-function FlowButton({ text, onClick }) {
-  return <CustomButton onClick={onClick}>{text}</CustomButton>;
+interface flowButtonProps {
+  text: string;
+  onClick: () => void;
+  className?: string;
+  icon?: string;
 }
+
+const FlowButton: FC<flowButtonProps> = ({
+  text,
+  onClick,
+  className,
+  icon,
+}) => {
+  return (
+    <CustomButton onClick={onClick} className={`${className} flow-btn`}>
+      {icon && <img src={icon} alt="btn icon" className="btn-icon" />}
+      {text}
+    </CustomButton>
+  );
+};
 
 export default FlowButton;

@@ -1,0 +1,131 @@
+.gdft-proof-of-signature-card {
+  width: 330px;
+  background: #22242c;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25), 0px 4px 4px rgba(0, 0, 0, 0.25),
+    inset 0px 4px 4px rgba(0, 0, 0, 0.25);
+  padding: 20px;
+  display: flex;
+  margin-right: auto;
+  flex-direction: column;
+  .heading {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    h1 {
+      margin: 0%;
+      margin-right: auto;
+      text-align: left;
+    }
+  }
+  .signature {
+    display: flex;
+    flex-direction: column;
+    .signature-header {
+      h1 {
+        font-weight: 400;
+        font-size: 16px;
+        line-height: 20px;
+        color: rgba(228, 228, 231, 0.6);
+      }
+    }
+  }
+}
+
+//signaure proof dgftt
+
+.dgft-signature-proof {
+  background: #22242c;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25), 0px 4px 4px rgba(0, 0, 0, 0.25),
+    inset 0px 4px 4px rgba(0, 0, 0, 0.25);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  padding: 25px;
+  margin: 25px 0;
+  gap: 15px;
+  width: 330px;
+  .signature-header {
+    display: grid;
+    grid-template-columns: 5% auto;
+    gap: 15px;
+    img {
+      margin-bottom: 0%;
+    }
+    .header-name {
+      margin-right: auto;
+      font-weight: 600;
+      font-size: 16px;
+      line-height: 20px;
+      color: rgba(228, 228, 231, 0.8);
+      text-align: left;
+    }
+  }
+  .signature-original,
+  .signature-multiple {
+    .header {
+      font-weight: 400;
+      font-size: 16px;
+      line-height: 20px;
+      color: rgba(228, 228, 231, 0.6);
+      margin-top: 0;
+    }
+    .signature-content {
+      display: grid;
+      grid-template-columns: repeat(1, 1fr);
+      column-gap: 45px;
+      div {
+        margin-bottom: 10px;
+      }
+    }
+  }
+}
+
+//signaure proof icegate
+
+.icegate-signature-proof {
+  background: #22242c;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25), 0px 4px 4px rgba(0, 0, 0, 0.25),
+    inset 0px 4px 4px rgba(0, 0, 0, 0.25);
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-start;
+  padding: 25px;
+  margin: 25px 0;
+  gap: 25px;
+  width: 666px;
+  .signature-header {
+    display: grid;
+    grid-template-columns: 5% auto;
+    gap: 15px;
+    img {
+      margin-bottom: 0%;
+    }
+    .header-name {
+      margin-right: auto;
+      font-weight: 600;
+      font-size: 16px;
+      line-height: 20px;
+      color: rgba(228, 228, 231, 0.8);
+      text-align: left;
+    }
+  }
+  .signature-original,
+  .signature-multiple {
+    .header {
+      font-weight: 400;
+      font-size: 16px;
+      line-height: 20px;
+      color: rgba(228, 228, 231, 0.6);
+      margin-top: 0;
+    }
+    .signature-content {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      column-gap: 45px;
+      div {
+        margin-bottom: 10px;
+      }
+    }
+  }
+}

@@ -31,8 +31,18 @@ import { testVCGeneration } from "../../utils/testVCGeneration";
 import AddPackage from "../../components/AddPackage";
 import AddPackageDialog from "../../components/flows/clients/AddPackage";
 import SubmitPackageDialog from "../../components/flows/clients/SubmitPackage";
-import SubmitPackageSuccessDialog from "../../components/flows/clients/SuccessDialog";
-import { faker } from '@faker-js/faker';
+import SubmitPackageSuccessDialog from "../../components/flows/common/SuccessDialog";
+import { faker } from "@faker-js/faker";
+import DgftAgencyDialog from "../../components/flows/govt dgft/AgencyViewDocs";
+import {
+  ViewDocsDgft,
+  ViewDocsIcegate,
+} from "../../components/flows/common/ViewDocs";
+import IcegateAgencyDialog from "../../components/flows/govt icegate/AgencyVIewDocs";
+import PackageDetailsDialog from "../../components/flows/clients/PackageDetailsDialog";
+import DocsNotification from "../../components/flows/common/DocsNotification";
+import IcegateRejectionDialog from "../../components/flows/govt icegate/RejectionReasonDialog";
+
 const memberdid =
   "did:ckdr:Ee3qAFcbDNAdq9GvYG9pBPkgr3Q3C2NqbScjdxhXymoF53VNkyVbR8p1O3jgtIVRhb6Yv9QRNFdsf1uPfANviuR5pH0BoJdmCOcZitfZvcXmp5+gF1KHlRaUTb7PRBws+9iUcmPCl166ad8Q10TCTC8FapG5nonsv071Z30ODSHCYPGm";
 
@@ -83,6 +93,7 @@ const Dashboard = () => {
   const [dialogOpen, setDialogOpen] = useState<string>("");
 
   const handleDialogOpen = (dialog) => {
+    console.log(dialog);
     setDialogOpen(dialog);
   };
 
@@ -141,12 +152,31 @@ const Dashboard = () => {
       <SubmitPackageSuccessDialog
         open={dialogOpen === "subpackagesuccess"}
         handleClose={handleDialogClose}
-        handleContinue={handleDialogClose}
+        handleContinue={handleDialogOpen}
+        title={null}
+        children={null}
+        icon={null}
       />
       <SubmitPackageDialog
         open={dialogOpen === "subpackage"}
         handleClose={handleDialogClose}
         handleContinue={() => handleDialogOpen("subpackagesuccess")}
+      />
+      <DgftAgencyDialog
+        open={dialogOpen === "dgftagency"}
+        handleClose={handleDialogClose}
+        handleContinue={() => handleDialogOpen("subpackagesuccess")}
+      />
+      <IcegateAgencyDialog
+        open={dialogOpen === "icegateagency"}
+        handleClose={handleDialogClose}
+        handleContinue={(dialog: string) => handleDialogOpen(dialog)}
+      />
+
+      <PackageDetailsDialog
+        open={dialogOpen === "packdetails"}
+        handleClose={handleDialogClose}
+        handleContinue={handleDialogClose}
       />
 
       <div className="headerContainer">
@@ -173,6 +203,7 @@ const Dashboard = () => {
                 <div>
                   <div className="panel-header flex items-center justify-between">
                     <div className="panel-header-label">All Activities</div>
+
                     <div className="flex items-center panel-header-ext">
                       <div className="activities-filter c-pointer">
                         <img src={filterIc} alt="filter icon" />
@@ -182,6 +213,20 @@ const Dashboard = () => {
                       </div>
                     </div>
                   </div>
+                  <div>
+                    <br />
+                    <br />
+                    <ViewDocsDgft
+                      onClick={() => handleDialogOpen("dgftagency")}
+                    />
+                    <ViewDocsIcegate
+                      onClick={() => handleDialogOpen("icegateagency")}
+                    />
+                    <DocsNotification
+                      onClick={() => handleDialogOpen("packdetails")}
+                    />
+                  </div>
+
                   <ul className="activities-list">
                     {activityList.map((e, i) => (
                       <li className="activity-item" key={i}>
@@ -273,7 +318,9 @@ const Dashboard = () => {
                       Activity: {faker.word}
                     </span>
                   </div>
-                  <div className="device-name c-pointer">{faker.vehicle.vin()}</div>
+                  <div className="device-name c-pointer">
+                    {faker.vehicle.vin()}
+                  </div>
                 </div>
                 <div className="flex justify-between device-details-list">
                   <div className="device-details flex-1">
@@ -281,14 +328,18 @@ const Dashboard = () => {
                       <img src={smallCCTVIc} alt="cctv" />
                       <span className="device-detials-label">Camera no.</span>
                     </div>
-                    <div className="device-details-info">{faker.vehicle.vin()}</div>
+                    <div className="device-details-info">
+                      {faker.vehicle.vin()}
+                    </div>
                   </div>
                   <div className="device-details flex-1 rec-border">
                     <div className="flex items-center justify-center">
                       <img src={smallCCTVIc} alt="cctv" />
                       <span className="device-detials-label">Rec. time</span>
                     </div>
-                    <div className="device-details-info">{new Date().getDay()}</div>
+                    <div className="device-details-info">
+                      {new Date().getDay()}
+                    </div>
                   </div>
                   <div className="device-details flex-1">
                     <div className="flex items-center justify-center">

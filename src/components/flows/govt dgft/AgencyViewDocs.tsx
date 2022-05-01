@@ -1,17 +1,12 @@
 import DialogLayout from "../../layouts/DialogLayout";
-import FlowButton from "../common/FlowButton";
 import { useStyles } from "../styles";
 import "../../../assets/styles/components/flowDialog.scss";
 import "../../../assets/styles/common.scss";
-import calendarImg from "../../../assets/images/icons/calendar.svg";
 import docImg from "../../../assets/images/icons/doc.svg";
+import calendarImg from "../../../assets/images/icons/calendar.svg";
 import fromtoImg from "../../../assets/images/icons/from_to.svg";
 import houseImg from "../../../assets/images/icons/houses.svg";
 import processingImg from "../../../assets/images/icons/processing.svg";
-import scanningImg from "../../../assets/images/icons/scanning.svg";
-import packingImg from "../../../assets/images/icons/scanning.svg";
-import safetyImg from "../../../assets/images/icons/safety.svg";
-import loadingImg from "../../../assets/images/icons/loading.svg";
 import documentsImg from "../../../assets/images/icons/documents.svg";
 import reportImg from "../../../assets/images/icons/report.svg";
 import locationImg from "../../../assets/images/icons/location_marker.svg";
@@ -27,25 +22,77 @@ import PackageDetail from "../common/PackageDetail";
 import SimpleSelectorInput from "../common/SimpleSelector";
 import ProofDialog from "../common/ProofReport";
 import { useState } from "react";
-import SubmitPackageSuccess from "./SubmiPackageSuccess";
-import BillMovementDetails from "../common/BillMovementDetails";
+import { AcceptButton, RejectButton } from "../common/Buttons";
 
-const DialogTitle = ({ handleContinue, handleAddPackage }) => {
+import icegateImg from "../../../assets/images/icegate.png";
+import pcsImg from "../../../assets/images/pcs.png";
+import acmeImg from "../../../assets/images/acme.png";
+import foisImg from "../../../assets/images/fois.png";
+import vahanImg from "../../../assets/images/vahan.png";
+import AgencyConfirmStatus from "../common/AgencyConfirmStatus";
+import DgftSuccessDialog from "./DgftSuccessDialog";
+import DgftRejectionDialog from "./DgftRejectionDialog";
+import DgftRejectionReasonDialog from "./RejectionReasonDialog";
+
+const DialogTitle = ({ handleContinue }) => {
   const classes = useStyles();
 
   return (
     <div className={classes.submit_title_container}>
-      <h1 className={classes.submit_title}>Add Package</h1>
-      <FlowButton
-        text="Submit"
-        onClick={handleContinue}
-        icon={null}
-        className=""
-      />
+      <h1
+        className={`${classes.submit_title} ${classes.pointer}`}
+        onClick={null}
+      >
+        IEC 89765 45678 transporation request
+      </h1>
+      <div className="agencies-approval-tab">
+        <AgencyConfirmStatus
+          icon={icegateImg}
+          className="icegate_color"
+          status=""
+          name="ICEGATE"
+        />
+        <div className="agencies-divider">
+          <div className="dashed-divider"></div>
+        </div>
+        <AgencyConfirmStatus
+          icon={acmeImg}
+          className="acme_color"
+          status="has verified request"
+          name="ACME"
+        />
+        <div className="agencies-divider">
+          <div className="dashed-divider"></div>
+        </div>
+        <AgencyConfirmStatus
+          icon={pcsImg}
+          className="pcs_color"
+          status="Waiing to verify"
+          name="PCS"
+        />
+        <div className="agencies-divider">
+          <div className="dashed-divider"></div>
+        </div>
+        <AgencyConfirmStatus
+          icon={foisImg}
+          className="fois_color"
+          status="has verified request"
+          name="FOIS"
+        />
+        <div className="agencies-divider">
+          <div className="dashed-divider"></div>
+        </div>
+        <AgencyConfirmStatus
+          icon={vahanImg}
+          className="vahan_color"
+          status="has verified request"
+          name="VAHAN"
+        />
+      </div>
     </div>
   );
 };
-const SubmitPackageDialog = ({ open, handleClose, handleContinue }) => {
+const DgftAgencyDialog = ({ open, handleClose, handleContinue }) => {
   const classes = useStyles();
 
   const vehicles = [
@@ -74,11 +121,11 @@ const SubmitPackageDialog = ({ open, handleClose, handleContinue }) => {
   const transporters = [
     {
       value: "Ashglow Trucks and Logistics",
-      label: "Ashglow Trucks and Logistics",
+      label: "",
     },
     {
       value: "DTDC",
-      label: "DTDC",
+      label: "",
     },
     {
       value: "Speed Delivery ",
@@ -104,31 +151,46 @@ const SubmitPackageDialog = ({ open, handleClose, handleContinue }) => {
     setReportShow(!reportShow);
   };
 
-  const [successShow, setSuccessShow] = useState(false);
+  const [showSuccessDialog, setShowSuccessDialog] = useState(false);
+  const [showRejectDialog, setShowRejectDialog] = useState(false);
+  const [showReasontDialog, setShowReasonDialog] = useState(false);
 
   const handleSuccess = () => {
-    setSuccessShow(!successShow);
+    handleClose();
+    setShowSuccessDialog(!showSuccessDialog);
+  };
+
+  const handleRejectReason = () => {
+    handleClose();
+    setShowReasonDialog(!showRejectDialog);
+  };
+
+  const handleReject = () => {
+    handleClose();
+    setShowReasonDialog(!showRejectDialog);
+    setShowRejectDialog(!showRejectDialog);
   };
   return (
     <div>
-      <SubmitPackageSuccess
-        open={successShow}
-        handleClose={handleSuccess}
-        handleContinue={() => {
-          handleClose();
-          handleSuccess();
-        }}
+      <DgftSuccessDialog
+        handleSuccess={handleSuccess}
+        showSuccessDialog={showSuccessDialog}
+      />
+      <DgftRejectionReasonDialog
+        handleClose={handleRejectReason}
+        handleContinue={handleReject}
+        open={showReasontDialog && !showRejectDialog}
+      />
+      <DgftRejectionDialog open={showRejectDialog} handleClose={handleReject} />
+      <DgftSuccessDialog
+        handleSuccess={handleSuccess}
+        showSuccessDialog={showSuccessDialog}
       />
       <DialogLayout
         open={open}
         handleClose={handleClose}
         handleContinue={null}
-        title={
-          <DialogTitle
-            handleContinue={handleSuccess}
-            handleAddPackage={() => handleContinue("addpackage")}
-          />
-        }
+        title={<DialogTitle handleContinue={handleContinue} />}
         showArrow={true}
       >
         <ProofDialog show={reportShow} handleShow={handleReportShow} />
@@ -136,7 +198,27 @@ const SubmitPackageDialog = ({ open, handleClose, handleContinue }) => {
           className={`${classes.dialog_content_wrapper} dialog_submit_package_container`}
         >
           <div className="upper_panel">
-            <BillMovementDetails />
+            <div className="child">
+              <div className="child_header">
+                <img src={docImg} alt="doc icon" />
+                <h1>E-Way Bill Number - 8976 4567 3456</h1>
+              </div>
+              <div className="destination_container">
+                <div className="destination">
+                  <div className="from_to">
+                    <span>From</span>
+                    <span>To</span>
+                  </div>
+                  <div className="location_img_container">
+                    <img src={fromtoImg} alt="location img" />
+                  </div>
+                  <div className="location_name">
+                    <h1>Kerwan Refinery Center, Iran</h1>
+                    <h1>Dehli Petrocheimcals ltd, Delhi</h1>
+                  </div>
+                </div>
+              </div>
+            </div>
             <div className="child">
               <div className="child_header">
                 <img src={calendarImg} alt="calendar icon" />
@@ -276,7 +358,7 @@ const SubmitPackageDialog = ({ open, handleClose, handleContinue }) => {
             />
             <CargoEvidence
               title="Safety"
-              icon={safetyImg}
+              icon={processingImg}
               images={[
                 "https://source.unsplash.com/user/c_v_r",
                 "https://source.unsplash.com/user/c_v_r",
@@ -287,7 +369,7 @@ const SubmitPackageDialog = ({ open, handleClose, handleContinue }) => {
             />
             <CargoEvidence
               title="Scanning"
-              icon={scanningImg}
+              icon={processingImg}
               images={[
                 "https://source.unsplash.com/user/c_v_r",
                 "https://source.unsplash.com/user/c_v_r",
@@ -298,7 +380,7 @@ const SubmitPackageDialog = ({ open, handleClose, handleContinue }) => {
             />
             <CargoEvidence
               title="Packing"
-              icon={packingImg}
+              icon={processingImg}
               images={[
                 "https://source.unsplash.com/user/c_v_r",
                 "https://source.unsplash.com/user/c_v_r",
@@ -309,7 +391,7 @@ const SubmitPackageDialog = ({ open, handleClose, handleContinue }) => {
             />
             <CargoEvidence
               title="Loading"
-              icon={loadingImg}
+              icon={processingImg}
               images={[
                 "https://source.unsplash.com/user/c_v_r",
                 "https://source.unsplash.com/user/c_v_r",
@@ -318,9 +400,10 @@ const SubmitPackageDialog = ({ open, handleClose, handleContinue }) => {
                 "https://source.unsplash.com/user/c_v_r",
               ]}
             />
-            <div className="package_submit_btn">
-              <FlowButton text={"Submit"} onClick={handleSuccess} />
-            </div>
+          </div>
+          <div className="package-agency-action-btns">
+            <AcceptButton onClick={handleSuccess} />
+            <RejectButton onClick={handleRejectReason} />
           </div>
         </div>
       </DialogLayout>
@@ -328,4 +411,4 @@ const SubmitPackageDialog = ({ open, handleClose, handleContinue }) => {
   );
 };
 
-export default SubmitPackageDialog;
+export default DgftAgencyDialog;

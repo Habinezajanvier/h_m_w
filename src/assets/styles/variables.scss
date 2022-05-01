@@ -2,7 +2,13 @@
 
 $green: "rgba(1, 143, 106, 0.85)";
 $dark_blue: "rgba(20, 22, 31, 0.7)";
-$gray: "#22242";
 
+//TYPOGRAPHY
 
-
+$colors: (
+  green: $green,
+  dark_blue: $dark_blue,
+  gray: $gray,
+  light_color: "rgba(255, 255, 255, 0.8)",
+  gray_color: "rgba(228, 228, 231, 0.4)",
+);

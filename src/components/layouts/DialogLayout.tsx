@@ -20,7 +20,7 @@ export interface DialogTitleProps {
   id: string;
   children?: React.ReactNode;
   onClose: () => void;
-  className: string | object;
+  className: any;
 }
 
 const BootstrapDialogTitle = (props: DialogTitleProps) => {

@@ -6,7 +6,7 @@ export const useStyles = makeStyles({
   },
   dialog_content_wrapper: {
     color: "rgba(228, 228, 231, 0.6)",
-    minHeight: "auto",
+    minHeight: "749px",
     paddingTop: "1.5%",
     "-ms-overflow-style": "none",
     scrollbarWidth: "none",
@@ -14,8 +14,6 @@ export const useStyles = makeStyles({
     "&::-webkit-scrollbar": {
       display: "none !important",
     },
-    // backgroundColor: "rgba(34, 36, 44, 0.85)",
-    // boxShadow: "20px 10px 4px rgba(0, 0, 0, 0.15)",
   },
   dialog_title: {
     fontStyle: "normal",
