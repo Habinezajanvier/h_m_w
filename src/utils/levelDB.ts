@@ -13,7 +13,6 @@ export const storeTokensInLevelDB = async (key: any, value: any) => {
 };
 
 export const readFromLevelDB = async (key: any) => {
-  
   return await db.get(key);;
 };
 
