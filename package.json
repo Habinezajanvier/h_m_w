@@ -52,11 +52,14 @@
     "moment": "^2.29.1",
     "multiformats": "^9.6.4",
     "nanoid": "^3.3.2",
+    "parcel": "^2.5.0",
     "parcel-plugin-asset-csv": "^0.1.5",
     "path-browserify": "^1.0.1",
     "prop-types": "^15.8.1",
     "qrcode.react": "^3.0.1",
+    "querystring": "^0.2.1",
     "react": "^17.0.2",
+    "react-circular-progressbar": "^2.0.4",
     "react-dom": "^17.0.2",
     "react-helmet": "^6.1.0",
     "react-hook-form": "^7.28.1",
@@ -66,10 +69,15 @@
     "react-router-dom": "^6.2.2",
     "react-scripts": "5.0.0",
     "redux": "^4.1.2",
+    "redux-devtools-extension": "^2.13.9",
+    "redux-logger": "^3.0.6",
     "redux-persist": "^6.0.0",
     "redux-persist-transform-encrypt": "^3.0.1",
+    "redux-starter-kit": "^2.0.0",
     "redux-thunk": "^2.4.1",
+    "remote-redux-devtools": "^0.5.16",
     "sass": "^1.49.9",
+    "sharp": "^0.30.4",
     "stream": "^0.0.2",
     "tap": "^16.1.0",
     "ts-essentials": "^9.1.2",
@@ -108,14 +116,16 @@
   },
   "browserslist": {
     "production": [
-      ">0.2%",
+      "> 3%",
+      "last 2 versions",
       "not dead",
-      "not op_mini all"
+      "not ie 11"
     ],
     "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
+      "> 3%",
+      "last 2 versions",
+      "not dead",
+      "not ie 11"
     ]
   },
   "browser": {
@@ -132,10 +142,10 @@
     "crypto-browserify": "^3.12.0",
     "dotenv": "^16.0.0",
     "flow-bin": "^0.174.1",
-    "parcel": "^2.4.0",
     "parcel-reporter-asar": "^0.0.2",
     "path-browserify": "^1.0.1",
     "process": "^0.11.10",
+    "querystring-es3": "^0.2.1",
     "stream-browserify": "^3.0.0",
     "timers-browserify": "^2.0.12",
     "util": "^0.12.4"

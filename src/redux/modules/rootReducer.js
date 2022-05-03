@@ -12,5 +12,5 @@ export const rootReducer = combineReducers({
   currentUser: userAuthSlice,
   dashboard: dashboardSlice,
   signup: signupSlice,
-  auth:authSlice
+  auth: authSlice,
 });

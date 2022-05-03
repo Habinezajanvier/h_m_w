@@ -6,7 +6,28 @@ import Select, { SelectChangeEvent } from "@mui/material/Select";
 import { useStyles } from "./styles/selectorStyles";
 import "../../../assets/styles/components/flowDialog.scss";
 
-export default function SelectorInput({ label, options, className }) {
+interface selectorProps {
+  label: string;
+  options: Array<{
+    label: string;
+    validfrom: string;
+    valid: string;
+    toLocation: string;
+    toDid: string;
+    ewayBillNumber: string;
+  }>;
+  className: string;
+  isLoading: boolean;
+  onChange: () => void;
+}
+
+const SelectorInput: React.FC<selectorProps> = ({
+  label,
+  options,
+  className,
+  isLoading,
+  onChange,
+}) => {
   const classes = useStyles();
 
   const menuProps = {
@@ -26,11 +47,12 @@ export default function SelectorInput({ label, options, className }) {
   };
 
   const [option, setOption] = React.useState(
-    (options?.length && options[0].value) || ""
+    (options?.length && options[0].ewayBillNumber) || ""
   );
 
   const handleChange = (event: SelectChangeEvent) => {
     setOption(event.target.value);
+    onChange();
   };
 
   return (
@@ -47,6 +69,7 @@ export default function SelectorInput({ label, options, className }) {
         onChange={handleChange}
         label={label}
         className={className}
+        disabled={isLoading}
         MenuProps={menuProps}
         classes={{
           select: classes.select,
@@ -58,18 +81,21 @@ export default function SelectorInput({ label, options, className }) {
           <h1>Valid From</h1>
           <h1>Delivery Loc</h1>
         </MenuItem>
-        {options.map(({ label, value, valid_from, delivery_loc }) => (
+        {options?.map(({ label, ewayBillNumber, validfrom, toLocation }) => (
           <MenuItem
-            value={value}
+            value={ewayBillNumber}
             className="selector-content"
             key={Math.random()}
+            onClick={() => console.log()}
           >
-            <h1 className="bill-number">{value}</h1>
-            <h1 className="bill-valid">{valid_from}</h1>
-            <h1 className="bill-deliv">{delivery_loc}</h1>
+            <h1 className="bill-number">{ewayBillNumber}</h1>
+            <h1 className="bill-valid">{validfrom}</h1>
+            <h1 className="bill-deliv">{toLocation}</h1>
           </MenuItem>
         ))}
       </Select>
     </FormControl>
   );
-}
+};
+
+export default SelectorInput;

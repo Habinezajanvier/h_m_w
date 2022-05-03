@@ -1,11 +1,9 @@
-import infoImg from "../../../assets/images/icons/info_orange.svg";
-
-const DocsNotification = ({ onClick }) => {
+const DocsNotification = ({ onClick, title, icon }) => {
   return (
-    <div className="activity-item">
+    <div className="activity-item" title={title}>
       <div className="activity-label">
         <div className="activity-title">
-          <img src={infoImg} alt="red location" className="c-pointer" />
+          <img src={icon} alt="red location" className="c-pointer" />
           <p>
             <span className="c-pointer">PK5096 </span>
             Details has been submitted to

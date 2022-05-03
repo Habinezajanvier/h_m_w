@@ -39,7 +39,11 @@ const BootstrapDialogTitle = (props: DialogTitleProps) => {
             color: (theme) => theme.palette.grey[500],
           }}
         >
-          <img src={closeImg} alt="dialog close icon" />
+          <img
+            src={closeImg}
+            alt="dialog close icon"
+            style={{ padding: "40px" }}
+          />
         </IconButton>
       ) : null}
     </DialogTitle>

@@ -5,8 +5,6 @@ import Map from "../../components/DrawMap";
 import filterIc from "../../assets/images/filter-icon.svg";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import redLocIc from "../../assets/images/icons/red-loc-icon.png";
-import greenExecIc from "../../assets/images/green-circular-exclamtion.svg";
-import yellowExecIc from "../../assets/images/yellow-circular-exclamtion.svg";
 import KeyboardBackspaceIcon from "@mui/icons-material/KeyboardBackspace";
 import smallCCTVIc from "../../assets/images/cctv-camera-icon.png";
 import smallManPic from "../../assets/images/man-sm.png";
@@ -14,18 +12,10 @@ import menInteranceImg from "../../assets/images/men-interance.png";
 import manInSuitImg from "../../assets/images/buisness-man-going.png";
 import cryptoIc from "../../assets/images/crypto-icon.svg";
 import { Avatar, Badge } from "@mui/material";
-import downArrowIcon from "../../assets/images/down-arrow-icon.png";
-import neuralNetworkIcon from "../../assets/images/neural-network-icon.svg";
-import redDotIcon from "../../assets/images/red-circular-dot.png";
-import greenDotIcon from "../../assets/images/green-circular-dot.svg";
 import CollapsibleLocationBar from "../../components/CollapsibleLocationBar";
 import crystalIcon from "../../assets/images/hexgon-crystal.png";
-import { useSubscription } from "urql";
-import {
-  activitiesIcons,
-  activitiesTitle,
-  ActivityType,
-} from "../../utils/activitiesList";
+import { useQuery, useSubscription } from "urql";
+import { activitiesIcons, activitiesTitle } from "../../utils/activitiesList";
 import moment from "moment";
 import { testVCGeneration } from "../../utils/testVCGeneration";
 import AddPackage from "../../components/AddPackage";
@@ -34,6 +24,7 @@ import SubmitPackageDialog from "../../components/flows/clients/SubmitPackage";
 import SubmitPackageSuccessDialog from "../../components/flows/common/SuccessDialog";
 import { faker } from "@faker-js/faker";
 import DgftAgencyDialog from "../../components/flows/govt dgft/AgencyViewDocs";
+import trafficRepresentationImg from "../../assets/images/traffic_representation.svg";
 import {
   ViewDocsDgft,
   ViewDocsIcegate,
@@ -41,7 +32,17 @@ import {
 import IcegateAgencyDialog from "../../components/flows/govt icegate/AgencyVIewDocs";
 import PackageDetailsDialog from "../../components/flows/clients/PackageDetailsDialog";
 import DocsNotification from "../../components/flows/common/DocsNotification";
-import IcegateRejectionDialog from "../../components/flows/govt icegate/RejectionReasonDialog";
+import ServiceProviderMainDialog from "../../components/flows/service provider/ProviderMainDialog";
+import ProviderDetailsReview from "../../components/flows/service provider/ProviderDetailsReviewDialog";
+import loadingImg from "../../assets/images/loading.jpg";
+import infoImg from "../../assets/images/icons/info_orange.svg";
+import packageImg from "../../assets/images/icons/package.svg";
+import {
+  saveBills,
+  saveActivitiesList,
+} from "../../redux/modules/dashboard/dashboardSlice";
+import { useDispatch } from "react-redux";
+import { getEwayBills } from "../../GQLQueries/ewayBills";
 
 const memberdid =
   "did:ckdr:Ee3qAFcbDNAdq9GvYG9pBPkgr3Q3C2NqbScjdxhXymoF53VNkyVbR8p1O3jgtIVRhb6Yv9QRNFdsf1uPfANviuR5pH0BoJdmCOcZitfZvcXmp5+gF1KHlRaUTb7PRBws+9iUcmPCl166ad8Q10TCTC8FapG5nonsv071Z30ODSHCYPGm";
@@ -51,7 +52,7 @@ subscription(
   $topic: String!,
   $memberdid: String
 ){
-  activities(topic: $topic ,memberdid: $memberdid ){
+  activities(topic: $topic ,memberdid: $memberdid ){a
     id,
     type,
     timestamp,
@@ -92,9 +93,24 @@ const Dashboard = () => {
   const [markerCoords, setMarkerCoords] = useState([]);
   const [dialogOpen, setDialogOpen] = useState<string>("");
 
+  const [{ fetching: billsLoading, data: ewayBills, error: billsError }] =
+    useQuery({
+      query: getEwayBills,
+      variables: {
+        limit: 5,
+      },
+    });
+
+  const timeOut = Math.floor(Math.random() * 3) + 0.5;
+  const dispatch = useDispatch();
+
   const handleDialogOpen = (dialog) => {
     console.log(dialog);
-    setDialogOpen(dialog);
+    setIsLoading(true);
+    setTimeout(() => {
+      setIsLoading(false);
+      setDialogOpen(dialog);
+    }, timeOut * 1000);
   };
 
   const handleDialogClose = () => {
@@ -116,8 +132,9 @@ const Dashboard = () => {
   );
 
   useEffect(() => {
-    if (res.data) {
+    if (res?.data) {
       setActivityList(res.data);
+      dispatch(saveActivitiesList(res.data));
     }
   }, [res]);
 
@@ -141,6 +158,22 @@ const Dashboard = () => {
     console.log("vc testing");
     testVCGeneration();
   }, []);
+
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleLoading = () => {
+    setIsLoading(true);
+
+    setTimeout(() => {
+      setIsLoading(false);
+    });
+  };
+
+  useEffect(() => {
+    if (ewayBills) {
+      dispatch(saveBills(ewayBills?.getEWayBills));
+    }
+  }, [ewayBills]);
 
   return (
     <div className="dashboard">
@@ -179,9 +212,28 @@ const Dashboard = () => {
         handleContinue={handleDialogClose}
       />
 
+      <ServiceProviderMainDialog
+        open={dialogOpen === "serviceprovider"}
+        handleClose={handleDialogClose}
+        handleContinue={handleDialogClose}
+      />
+      <ProviderDetailsReview
+        open={dialogOpen === "provider-details-review"}
+        handleClose={handleDialogClose}
+        handleContinue={handleDialogClose}
+      />
+
       <div className="headerContainer">
         <Header onLocationClick={() => setIsLocationView(true)} />
       </div>
+      {isLoading && (
+        <div
+          className="loader-image"
+          style={{ position: "absolute", top: "40%", right: "60%" }}
+        >
+          <img src={loadingImg} alt="loaidng" />
+        </div>
+      )}
       <div className="dashboard-map-bg">
         <Map
           trackerIcon={isLocationView ? crystalIcon : false}
@@ -191,6 +243,10 @@ const Dashboard = () => {
         <div className="add-package-wrapper">
           <AddPackage onClick={() => handleDialogOpen("addpackage")} />
         </div>
+        <div className="traffic-presentation-wrapper">
+          <img src={trafficRepresentationImg} alt="traffic representation" />
+        </div>
+
         {/* Side Panel */}
         {!isLocationView && (
           <div
@@ -224,6 +280,21 @@ const Dashboard = () => {
                     />
                     <DocsNotification
                       onClick={() => handleDialogOpen("packdetails")}
+                      title="Package details view"
+                      icon={infoImg}
+                    />
+
+                    <DocsNotification
+                      onClick={() => handleDialogOpen("serviceprovider")}
+                      title="Service provider check"
+                      icon={packageImg}
+                    />
+                    <DocsNotification
+                      onClick={() =>
+                        handleDialogOpen("provider-details-review")
+                      }
+                      icon={packageImg}
+                      title="Service provider details view"
                     />
                   </div>
 

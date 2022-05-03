@@ -38,6 +38,32 @@
     font-weight: 600;
   }
 
+  //HEADER
+
+  .header-tab {
+    display: grid;
+    grid-template-columns: auto auto;
+    gap: 10px;
+    align-items: center;
+    background: rgba(38, 40, 50, 0.8);
+    border-radius: 4px;
+    height: 42px;
+    padding: 6px 15px;
+
+    div {
+      h1 {
+        margin: 0;
+        font-weight: 700;
+        font-size: 14px;
+        line-height: 30px;
+        color: rgba(255, 255, 255, 0.8);
+      }
+    }
+  }
+  .highlight-header-stat {
+    color: rgba(90, 199, 231, 1);
+  }
+
   .profile {
     font-style: normal;
     font-weight: 900;
@@ -68,8 +94,7 @@
       right: -5px;
       z-index: 20;
 
-      &::-webkit-scrollbar{
-        
+      &::-webkit-scrollbar {
       }
     }
   }

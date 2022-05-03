@@ -18,6 +18,7 @@ export const useStyles = makeStyles({
   title_container: {
     display: "flex",
     gap: "25px",
+    marginLeft: "5rem",
   },
   submit_title_container: {
     display: "flex",

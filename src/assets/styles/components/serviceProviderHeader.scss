@@ -1,0 +1,22 @@
+.service-provider-header {
+  display: grid;
+  grid-template-columns: auto 10%;
+
+  //   .left-side {
+  //   }
+
+  .right-side {
+    margin-left: auto !important;
+    display: flex;
+    align-items: center;
+    h1 {
+      margin: 0%;
+      font-weight: 600;
+      font-size: 16px;
+      line-height: 30px;
+      text-align: center;
+      color: #0b8465 !important;
+      margin-left: auto;
+    }
+  }
+}

@@ -1,0 +1,23 @@
+.provider-details-container {
+  height: auto;
+  min-height: 700px;
+}
+
+.provider-details-review-wrapper {
+  height: auto;
+  width: 150px;
+  display: grid;
+  gap: 15px;
+  grid-template-columns: repeat(2, 1fr);
+  justify-content: center;
+  align-items: center;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.action-button {
+  position: absolute;
+  bottom: 37px;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}

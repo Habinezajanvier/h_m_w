@@ -43,6 +43,15 @@ import ProofOfSignatureIcegate from "./ProofOfSignature";
 import IcegateRejectionReasonDialog from "./RejectionReasonDialog";
 import IcegateSuccessDialog from "./IcegateSuccessDialog";
 import IcegateRejectionDialog from "./IcegateRejecionDialog";
+import processingImage from "../../../assets/images/evidence/processing.svg";
+import loadingImage from "../../../assets/images/evidence/loading.svg";
+import packingImage from "../../../assets/images/evidence/packing.svg";
+import scanningImage from "../../../assets/images/evidence/scanning.svg";
+import safetyImage from "../../../assets/images/evidence/safety.svg";
+import planeImage from "../../../assets/images/import-export/plane.svg";
+import ship1Image from "../../../assets/images/import-export/ship1.svg";
+import ship2Image from "../../../assets/images/import-export/ship2.svg";
+import evidenceImg from "../../../assets/images/evidence/evidence.png";
 
 const DialogTitle = ({ handleContinue }) => {
   const classes = useStyles();
@@ -394,31 +403,32 @@ const IcegateAgencyDialog = ({ open, handleClose, handleContinue }) => {
               <div className="lower_panel icegate-cargo-evidence-wrapper">
                 <h1>Evidences of Cargo</h1>
                 <div className="cargo-evidence">
-                  <CargoEvidence
+                  <img src={evidenceImg} style={{ maxWidth: "700px" }} />
+                  {/* <CargoEvidence
                     title="Processing"
                     icon={processingImg}
-                    images={["https://source.unsplash.com/user/c_v_r"]}
+                    images={[processingImage]}
                   />
                   <CargoEvidence
                     title="Safety"
                     icon={safetyImg}
-                    images={["https://source.unsplash.com/user/c_v_r"]}
+                    images={[safetyImage]}
                   />
                   <CargoEvidence
                     title="Scanning"
                     icon={scanningImg}
-                    images={["https://source.unsplash.com/user/c_v_r"]}
+                    images={[scanningImage]}
                   />
                   <CargoEvidence
                     title="Packing"
                     icon={packingImg}
-                    images={["https://source.unsplash.com/user/c_v_r"]}
+                    images={[packingImage]}
                   />
                   <CargoEvidence
                     title="Loading"
                     icon={loadingImg}
-                    images={["https://source.unsplash.com/user/c_v_r"]}
-                  />
+                    images={[loadingImage]}
+                  /> */}
                 </div>
               </div>
             </div>
@@ -442,14 +452,8 @@ const IcegateAgencyDialog = ({ open, handleClose, handleContinue }) => {
                 <div className="videos-container">
                   <h1>Videos</h1>
                   <div className="videos-wrapper">
-                    <img
-                      src="https://source.unsplash.com/user/c_v_r"
-                      alt="package"
-                    />
-                    <img
-                      src="https://source.unsplash.com/user/c_v_r"
-                      alt="package"
-                    />
+                    <img src={ship1Image} alt="package" />
+                    <img src={ship2Image} alt="package" />
                   </div>
                 </div>
               </div>
@@ -475,10 +479,7 @@ const IcegateAgencyDialog = ({ open, handleClose, handleContinue }) => {
                 <div className="videos-container">
                   <h1>Images</h1>
                   <div className="videos-wrapper">
-                    <img
-                      src="https://source.unsplash.com/user/c_v_r"
-                      alt="package"
-                    />
+                    <img src={planeImage} alt="package" />
                   </div>
                 </div>
               </div>

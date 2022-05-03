@@ -1,6 +1,6 @@
 import submissionSuccessImg from "../../../assets/images/icons/submission_success.svg";
 import SuccessDialog from "../common/SuccessDialog";
-import ProofOfSignatureDgft from "./ProofOfSignature";
+import ProofOfSignatureDgft from "../common/ProofOfSignature";
 
 const DgftSuccessDialog = ({ handleSuccess, showSuccessDialog }) => {
   return (

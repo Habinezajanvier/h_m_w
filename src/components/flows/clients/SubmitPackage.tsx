@@ -29,6 +29,9 @@ import ProofDialog from "../common/ProofReport";
 import { useState } from "react";
 import SubmitPackageSuccess from "./SubmiPackageSuccess";
 import BillMovementDetails from "../common/BillMovementDetails";
+import { useQuery } from "urql";
+import { ewayBillsQuery } from "../../../GQLQueries";
+import faker from "@faker-js/faker";
 
 const DialogTitle = ({ handleContinue, handleAddPackage }) => {
   const classes = useStyles();
@@ -45,6 +48,7 @@ const DialogTitle = ({ handleContinue, handleAddPackage }) => {
     </div>
   );
 };
+
 const SubmitPackageDialog = ({ open, handleClose, handleContinue }) => {
   const classes = useStyles();
 
@@ -107,6 +111,7 @@ const SubmitPackageDialog = ({ open, handleClose, handleContinue }) => {
   const [successShow, setSuccessShow] = useState(false);
 
   const handleSuccess = () => {
+    handleClose();
     setSuccessShow(!successShow);
   };
   return (
@@ -267,55 +272,55 @@ const SubmitPackageDialog = ({ open, handleClose, handleContinue }) => {
               title="Processing"
               icon={processingImg}
               images={[
-                "https://source.unsplash.com/user/c_v_r",
-                "https://source.unsplash.com/user/c_v_r",
-                "https://source.unsplash.com/user/c_v_r",
-                "https://source.unsplash.com/user/c_v_r",
-                "https://source.unsplash.com/user/c_v_r",
+                faker.image.transport(),
+                faker.image.transport(),
+                faker.image.transport(),
+                faker.image.transport(),
+                faker.image.transport(),
               ]}
             />
             <CargoEvidence
               title="Safety"
               icon={safetyImg}
               images={[
-                "https://source.unsplash.com/user/c_v_r",
-                "https://source.unsplash.com/user/c_v_r",
-                "https://source.unsplash.com/user/c_v_r",
-                "https://source.unsplash.com/user/c_v_r",
-                "https://source.unsplash.com/user/c_v_r",
+                faker.image.transport(),
+                faker.image.transport(),
+                faker.image.transport(),
+                faker.image.transport(),
+                faker.image.transport(),
               ]}
             />
             <CargoEvidence
               title="Scanning"
               icon={scanningImg}
               images={[
-                "https://source.unsplash.com/user/c_v_r",
-                "https://source.unsplash.com/user/c_v_r",
-                "https://source.unsplash.com/user/c_v_r",
-                "https://source.unsplash.com/user/c_v_r",
-                "https://source.unsplash.com/user/c_v_r",
+                faker.image.transport(),
+                faker.image.transport(),
+                faker.image.transport(),
+                faker.image.transport(),
+                faker.image.transport(),
               ]}
             />
             <CargoEvidence
               title="Packing"
               icon={packingImg}
               images={[
-                "https://source.unsplash.com/user/c_v_r",
-                "https://source.unsplash.com/user/c_v_r",
-                "https://source.unsplash.com/user/c_v_r",
-                "https://source.unsplash.com/user/c_v_r",
-                "https://source.unsplash.com/user/c_v_r",
+                faker.image.transport(),
+                faker.image.transport(),
+                faker.image.transport(),
+                faker.image.transport(),
+                faker.image.transport(),
               ]}
             />
             <CargoEvidence
               title="Loading"
               icon={loadingImg}
               images={[
-                "https://source.unsplash.com/user/c_v_r",
-                "https://source.unsplash.com/user/c_v_r",
-                "https://source.unsplash.com/user/c_v_r",
-                "https://source.unsplash.com/user/c_v_r",
-                "https://source.unsplash.com/user/c_v_r",
+                faker.image.transport(),
+                faker.image.transport(),
+                faker.image.transport(),
+                faker.image.transport(),
+                faker.image.transport(),
               ]}
             />
             <div className="package_submit_btn">

@@ -15,7 +15,7 @@ import SearchQRCode from "./SearchQRCode";
 import RegistrationLoading from "./RegistrationLoading";
 import SignUpWrapper from "./SignUpWrapper";
 import { testRegisterUser } from "./testRigister";
-import { useMutation } from "urql";
+import { useMutation, useQuery } from "urql";
 import { storeInCredManager } from "../../utils/storeInCredManager";
 import QRCode from "qrcode.react";
 
@@ -56,9 +56,8 @@ const Signup = ({ ...props }) => {
   const [showMnemonicPhrase, setShowMnemonicPhrase] = useState(false);
   const [showQRCode, setShowQRCode] = useState(false);
   const [mnenominPhrase, setMnenominPhrase] = useState("");
-  const [readyForFaceRegistration, setReadyForFaceRegistration] = useState(
-    false
-  );
+  const [readyForFaceRegistration, setReadyForFaceRegistration] =
+    useState(false);
   const navigate = useNavigate();
 
   const [updateResult, update] = useMutation(registerMutation);
@@ -68,7 +67,7 @@ const Signup = ({ ...props }) => {
   // redux
   const currentView = useSelector((state) => state.signup.currentView);
   const signupState = useSelector((state) => state.signup.signupData);
-  
+
   const dispatch = useDispatch();
 
   // sendOTP mutation
@@ -123,7 +122,7 @@ const Signup = ({ ...props }) => {
   };
 
   const handleKeyPairGeneration = async () => {
-    console.log(`${countryCode}${phone}`, mnenominPassword)
+    console.log(`${countryCode}${phone}`, mnenominPassword);
     let registerObj = await testRegisterUser(
       `${countryCode}${phone}`,
       mnenominPassword
@@ -131,7 +130,7 @@ const Signup = ({ ...props }) => {
     let keypair = registerObj.kayPair;
     registerObj = registerObj.payload;
 
-    console.log("payload:", registerObj, "keypair:", keypair)
+    console.log("payload:", registerObj, "keypair:", keypair);
 
     setMnenominPhrase(registerObj?.mnemonicPhrase);
 
@@ -311,11 +310,11 @@ const Signup = ({ ...props }) => {
                       outlined={false}
                       title={"Save QR code on this device"}
                       onClick={() => {
-                        console.log(`Saving QR Code and dispatching`)
-                        dispatch(login())
-                        console.log(`login dispatched, moving to dashboard`)
+                        console.log(`Saving QR Code and dispatching`);
+                        dispatch(login());
+                        console.log(`login dispatched, moving to dashboard`);
                         setShowQRCode(false);
-                        navigate('/dashboard')
+                        navigate("/dashboard");
                         // dispatch(signupCurrentView(6))
                       }}
                     />

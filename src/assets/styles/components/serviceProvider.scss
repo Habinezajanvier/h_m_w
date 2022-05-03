@@ -1,0 +1,43 @@
+.service-provider-dialog {
+  padding: 86px;
+  .dialog-container {
+    display: flex;
+    min-height: 565px;
+    justify-content: center;
+    gap: 25px;
+    .dialog-left {
+      min-width: 688px;
+      width: 357px;
+      height: 565px;
+      display: flex !important;
+      flex-direction: column;
+      gap: 25px;
+      .top {
+        height: 218px;
+        background: #181a23;
+        border-radius: 6px;
+      }
+      .bottom {
+        height: 337px;
+        background: #181a23;
+        border-radius: 6px;
+      }
+    }
+
+    .dialog-right {
+      width: 357px;
+      height: 565px;
+      background: #181a23;
+      border-radius: 6px;
+    }
+  }
+}
+
+//buttons
+
+.service-provider-buttons-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 58px;
+}

@@ -3,6 +3,9 @@ import helpIcon from "../../../assets/images/icons/help.svg";
 import qrScanImg from "../../../assets/images/how_qr_scan.svg";
 import "../../../assets/styles/components/QuickStart.scss";
 import PackageAccordion from "./Accordon";
+import billGif from "../../../assets/images/help-section/bill.gif";
+import scannGif from "url:../../../assets/images/help-section/scan.gif";
+import { faker } from "@faker-js/faker";
 
 const QuickStart = () => {
   const [open, setIsOpen] = useState(true);
@@ -13,6 +16,8 @@ const QuickStart = () => {
     console.log(panel);
     setExpanded(panel);
   };
+
+  const image = faker.image.transport();
 
   return (
     <div className="quick-start-container">
@@ -28,7 +33,7 @@ const QuickStart = () => {
           content={
             <div className="quickstart">
               <div className="help-video">
-                {/* <img src={qrScanImg} alt="qr scan" /> */}
+                <img src={image} alt="" />
               </div>
               <ol type="1" className="quickstart-list">
                 <li>
@@ -56,7 +61,7 @@ const QuickStart = () => {
           content={
             <div className="quickstart">
               <div className="help-video">
-                {/* <img src={qrScanImg} alt="qr scan" /> */}
+                <img src={image} alt="qr scan" />
               </div>
               <ol type="1" className="quickstart-list">
                 <li>
@@ -84,7 +89,7 @@ const QuickStart = () => {
           content={
             <div className="quickstart">
               <div className="help-video">
-                {/* <img src={qrScanImg} alt="qr scan" /> */}
+                <img src={image} alt="qr scan" />
               </div>
               <ol type="1" className="quickstart-list">
                 <li>

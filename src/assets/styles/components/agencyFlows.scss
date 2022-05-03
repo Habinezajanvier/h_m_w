@@ -33,7 +33,7 @@
   display: flex;
   justify-content: flex-end;
   align-items: center;
-  margin-left: 10rem;
+  margin-left: 5rem;
   div {
     width: 100%;
     margin-left: auto;
@@ -149,11 +149,4 @@
   }
   border: 2px solid red;
   color: red !important;
-}
-
-//signaure proof
-
-.icegate-signature-proof {
-  display: flex;
-  flex-direction: column;
 }

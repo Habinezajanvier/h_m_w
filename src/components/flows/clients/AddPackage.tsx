@@ -20,12 +20,12 @@ export default function AddPackageDialog({
           Add Package
         </h1>
       }
-      showArrow={true}
+      showArrow
     >
       <div className={classes.dialog_content_wrapper}>
         <div className="dialog-content-container">
           <div className="left-side">
-            <BillDetails />
+            <BillDetails handleContinue={handleContinue} />
           </div>
           <div className="right-side">
             <QuickStart />

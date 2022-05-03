@@ -33,6 +33,8 @@ import AgencyConfirmStatus from "../common/AgencyConfirmStatus";
 import DgftSuccessDialog from "./DgftSuccessDialog";
 import DgftRejectionDialog from "./DgftRejectionDialog";
 import DgftRejectionReasonDialog from "./RejectionReasonDialog";
+import evidenceImg from "../../../assets/images/evidence/evidence.png";
+import faker from "@faker-js/faker";
 
 const DialogTitle = ({ handleContinue }) => {
   const classes = useStyles();
@@ -50,7 +52,7 @@ const DialogTitle = ({ handleContinue }) => {
           icon={icegateImg}
           className="icegate_color"
           status=""
-          name="ICEGATE"
+          name="DGFT"
         />
         <div className="agencies-divider">
           <div className="dashed-divider"></div>
@@ -170,6 +172,7 @@ const DgftAgencyDialog = ({ open, handleClose, handleContinue }) => {
     setShowReasonDialog(!showRejectDialog);
     setShowRejectDialog(!showRejectDialog);
   };
+
   return (
     <div>
       <DgftSuccessDialog
@@ -345,61 +348,62 @@ const DgftAgencyDialog = ({ open, handleClose, handleContinue }) => {
           </div>
           <div className="lower_panel">
             <h1>Evidences of Cargo</h1>
-            <CargoEvidence
+            {/* <CargoEvidence
               title="Processing"
               icon={processingImg}
               images={[
-                "https://source.unsplash.com/user/c_v_r",
-                "https://source.unsplash.com/user/c_v_r",
-                "https://source.unsplash.com/user/c_v_r",
-                "https://source.unsplash.com/user/c_v_r",
-                "https://source.unsplash.com/user/c_v_r",
+                faker.image.transport(),
+                faker.image.transport(),
+                faker.image.transport(),
+                faker.image.transport(),
+                faker.image.transport(),
               ]}
             />
             <CargoEvidence
               title="Safety"
               icon={processingImg}
               images={[
-                "https://source.unsplash.com/user/c_v_r",
-                "https://source.unsplash.com/user/c_v_r",
-                "https://source.unsplash.com/user/c_v_r",
-                "https://source.unsplash.com/user/c_v_r",
-                "https://source.unsplash.com/user/c_v_r",
+                faker.image.transport(),
+                faker.image.transport(),
+                faker.image.transport(),
+                faker.image.transport(),
+                faker.image.transport(),
               ]}
             />
             <CargoEvidence
               title="Scanning"
               icon={processingImg}
               images={[
-                "https://source.unsplash.com/user/c_v_r",
-                "https://source.unsplash.com/user/c_v_r",
-                "https://source.unsplash.com/user/c_v_r",
-                "https://source.unsplash.com/user/c_v_r",
-                "https://source.unsplash.com/user/c_v_r",
+                faker.image.transport(),
+                faker.image.transport(),
+                faker.image.transport(),
+                faker.image.transport(),
+                faker.image.transport(),
               ]}
             />
             <CargoEvidence
               title="Packing"
               icon={processingImg}
               images={[
-                "https://source.unsplash.com/user/c_v_r",
-                "https://source.unsplash.com/user/c_v_r",
-                "https://source.unsplash.com/user/c_v_r",
-                "https://source.unsplash.com/user/c_v_r",
-                "https://source.unsplash.com/user/c_v_r",
+                faker.image.transport(),
+                faker.image.transport(),
+                faker.image.transport(),
+                faker.image.transport(),
+                faker.image.transport(),
               ]}
             />
             <CargoEvidence
               title="Loading"
               icon={processingImg}
               images={[
-                "https://source.unsplash.com/user/c_v_r",
-                "https://source.unsplash.com/user/c_v_r",
-                "https://source.unsplash.com/user/c_v_r",
-                "https://source.unsplash.com/user/c_v_r",
-                "https://source.unsplash.com/user/c_v_r",
+                faker.image.transport(),
+                faker.image.transport(),
+                faker.image.transport(),
+                faker.image.transport(),
+                faker.image.transport(),
               ]}
-            />
+            /> */}
+            <img style={{ maxWidth: "700px" }} src={evidenceImg} />
           </div>
           <div className="package-agency-action-btns">
             <AcceptButton onClick={handleSuccess} />

@@ -5,9 +5,9 @@ export const useStyles = makeStyles(() => ({
     fontWeight: 400,
     fontSize: "16px",
     lineheight: "20px",
-    color: "rgba(228, 228, 231, 0.4) !important",
+    color: "rgba(228, 228, 231, 0.4)",
     "&:focus": {
-      backgroundColor: "#14161f !important",
+      backgroundColor: "#14161f",
     },
   },
   selectIcon: {

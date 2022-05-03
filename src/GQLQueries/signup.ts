@@ -62,3 +62,18 @@ mutation(
   verifyotp(token: $token, target: $target)
 }
 `;
+
+export const ewayBillsQuery = `
+query(){
+  {
+    getEWayBills(limit: 1000){
+      id
+      ewayBillNumber
+      validfrom
+      validto
+      toDid
+      toLocation
+    }
+  }
+}
+`;

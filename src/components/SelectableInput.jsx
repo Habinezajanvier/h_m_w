@@ -51,7 +51,7 @@ const SelectableInput = ({
             {selectIcon ? (
               <img src={selectIcon ? selectIcon : indflag} alt="country flag" />
             ) : (
-              <img src={countryCode_flag[selectedValue] } alt="country flag" />
+              <img src={countryCode_flag[selectedValue]} alt="country flag" />
             )}
             {withSelectable && <ArrowDropDownIcon className="gray-200" />}
           </div>

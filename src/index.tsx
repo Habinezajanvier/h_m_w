@@ -56,8 +56,6 @@ if (token) {
   store.dispatch(unauthUser());
 }
 
-
-
 ReactDOM.render(
   <Provider store={store}>
     <PersistGate loading={Loading} persistor={persistor}>

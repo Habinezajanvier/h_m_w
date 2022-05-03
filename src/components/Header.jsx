@@ -19,17 +19,18 @@ import {
   notification as notificationPanel,
   sidePanel,
 } from "../redux/modules/dashboard/dashboardSlice";
+import vehiclesIcon from "../assets/images/icons/moving_vehicle.svg";
+import incidentsIcon from "../assets/images/icons/incidents.svg";
+import packagesIcon from "../assets/images/icons/packages.svg";
+import Badge from "@mui/material/Badge";
+import { useStyles } from "./flows/common/styles/selectorStyles";
+import { makeStyles } from "@material-ui/core";
 
 const HLabel = ({ icon, text, isLong, onClick }) => {
   return (
-    <div
-      className={`h-label flex items-center c-pointer ${
-        isLong ? "h-label-long" : "h-label-short"
-      }`}
-      onClick={() => onClick && onClick()}
-    >
-      <div className="h-label-icon flex">{icon}</div>
-      <div className="h-lable-text m-auto">{text}</div>
+    <div className="header-tab" onClick={() => onClick && onClick()}>
+      <div className="header-icon">{icon}</div>
+      <div className="header-txt">{text}</div>
     </div>
   );
 };
@@ -64,7 +65,7 @@ const Header = ({ onLocationClick }) => {
     setIsSidebarActive(isSidePanelActive);
   }, [isSidePanelActive]);
 
-
+  const classes = useStyles();
 
   return (
     <>
@@ -82,14 +83,34 @@ const Header = ({ onLocationClick }) => {
           <div className="h-labels flex ">
             <HLabel
               isLong={true}
-              icon={<img src={locationImg} alt="location" />}
+              icon={<img src={vehiclesIcon} alt="location" />}
               onClick={() => onLocationClick && onLocationClick()}
-              text={<span className="h-location">BTM Layout,Bengaluru</span>}
+              text={
+                <h1 className="h-stat">
+                  No of Vehicles in movement :{" "}
+                  <span className="highlight-header-stat">223029</span>
+                </h1>
+              }
             />
             <HLabel
               isLong={false}
-              icon={<img src={weather} alt="weather" />}
-              text={<span className="h-weather">23° C, Sunny</span>}
+              icon={<img src={packagesIcon} alt="weather" />}
+              text={
+                <h1 className="h-stat">
+                  No of Packages in transit :{" "}
+                  <span className="highlight-header-stat">302945</span>
+                </h1>
+              }
+            />
+            <HLabel
+              isLong={false}
+              icon={<img src={incidentsIcon} alt="weather" />}
+              text={
+                <h1 className="h-stat">
+                  No of Incidents :{" "}
+                  <span className="highlight-header-stat">450</span>
+                </h1>
+              }
             />
           </div>
         </div>
@@ -101,7 +122,21 @@ const Header = ({ onLocationClick }) => {
               dispatch(notificationPanel(true));
             }}
           >
-            <img src={notify} alt="notification" className="c-pointer" />
+            <Badge
+              badgeContent={3}
+              sx={{
+                "& .MuiBadge-badge": {
+                  color: "rgba(255, 255, 255, 0.8)",
+                  backgroundColor: "rgba(224, 55, 97, 0.8)",
+                  width: "24px",
+                  height: "24px",
+                  borderRadius: "50%",
+                },
+              }}
+            >
+              <img src={notify} alt="notification" className="c-pointer" />
+            </Badge>
+
             {showNotification && (
               <Card className="notificaton-pannel" ref={notificationRef}>
                 {[...Array(3)].map((e, i) => (
