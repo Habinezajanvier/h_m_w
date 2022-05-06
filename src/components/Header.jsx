@@ -117,7 +117,7 @@ const Header = ({ onLocationClick }) => {
             icon={
               <img src={avatarImg} alt="profile" className="h-profileImg" />
             }
-            text={<span className="profile">Rajan B R</span>}
+            text={<span className="profile">rajan@ulip</span>}
             onClick={() => setIsProfileSettingOpened(true)}
           />
         </div>

@@ -25,6 +25,7 @@ import {
 } from "urql";
 import { createClient as createWSClient } from "graphql-ws";
 import { PersistGate } from "redux-persist/integration/react";
+import Loading from "./utils/Loading";
 
 // subscription ws client connection
 const wsClient = createWSClient({
@@ -59,7 +60,7 @@ if (token) {
 
 ReactDOM.render(
   <Provider store={store}>
-    <PersistGate loading={null} persistor={persistor}>
+    <PersistGate loading={Loading} persistor={persistor}>
       <URQLProvider value={client}>
         <React.StrictMode>
           <ThemeProvider theme={theme}>

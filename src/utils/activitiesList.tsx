@@ -36,7 +36,7 @@ export const activitiesTitle = {
   person_out: "ID7651 found exiting",
   car_in: "Vehicle KA001234(vehicle number) found entering",
   car_out: "Vehicle KA001234(vehicle number) found exiting",
-  intrusion: "Unkown person found entering",
+  intrusion: "Package, Reported at Velor,TN.",
   no_activity: "No activity detected",
   multiple_intrusion: "4 unkown people found entering",
   trip_start: "FL2345(Fleet ID) has begun the trip",

@@ -32,7 +32,7 @@ import AddPackage from "../../components/AddPackage";
 import AddPackageDialog from "../../components/flows/clients/AddPackage";
 import SubmitPackageDialog from "../../components/flows/clients/SubmitPackage";
 import SubmitPackageSuccessDialog from "../../components/flows/clients/SuccessDialog";
-
+import { faker } from '@faker-js/faker';
 const memberdid =
   "did:ckdr:Ee3qAFcbDNAdq9GvYG9pBPkgr3Q3C2NqbScjdxhXymoF53VNkyVbR8p1O3jgtIVRhb6Yv9QRNFdsf1uPfANviuR5pH0BoJdmCOcZitfZvcXmp5+gF1KHlRaUTb7PRBws+9iUcmPCl166ad8Q10TCTC8FapG5nonsv071Z30ODSHCYPGm";
 
@@ -211,7 +211,7 @@ const Dashboard = () => {
                               ? `${moment().diff(
                                   moment(e.activity_start_time),
                                   "days"
-                                )} days ago`
+                                )} mins ago`
                               : moment().diff(
                                   moment(e.activity_start_time),
                                   "hours"
@@ -229,7 +229,7 @@ const Dashboard = () => {
                         <div className="activity-info">
                           <div className="activity-info-labels">
                             <div className="activity-member c-pointer">
-                              Members
+                              Fleet
                             </div>
                             <div className="activity-priority c-pointer">
                               {"Priority "}
@@ -256,7 +256,7 @@ const Dashboard = () => {
                       onClick={() => setDetailVidew(false)}
                       style={{ color: "#fff" }}
                     />
-                    <span>Activity</span>
+                    <span>Fleet</span>
                   </div>
                 </div>
                 <div className="activity-label">
@@ -270,10 +270,10 @@ const Dashboard = () => {
                       className="c-pointer"
                       onClick={() => setDetailVidew(true)}
                     >
-                      Your geolocation is being tracked
+                      Activity: {faker.word}
                     </span>
                   </div>
-                  <div className="device-name c-pointer">Device DC8364</div>
+                  <div className="device-name c-pointer">{faker.vehicle.vin()}</div>
                 </div>
                 <div className="flex justify-between device-details-list">
                   <div className="device-details flex-1">
@@ -281,14 +281,14 @@ const Dashboard = () => {
                       <img src={smallCCTVIc} alt="cctv" />
                       <span className="device-detials-label">Camera no.</span>
                     </div>
-                    <div className="device-details-info">Camera 2</div>
+                    <div className="device-details-info">{faker.vehicle.vin()}</div>
                   </div>
                   <div className="device-details flex-1 rec-border">
                     <div className="flex items-center justify-center">
                       <img src={smallCCTVIc} alt="cctv" />
                       <span className="device-detials-label">Rec. time</span>
                     </div>
-                    <div className="device-details-info">09:30 am</div>
+                    <div className="device-details-info">{new Date().getDay()}</div>
                   </div>
                   <div className="device-details flex-1">
                     <div className="flex items-center justify-center">

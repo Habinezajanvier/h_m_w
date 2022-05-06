@@ -1,84 +1,194 @@
 import React, { useRef, useEffect, useState } from "react";
 import "../assets/styles/components/map.scss";
+import "mapbox-gl/dist/mapbox-gl.css";
 import trackerImg from "../assets/images/tracker-marker.png";
 import { Dialog, hslToRgb } from "@mui/material";
-import ReactDOM from "react-dom";
 import mapboxgl from "mapbox-gl";
+
+import Map from "react-map-gl";
+import { ArcLayer, GeoJsonLayer } from "deck.gl";
+import { HexagonLayer } from "@deck.gl/aggregation-layers";
+import { AmbientLight, PointLight, LightingEffect } from "@deck.gl/core";
 import Hls from "hls.js";
+import DeckGL from "@deck.gl/react";
+import myData from "./csvjson.json";
+import { PolygonLayer } from "@deck.gl/layers";
+import { TripsLayer } from "@deck.gl/geo-layers";
+import {ScenegraphLayer} from '@deck.gl/mesh-layers';
+
+const MAPBOX_ACCESS_TOKEN =
+  "pk.eyJ1IjoicmlzaGZyb21oYXBweW1vbmsiLCJhIjoiY2wwNmx0YjNnMjkyYjNqczB3NjlqdXdvYiJ9.cmAaMzsw9G1DbhtGebVnhQ";
+
 mapboxgl.accessToken =
   "pk.eyJ1IjoicmlzaGZyb21oYXBweW1vbmsiLCJhIjoiY2wwNmx0YjNnMjkyYjNqczB3NjlqdXdvYiJ9.cmAaMzsw9G1DbhtGebVnhQ";
 
-const mapStyle = "mapbox://styles/rishfromhappymonk/cl0t5b4db001i15polhxjnx9m";
+const AIR_PORTS =
+  "https://d2ad6b4ur7yvpq.cloudfront.net/naturalearth-3.3.0/ne_10m_airports.geojson";
 
-const addMarker = (
-  map,
-  lng,
-  lat,
-  popupText = "5th cross, Chickpet market, Avenue road",
-  markerImg = trackerImg
-) => {
-  const el = document.createElement("img");
-
-  el.src = markerImg;
-
-  const popUpEl = document.createElement("div");
-  popUpEl.className = "map-toolTip";
-  popUpEl.innerText = popupText;
-  popUpEl.addEventListener("click", () => {
-    setOpenDilog(true);
-  });
-
-  new mapboxgl.Marker(el)
-    .setLngLat([lng, lat])
-    .setPopup(new mapboxgl.Popup({ offset: 25 }).setDOMContent(popUpEl))
-    .addTo(map);
+const DATAURL = {
+  BUILDINGS:
+    "https://raw.githubusercontent.com/visgl/deck.gl-data/master/examples/trips/buildings.json", // eslint-disable-line
+  TRIPS:
+    "https://raw.githubusercontent.com/wajoud/map/main/routes.json", // eslint-disable-line
+  HEATMAPS : " https://raw.githubusercontent.com/wajoud/map/main/heatmap.json"
 };
+const DATA_URL = 'https://opensky-network.org/api/states/all';
+const MODEL_URL =
+  'https://raw.githubusercontent.com/visgl/deck.gl-data/master/examples/scenegraph-layer/airplane.glb';
+const REFRESH_TIME = 30000;
+
+const ANIMATIONS = {
+  '*': {speed: 1}
+};
+const DATA_INDEX = {
+  UNIQUE_ID: 0,
+  CALL_SIGN: 1,
+  ORIGIN_COUNTRY: 2,
+  LONGITUDE: 5,
+  LATITUDE: 6,
+  BARO_ALTITUDE: 7,
+  VELOCITY: 9,
+  TRUE_TRACK: 10,
+  VERTICAL_RATE: 11,
+  GEO_ALTITUDE: 13,
+  POSITION_SOURCE: 16
+};
+function verticalRateToAngle(object) {
+  // Return: -90 looking up, +90 looking down
+  const verticalRate = object[DATA_INDEX.VERTICAL_RATE] || 0;
+  const velocity = object[DATA_INDEX.VELOCITY] || 0;
+  return (-Math.atan2(verticalRate, velocity) * 180) / Math.PI;
+}
+
+function getTooltip({object}) {
+  return (
+    object &&
+    `\
+    Call Sign: ${object[DATA_INDEX.CALL_SIGN] || ''}
+    Country: ${object[DATA_INDEX.ORIGIN_COUNTRY] || ''}
+    Vertical Rate: ${object[DATA_INDEX.VERTICAL_RATE] || 0} m/s
+    Velocity: ${object[DATA_INDEX.VELOCITY] || 0} m/s
+    Direction: ${object[DATA_INDEX.TRUE_TRACK] || 0}`
+  );
+}
+
+
+
+const ambientLight = new AmbientLight({
+  color: [255, 255, 255],
+  intensity: 1.0,
+});
+
+const pointLight1 = new PointLight({
+  color: [255, 255, 255],
+  intensity: 0.8,
+  position: [-0.144528, 49.739968, 80000],
+});
+
+const pointLight2 = new PointLight({
+  color: [255, 255, 255],
+  intensity: 0.8,
+  position: [-3.807751, 54.104682, 8000],
+});
+
+const lightingEffect = new LightingEffect({
+  ambientLight,
+  pointLight1,
+  pointLight2,
+});
+
+const material = {
+  ambient: 0.64,
+  diffuse: 0.6,
+  shininess: 32,
+  specularColor: [51, 51, 51],
+};
+
+const INITIAL_VIEW_STATE = {
+  longitude: -1.415727,
+  latitude: 52.232395,
+  zoom: 6.6,
+  minZoom: 5,
+  maxZoom: 15,
+  pitch: 40.5,
+  bearing: -27,
+};
+
+export const colorRange = [
+  [1, 152, 189],
+  [73, 227, 206],
+  [216, 254, 181],
+  [254, 237, 177],
+  [254, 173, 84],
+  [209, 55, 78],
+];
+
+const DEFAULT_THEME = {
+  buildingColor: [74, 80, 87],
+  trailColor0: [253, 128, 93],
+  trailColor1: [23, 184, 190],
+  material,
+  effects: [lightingEffect]
+};
+
+
+
 
 const DrawMap = ({ trackerIcon, markerCoords }) => {
   const [openDilog, setOpenDilog] = useState(false);
 
   const [lng, setLng] = useState(77.5946);
   const [lat, setLat] = useState(12.9716);
-  const [zoom, setZoom] = useState(1.5);
+  const [zoom, setZoom] = useState(11);
   const videoRef = useRef();
-
   const mapContainerRef = useRef(null);
   const tooltipRef = useRef(new mapboxgl.Popup({ offset: 15 }));
+  const [coverage, setCoverage] = useState(1);
+  const [radius, setRadius] = useState(1000);
+  const [upperPercentile, setUpperPercentile] = useState(100);
 
-  // Initialize map when component mounts
+  const [buildings, setBuildings] = useState(DATAURL.BUILDINGS);
+  const [trips, setTrips] = useState(DATAURL.TRIPS);
+  const [trailLength, setTrailLength] = useState(180);
+  const [loopLength] = useState(1800);
+  const [animationSpeed] = useState(1);
+  const [theme] = useState(DEFAULT_THEME)
+  const [data, setData] = useState(null);
+  const [timer, setTimer] = useState({});
+
   useEffect(() => {
-    const map = new mapboxgl.Map({
-      container: mapContainerRef.current,
-      style: mapStyle,
-      center: [lng, lat],
-      zoom: 12.5,
-    });
+    fetch(DATA_URL)
+      .then(resp => resp.json())
+      .then(resp => {
+        if (resp && resp.states && timer.id !== null) {
+          // In order to keep the animation smooth we need to always return the same
+          // objects in the exact same order. This function will discard new objects
+          // and only update existing ones.
+          let sortedData = resp.states;
+          if (data) {
+            const dataAsObj = {};
+            sortedData.forEach(entry => (dataAsObj[entry[DATA_INDEX.UNIQUE_ID]] = entry));
+            sortedData = data.map(entry => dataAsObj[entry[DATA_INDEX.UNIQUE_ID]] || entry);
+          }
 
-    const el = document.createElement("img");
+          setData(sortedData);
 
-    el.src = trackerImg;
+          // if (onDataLoad) {
+          //   onDataLoad(sortedData.length);
+          // }
+        }
+      })
+      .finally(() => {
+        timer.nextTimeoutId = setTimeout(() => setTimer({id: timer.nextTimeoutId}), REFRESH_TIME);
+      });
 
-    const popUpEl = document.createElement("div");
-    popUpEl.className = "map-toolTip";
-    popUpEl.innerText = "5th cross, Chickpet market, Avenue road";
-    popUpEl.addEventListener("click", () => {
-      setOpenDilog(true);
-    });
+    return () => {
+      clearTimeout(timer.nextTimeoutId);
+      timer.id = null;
+    };
+  }, [timer]);
 
-    new mapboxgl.Marker(el)
-      .setLngLat([lng, lat])
-      .setPopup(new mapboxgl.Popup({ offset: 25 }).setDOMContent(popUpEl))
-      .addTo(map);
 
-    //  marker function
-
-    markerCoords?.map(({ longitude, latitude }, i) => {
-      addMarker(map, longitude, latitude);
-    });
-
-    // Clean up on unmount
-    return () => map.remove();
-  }, [markerCoords]);
 
   const handleVideoPlay = (videoRef, url) => {
     if (openDilog) {
@@ -89,16 +199,137 @@ const DrawMap = ({ trackerIcon, markerCoords }) => {
         var hls = new Hls();
         hls.loadSource(videoSrc);
         hls.attachMedia(videoRef);
+        hls.play();
       } else if (video.canPlayType("application/vnd.apple.mpegurl")) {
         videoRef.src = videoSrc;
       }
     }
   };
 
+  const [time, setTime] = useState(0);
+  const [animation] = useState({});
+  const landCover = [
+    [
+      [-74.0, 12.9716],
+      [-74.02, 12.9716],
+      [-74.02, 12.9716],
+      [-74.0, 12.9716]
+    ]
+  ];
+
+  const animate = ()=>{
+    setTime(t=>(t+animationSpeed)%loopLength);
+    animation.id = window.requestAnimationFrame(animate)
+  }
+
+  useEffect(()=>{
+    animation.id = window.requestAnimationFrame(animate);
+    return ()=>window.cancelAnimationFrame(animation.id)
+  },[animation])
+
+  const onClick = (info) => {
+    if (info.object) {
+      // eslint-disable-next-line
+      alert(
+        `${info.object.properties.name} (${info.object.properties.abbrev})`
+      );
+    }
+  };
+
+  const scenegraph = new ScenegraphLayer({
+    id: 'scenegraph-layer',
+    data,
+    pickable: true,
+    sizeScale:20,
+    scenegraph: MODEL_URL,
+    _animations: ANIMATIONS,
+    sizeMinPixels: 0.1,
+    sizeMaxPixels: 1.5,
+    getPosition: d => [
+      d[DATA_INDEX.LONGITUDE] || 0,
+      d[DATA_INDEX.LATITUDE] || 0,
+      d[DATA_INDEX.GEO_ALTITUDE] || 0
+    ],
+    getOrientation: d => [verticalRateToAngle(d), -d[DATA_INDEX.TRUE_TRACK] || 0, 90],
+    transitions: {
+      getPosition: REFRESH_TIME * 0.9
+    }
+  });
+
+  const buildingLayer = new PolygonLayer({
+    id: 'ground',
+    data: landCover,
+    getPolygon: f => f,
+    stroked: false,
+    getFillColor: [0, 0, 0, 0]
+  })
+
+  const tripLayer = new TripsLayer({
+    id: 'trips',
+    data: trips,
+    getPath: d => d.path,
+    getTimestamps: d => d.timestamps,
+    getColor: d => (d.vendor === 0 ? theme.trailColor0 : theme.trailColor1),
+    opacity: 0.7,
+    widthMinPixels: 2,
+    rounded: true,
+    trailLength,
+    currentTime: time,
+    shadowEnabled: false
+  })
+
+
+  const geoLayer = new GeoJsonLayer({
+    id: "airports",
+    data: AIR_PORTS,
+    // Styles
+    filled: true,
+    pointRadiusMinPixels: 2,
+    pointRadiusScale: 200,
+    getPointRadius: (f) => 11 - f.properties.scalerank,
+    getFillColor: [200, 0, 80, 180],
+    // Interactive props
+    pickable: true,
+    autoHighlight: true,
+    // saonClick,
+  });
+  const arcLayer = new ArcLayer({
+    id: "arcs",
+    data: AIR_PORTS,
+    dataTransform: (d) => d.features.filter((f) => f.properties.scalerank < 4),
+    getSourcePosition: (f) => [77.5946, 12.9716],
+    getTargetPosition: (f) => f.geometry.coordinates,
+    getSourceColor: [0, 128, 200],
+    getTargetColor: [200, 0, 80],
+    getWidth: 2,
+  });
+
+  const layers = [scenegraph,tripLayer,geoLayer, arcLayer];
+
   return (
     <div className="map-container">
-      <div ref={mapContainerRef} className="map-container" />
-
+      <DeckGL
+        initialViewState={{
+          longitude: lng,
+          latitude: lat,
+          zoom: zoom,
+          bearing: 0,
+          pitch: 60,
+        }}
+        controller={true}
+        layers={layers}
+        effects={[lightingEffect]}
+        // getTooltip={getTooltip}
+      >
+        <Map
+          ref={React.useRef(null)}
+          style={{ width: "100%", height: "100%" }}
+          styleDiffing
+          reuseMaps
+          mapStyle="mapbox://styles/rishfromhappymonk/cl0t5b4db001i15polhxjnx9m"
+          mapboxAccessToken={MAPBOX_ACCESS_TOKEN}
+        />
+      </DeckGL>
       <Dialog
         onClose={() => setOpenDilog(false)}
         open={openDilog}
@@ -115,20 +346,6 @@ const DrawMap = ({ trackerIcon, markerCoords }) => {
         >
           {/* <source src="https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8"/> */}
         </video>
-
-        {/* <ReactPlayer
-          className={"map-streaming-player"}
-          url={
-            // "https://bitdash-a.akamaihd.net/content/sintel/hls/playlist.m3u8"
-            "https://216.48.189.5:8080/playlist.m3u8"
-            // "http://192.168.52.215:8080/playlist.m3u"
-            // "https://bitdash-a.akamaihd.net/content/MI201109210084_1/m3u8s/f08e80da-bf1d-4e3d-8899-f0f6155f6efa.m3u8"
-          }
-          // url={"https://www.w3schools.com/html/movie.mp4"}
-          // config={{
-          //   file: "forceHLS",
-          // }}
-        /> */}
       </Dialog>
     </div>
   );
