@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import IOSSwitch from "./IOSSwitch";
 import CloseIcon from "@mui/icons-material/Close";
 import eyeIc from "../assets/images/eye-icon.svg";
@@ -14,8 +14,13 @@ import docsIco from "../assets/images/icons/folder.svg";
 import myQRIco from "../assets/images/icons/Qr-code-side-menu.svg";
 import feedbackIco from "../assets/images/icons/Feedback-side-menu.svg";
 import { sidePanel } from "../redux/modules/dashboard/dashboardSlice";
+import LogoutDialog from "../components/flows/logout/LogoutDialog";
+import { saveSideBarView } from "../redux/modules/dashboard/dashboardSlice";
 import { useDispatch } from "react-redux";
-const Sidebar = ({ setIsSidebarActive, open }) => {
+import MyDocuments from "./documents/MyDocuments";
+import Troubleshoot from "./flows/troubleshoot";
+import DevicesBrandsDialog from "./flows/devices/DevicesBrands";
+const Sidebar = ({ setIsSidebarActive, open, handleLogout }) => {
   const [selectedNav, setSelectedNav] = useState(0);
 
   const dispatch = useDispatch();
@@ -25,8 +30,16 @@ const Sidebar = ({ setIsSidebarActive, open }) => {
     setIsSidebarActive(false);
   };
 
+  const [logout, setLogout] = useState(true);
+
+  const handleDevicesShow = () => {
+    dispatch(saveSideBarView("devices"));
+  };
+
   return (
     <>
+      <LogoutDialog open={!logout} handleClose={() => setLogout(true)} />
+      {/* <DevicesBrandsDialog open={true} handleContinue={null} /> */}
       {open && (
         <div className="sidebarDrawr">
           <div className="sidebarDrawr-header">
@@ -92,7 +105,9 @@ const Sidebar = ({ setIsSidebarActive, open }) => {
               >
                 <div className="glow-border-left"></div>
                 <img src={devicesIco} alt="devices" />
-                <div className="navLink">Devices</div>
+                <div className="navLink" onClick={handleDevicesShow}>
+                  Devices
+                </div>
               </li>
               <li
                 className="sidebar-navItem flex items-center "
@@ -122,7 +137,11 @@ const Sidebar = ({ setIsSidebarActive, open }) => {
               <div className="sidebarDrawr-loginStatus flex items-center justify-between">
                 <div className="loginStatus-label">You’re logged in</div>
                 <div className="radio">
-                  <IOSSwitch sx={{ m: 1 }} defaultChecked />
+                  <IOSSwitch
+                    sx={{ m: 1 }}
+                    onChange={({ target }) => setLogout(target.checked)}
+                    checked={logout}
+                  />
                 </div>
               </div>
 
@@ -136,8 +155,39 @@ const Sidebar = ({ setIsSidebarActive, open }) => {
           </div>
         </div>
       )}
-
       {selectedNav === 1 && <MyQRCode onClose={() => setSelectedNav(0)} />}
+      {selectedNav === 2 && (
+        <MyDocuments
+          onClose={() => setSelectedNav(0)}
+          docs={[
+            {
+              docName: "Pan Card",
+              docIcon: docsIco,
+              docTag: "New",
+              docDate: "6 Feb 2022",
+            },
+            {
+              docName: "Pan Card",
+              docIcon: docsIco,
+              docTag: "New",
+              docDate: "6 Feb 2022",
+            },
+            {
+              docName: "Pan Card",
+              docIcon: docsIco,
+              docTag: "New",
+              docDate: "6 Feb 2022",
+            },
+            {
+              docName: "Pan Card",
+              docIcon: docsIco,
+              docTag: "New",
+              docDate: "6 Feb 2022",
+            },
+          ]}
+        />
+      )}
+      {selectedNav === 5 && <Troubleshoot onClose={() => setSelectedNav(0)} />}
       {selectedNav === 6 && <Feedback onClose={() => setSelectedNav(0)} />}
     </>
   );

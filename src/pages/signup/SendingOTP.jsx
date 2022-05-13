@@ -2,7 +2,9 @@ import React from "react";
 import Button from "../../components/Button";
 import SelectableInput from "../../components/SelectableInput";
 
-const SendingOTP = ({ OTP, setOTP, invalidOTP, otpImg, handleVerifyOTP }) => {
+const SendingOTP = ({ OTP, setOTP, invalidOTP, otpImg, handleVerifyOTP, isOtpSent, isLoading }) => {
+
+  console.log("CHECK OTP    ===========> ", invalidOTP)
   return (
     <>
       <div className="signup-card-body">
@@ -15,7 +17,7 @@ const SendingOTP = ({ OTP, setOTP, invalidOTP, otpImg, handleVerifyOTP }) => {
             getValue={({ value }) => setOTP(value)}
             withSelectable={false}
             selectIcon={otpImg}
-            errText={invalidOTP && isOtpSent ? "Incorrect OTP" : ""}
+            errText={invalidOTP ? "Incorrect OTP" : ""}
           />
         </div>
       </div>
@@ -26,6 +28,7 @@ const SendingOTP = ({ OTP, setOTP, invalidOTP, otpImg, handleVerifyOTP }) => {
             <Button
               outlined={false}
               title={"Continue"}
+              disabled={isLoading}
               onClick={() => {
                 handleVerifyOTP();
               }}

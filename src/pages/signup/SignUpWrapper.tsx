@@ -19,7 +19,7 @@ const SignUpWrapper = ({ children, headText }) => {
                 className={"c-pointer"}
               />
             </div>
-            <div>{headText ? headText : "Sign Up"} </div>
+            <div>{headText} </div>
             <div></div>
           </div>
 

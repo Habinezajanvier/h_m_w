@@ -1,6 +1,7 @@
 .dashboard {
   // background: #1d1d20;
-  background: #22242C;
+  // background: #22242c;
+  background: #262832;
   padding: 20px 20px 0 20px;
   min-height: 100vh;
   .dashboard-map-bg {
@@ -321,16 +322,41 @@
       padding: 12px 10px;
 
       overflow-y: scroll;
-      &::-webkit-scrollbar {
-        width: 0;
-      }
-
       background: #24262e;
       box-shadow: inset 0px 0px 3px rgba(0, 0, 0, 0.25);
+
+      ::-webkit-scrollbar {
+        width: 10px;
+      }
+
+      ::-webkit-scrollbar-track {
+        background: #24262e;
+      }
+
+      ::-webkit-scrollbar-thumb {
+        width: 6px;
+        height: 25px;
+        background: rgba(228, 228, 231, 0.4);
+        border-radius: 16px;
+      }
     }
 
     .location-list {
       gap: 10px;
+      ::-webkit-scrollbar {
+        width: 10px;
+      }
+
+      ::-webkit-scrollbar-track {
+        background: #24262e;
+      }
+
+      ::-webkit-scrollbar-thumb {
+        width: 6px;
+        height: 109px;
+        background: rgba(228, 228, 231, 0.4);
+        border-radius: 16px;
+      }
     }
 
     .location-item {
@@ -394,27 +420,23 @@
   z-index: 99;
 }
 
-
-
 //ADD DEVICE
 
-.add-device-title{
+.add-device-title {
   font-weight: 700;
-font-size: 16px;
-line-height: 30px;
-color: rgba(255, 255, 255, 0.8) !important;
-
+  font-size: 16px;
+  line-height: 30px;
+  color: rgba(255, 255, 255, 0.8) !important;
 }
 
-
-.add-device-form{
-  .add-device-body{
+.add-device-form {
+  .add-device-body {
     display: flex;
     flex-direction: column;
     align-items: center;
     padding: 97px 97px 0px 97px;
     gap: 70px;
-    .add-device-form-input{
+    .add-device-form-input {
       // background: #24262E;
       background: #1d1d20;
       height: 5vh;
@@ -428,58 +450,68 @@ color: rgba(255, 255, 255, 0.8) !important;
     }
   }
 
-  .add-device-footer{
-    h1{font-weight: 400;
+  .add-device-footer {
+    h1 {
+      font-weight: 400;
       font-size: 14px;
       line-height: 20px;
       color: rgba(228, 228, 231, 0.25);
     }
-    button{
+    button {
       float: right;
     }
   }
 }
 
-
-.add-device-not-auth{
-  .heading{
+.add-device-not-auth {
+  .heading {
     display: flex;
     gap: 25px;
-    h1{
+    h1 {
       font-weight: 600;
-font-size: 16px;
-line-height: 20px;
-text-align: center;
-color: rgba(228, 228, 231, 0.8);
+      font-size: 16px;
+      line-height: 20px;
+      text-align: center;
+      color: rgba(228, 228, 231, 0.8);
     }
-    img{
+    img {
       cursor: pointer;
     }
   }
-  .login-form{
-height: 191px;
-background: #1D1F27;
-border-radius: 0px;
-display: flex;
-flex-direction: column;
-align-items: center;
-padding: 25px;
-gap: 25px;
-input{
-  background: #1d1d20;
-  height: 5vh;
-  border: none;
-  border-bottom: 1px solid rgba(228, 228, 231, 0.4) !important;
-  outline: none;
-  font-size: 16px;
-  line-height: 30px;
-  color: rgba(255, 255, 255, 0.8);
-  width: 200px;
+  .login-form {
+    height: 191px;
+    background: #1d1f27;
+    border-radius: 0px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 25px;
+    gap: 25px;
+    input {
+      background: #1d1d20;
+      height: 5vh;
+      border: none;
+      border-bottom: 1px solid rgba(228, 228, 231, 0.4) !important;
+      outline: none;
+      font-size: 16px;
+      line-height: 30px;
+      color: rgba(255, 255, 255, 0.8);
+      width: 200px;
+    }
+    button {
+      margin-left: auto;
+      width: 100px;
+    }
+  }
+}
 
-}
-button{
-margin-left: auto;
-  width: 100px;
-}
+//activity people involved
+
+.peopleInvolved {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  ul {
+    cursor: pointer;
   }
 }

@@ -3,24 +3,34 @@ import { createKeypair, KeyPairType } from "../../crypto/KeyPair";
 import { nanoid } from "nanoid";
 import moment from "moment";
 
+export enum RegistrationType {
+  INITIAL = "INITIAL",
+}
+
 export const testRegisterUser = async (
   target: string,
+  code: string,
   mnemonicPassword: string
 ) => {
   const keypair = createKeypair();
   const meta = {
-    firstName: "bhavish",
-    email: "bhavish@happymonk.co",
+    phoneNumber: target,
+    countryCode: code,
+    role: "admin",
     // other meta data to sign and send
   };
-  const nonce = randomBytes(24);
+
   const nanoId = nanoid(32);
   const createdTime = moment().toISOString();
 
   const mnemonicPhrase = await keypair.derive(target, KeyPairType.HYBRID);
+  // mnemonicPhrase.
+
+  keypair.encodePkcs8(mnemonicPassword);
 
   const sig = await keypair.blsSign([Buffer.from(JSON.stringify(meta))]);
   const pop = await keypair.createPop();
+
   // const passPhrase = await keypair.encodePkcs8(mnemonicPassword);
 
   const registerRequestObject = {
@@ -29,22 +39,21 @@ export const testRegisterUser = async (
       did: keypair.did,
       createdTime,
       proofOfPossession: pop,
-      role: "admin",
       metaInformation: meta,
       odid: "",
       invited_by: "",
       event: undefined,
-      signature: sig,
+      signature: sig.signature,
       mnemonicPhrase: mnemonicPhrase.mnemonic,
+      registrationType: RegistrationType.INITIAL,
     },
 
     kayPair: {
       id: nanoId,
       did: keypair.did,
-      keypair: keypair.encodePkcs8(),
+      keypair: keypair.encodePkcs8(mnemonicPassword),
       createdTime,
       proofOfPossession: pop,
-      role: "admin",
       metaInformation: meta,
       odid: "",
       invited_by: "",

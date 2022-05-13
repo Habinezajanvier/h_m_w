@@ -25,6 +25,7 @@ import packagesIcon from "../assets/images/icons/packages.svg";
 import Badge from "@mui/material/Badge";
 import { useStyles } from "./flows/common/styles/selectorStyles";
 import { makeStyles } from "@material-ui/core";
+import { saveSideBarView } from "../redux/modules/dashboard/dashboardSlice";
 
 const HLabel = ({ icon, text, isLong, onClick }) => {
   return (
@@ -67,6 +68,10 @@ const Header = ({ onLocationClick }) => {
 
   const classes = useStyles();
 
+  const handleSidebarShow = (show) => {
+    dispatch(saveSideBarView(show));
+  };
+
   return (
     <>
       <div className="header flex justify-between items-center">
@@ -83,34 +88,14 @@ const Header = ({ onLocationClick }) => {
           <div className="h-labels flex ">
             <HLabel
               isLong={true}
-              icon={<img src={vehiclesIcon} alt="location" />}
-              onClick={() => onLocationClick && onLocationClick()}
-              text={
-                <h1 className="h-stat">
-                  No of Vehicles in movement :{" "}
-                  <span className="highlight-header-stat">223029</span>
-                </h1>
-              }
+              icon={<img src={locationImg} alt="location" />}
+              onClick={() => handleSidebarShow("location")}
+              text={<span className="h-location">BTM Layout,Bengaluru</span>}
             />
             <HLabel
               isLong={false}
-              icon={<img src={packagesIcon} alt="weather" />}
-              text={
-                <h1 className="h-stat">
-                  No of Packages in transit :{" "}
-                  <span className="highlight-header-stat">302945</span>
-                </h1>
-              }
-            />
-            <HLabel
-              isLong={false}
-              icon={<img src={incidentsIcon} alt="weather" />}
-              text={
-                <h1 className="h-stat">
-                  No of Incidents :{" "}
-                  <span className="highlight-header-stat">450</span>
-                </h1>
-              }
+              icon={<img src={weather} alt="weather" />}
+              text={<span className="h-weather">23° C, Sunny</span>}
             />
           </div>
         </div>

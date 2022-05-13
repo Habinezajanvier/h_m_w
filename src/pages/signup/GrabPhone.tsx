@@ -1,6 +1,7 @@
 import React from "react";
 import Button from "../../components/Button";
 import SelectableInput from "../../components/SelectableInput";
+import { registerUser } from "./registerUser";
 
 const GrabPhone = ({ phone, handlePhoneInput, handleSendOTPRequest }) => {
   return (
@@ -24,7 +25,7 @@ const GrabPhone = ({ phone, handlePhoneInput, handleSendOTPRequest }) => {
             title={"Verify"}
             onClick={() => {
               handleSendOTPRequest && handleSendOTPRequest();
-              // registerUser();
+              registerUser(phone);
             }}
           />
         )}

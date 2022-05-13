@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import ReactDOM from "react-dom";
 import { Provider } from "react-redux";
 import { ThemeProvider } from "@mui/material/styles";
@@ -46,7 +46,6 @@ const client = createClient({
     }),
   ],
 });
-
 
 const token = localStorage.getItem("token");
 if (token) {

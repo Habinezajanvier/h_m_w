@@ -3,7 +3,7 @@ mutation(
   $id: ID!, 
   $did: String!,
   $createdTime: String!,
-  $proofOfPossession: JSON,
+  $proofOfPossession: JSON!,
   $signature: Signature!
 ) {
  login(login:{

@@ -3,26 +3,21 @@ export const registerMutation = `
 mutation(
   $id: ID!, 
   $did: String!,
-  $role: String!,
   $createdTime: String!,
   $metaInformation: MetaData!,
-  $proofOfPossession: JSON,
-  $signature: Signature!
+  $proofOfPossession: JSON!,
+  $signature: InputSignature!
+  $registrationType: RegistrationType!
   ){
   register(signup: 
     {
     id: $id,
-    
     did: $did,
-    
-    role: $role,
-    
     createdTime: $createdTime,
-    
     metaInformation: $metaInformation,
-    
     proofOfPossession: $proofOfPossession,
     signature: $signature,
+    registrationType:  $registrationType
   }
   
   ){

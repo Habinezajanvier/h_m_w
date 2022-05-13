@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/rules-of-hooks */
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import chokidrImg from "../../assets/images/chokidr.png";
@@ -6,8 +7,7 @@ import macMonitorImg from "../../assets/images/macMonitor.png";
 import "../../assets/styles/splash.scss";
 import Button from "../../components/Button";
 import CarouselNavigation from "../../components/CarouselNavigation";
-
-
+import useProtectedRoute from "../../hooks/UseProtectedRoute";
 
 const Splash = () => {
   const [splashScreenId, setSplashScreenId] = useState<Number>(1);
@@ -57,14 +57,14 @@ const Splash = () => {
               <Button
                 outlined={false}
                 title={"Sign Up"}
-                onClick={() => navigate('/signup')}
+                onClick={() => navigate("/signup")}
               />
             </div>
             <div className="splash-login-btn btn">
               <Button
                 outlined={true}
                 title={"Log In"}
-                onClick={() => navigate('/signin')}
+                onClick={() => navigate("/signin")}
               />
             </div>
           </div>
@@ -74,4 +74,4 @@ const Splash = () => {
   );
 };
 
-export default Splash;
+export default useProtectedRoute(Splash);

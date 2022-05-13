@@ -1,0 +1,71 @@
+.qr-popup {
+  width: 348px;
+  height: 145px;
+  background: #24262e;
+  border-radius: 19px;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  padding: 32px 23px;
+  align-items: center;
+  //   align-items: flex-start;
+  //   justify-content: flex-start;
+
+  .title {
+    margin-bottom: 20px;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 22px;
+    letter-spacing: -0.015em;
+    color: rgba(228, 228, 231, 0.8);
+    text-align: left;
+  }
+  .footer {
+    display: flex;
+    align-items: center;
+    width: 348px;
+    padding: 0px 23px;
+    .step {
+      font-weight: 400;
+      font-size: 16px;
+      line-height: 22px;
+      color: rgba(228, 228, 231, 0.4);
+      margin-right: auto;
+      text-align: left;
+    }
+    .action-text {
+      display: flex;
+      gap: 57px;
+      font-weight: 400;
+      font-size: 16px;
+      line-height: 20px;
+      color: #216692;
+      float: right;
+    }
+  }
+}
+
+//PANELS
+
+.popup-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  .description {
+    max-width: 283px;
+    p {
+      font-weight: 400;
+      font-size: 18px;
+      line-height: 28px;
+      text-align: center;
+      color: rgba(228, 228, 231, 0.8);
+    }
+    .error-text {
+      color: #e03761 !important;
+    }
+  }
+  .continue-btn {
+    margin-top: 80px;
+    width: 320px;
+  }
+}

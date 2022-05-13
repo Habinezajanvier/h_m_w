@@ -2,8 +2,6 @@ import "../../../assets/styles/components/billDetails.scss";
 import orSeparatorImg from "../../../assets/images/or_separator.svg";
 import qrScanImg from "../../../assets/images/qr_scan.svg";
 import SelectorInput from "../common/SelectorInput";
-import { useQuery } from "urql";
-import { getEwayBills } from "../../../api/clients/graphql/query";
 import { useSelector } from "react-redux";
 
 const BillDetails = ({ handleContinue }) => {

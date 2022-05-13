@@ -1,0 +1,63 @@
+.employee-card {
+  width: 355px;
+  height: 399px;
+  background: #22242c;
+  border-radius: 6px;
+  padding: 16px 10px 16px 25px;
+  .heading {
+    display: flex;
+    align-items: flex-start;
+    img {
+      margin-left: auto;
+      cursor: pointer;
+    }
+    .left {
+      display: flex;
+      gap: 9px;
+      img {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+      }
+      div {
+        h1 {
+          margin: 0%;
+          font-weight: 600;
+          font-size: 16px;
+          line-height: 20px;
+          color: rgba(228, 228, 231, 0.8);
+        }
+        span {
+          margin: 0%;
+          font-weight: 400;
+          font-size: 12px;
+          line-height: 10px;
+          color: rgba(228, 228, 231, 0.6);
+        }
+      }
+    }
+  }
+  .content {
+    display: grid;
+    grid-template-columns: repeat(2, auto);
+    padding-top: 40px;
+    gap: 21px;
+    .details {
+      margin-right: auto;
+      h1 {
+        margin: 0%;
+        font-weight: 400;
+        font-size: 14px;
+        line-height: 20px;
+        color: rgba(228, 228, 231, 0.4);
+      }
+      span {
+        margin: 0%;
+        font-weight: 600;
+        font-size: 16px;
+        line-height: 30px;
+        color: #e4e4e7;
+      }
+    }
+  }
+}

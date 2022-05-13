@@ -9,8 +9,6 @@ const MyQRCode = ({ onClose }) => {
   const [tab, setTab] = useState(0);
   const [isOpen, setIsOpen] = useState(true);
 
-
-
   return (
     <Dialog
       maxWidth={"lg"}
@@ -30,7 +28,13 @@ const MyQRCode = ({ onClose }) => {
       <div className="myqrcode-header flex justify-between">
         <div className="myqrcode-header-title">My QR Code</div>
         <div className="myqrcode-header-close">
-          <CloseIcon onClick={() => {setIsOpen(false); onClose()}}  className="c-pointer"/>
+          <CloseIcon
+            onClick={() => {
+              setIsOpen(false);
+              onClose();
+            }}
+            className="c-pointer"
+          />
         </div>
       </div>
       <div className="myqrcode-tabs flex justify-between">

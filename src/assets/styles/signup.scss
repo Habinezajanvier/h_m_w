@@ -21,22 +21,23 @@
 
       color: #e4e4e7;
     }
-
-    .signup-card-body {
+  .signup-card-body {
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: space-between;
       gap: 59px;
       margin-top: 25px;
+
     }
-    // .signup-card-footer,
-    .signup-card-body {
-      align-items: center;
-      justify-content: space-between;
-      display: flex;
-      flex-direction: column;
-    }
+    // // .signup-card-footer,
+    // .signup-card-body {
+    //   align-items: center;
+    //   justify-content: space-between;
+    //   display: flex;
+    //   flex-direction: column;
+
+    // }
 
     .signup-card-footer {
       gap: 25px;
@@ -90,4 +91,13 @@
   text-align: center;
   color: rgba(228, 228, 231, 0.8);
   gap: 12px;
+}
+
+
+.error-text{
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 30px;
+  text-align: center;
+  color: #D80027 !important;
 }

@@ -1,0 +1,230 @@
+.add-device {
+  width: 375px;
+  height: auto;
+  background: #24262e !important;
+  border-radius: 6px;
+}
+.add-device-accordon {
+  background: #24262e !important;
+  font-weight: 700;
+  font-size: 16px;
+  line-height: 30px;
+  color: rgba(255, 255, 255, 0.8) !important;
+}
+
+.add-device-details {
+  .add-device-header {
+    display: grid;
+    grid-template-columns: auto 10%;
+    align-items: center;
+    h1 {
+      font-weight: 600;
+      font-size: 16px;
+      line-height: 20px;
+      text-align: center;
+      color: rgba(228, 228, 231, 0.8);
+      margin-right: auto;
+    }
+    img {
+      margin-left: auto;
+    }
+  }
+}
+
+.add-device-content-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+  .add-device-content {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    h1 {
+      font-weight: 600;
+      font-size: 16px;
+      line-height: 20px;
+      text-align: center;
+      color: rgba(1, 143, 106, 0.85);
+    }
+    img {
+      background-color: #1d1f27;
+      cursor: pointer;
+    }
+  }
+}
+
+.accordon-summary {
+  img {
+    margin-right: 12.5px;
+  }
+}
+
+//Login Form
+
+.device-login-form {
+  width: 337px;
+  height: 191px;
+  background: #1d1f27;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 32px;
+  gap: 25px;
+  .form-inputs {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    input {
+      background-color: #1d1f27;
+      border: none;
+      height: 25px;
+      border-bottom: 1px solid rgba(228, 228, 231, 0.2);
+      outline: none;
+      font-weight: 400;
+      font-size: 14px;
+      line-height: 20px;
+      color: rgba(255, 255, 255, 0.4);
+      padding-bottom: 5px;
+    }
+
+    span {
+      font-weight: 400;
+      font-size: 14px;
+      line-height: 20px;
+      color: rgba(86, 204, 242, 0.8);
+      margin-left: auto;
+      cursor: pointer;
+    }
+  }
+  button {
+    width: 94px;
+    font-weight: 600;
+    font-size: 16px;
+    line-height: 30px;
+    text-align: center;
+    color: rgba(255, 255, 255, 0.8);
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
+
+//Add Device Form
+
+.add-device-form {
+  display: flex;
+  flex-direction: column;
+  flex-direction: column;
+  justify-content: center;
+  gap: 25px;
+  .img-container {
+    display: flex;
+    justify-content: center;
+    padding: 60px;
+  }
+  .input-container {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    input {
+      background: #24262e;
+      border: none;
+      font-weight: 400;
+      font-size: 16px;
+      line-height: 20px;
+      color: rgba(228, 228, 231, 0.4);
+      outline: none;
+      border-bottom: 1px solid rgba(228, 228, 231, 0.4);
+      padding-bottom: 5px;
+    }
+    span {
+      font-weight: 400;
+      font-size: 14px;
+      line-height: 20px;
+      color: rgba(228, 228, 231, 0.25);
+    }
+  }
+  .button-container {
+    display: flex;
+    justify-content: flex-end;
+    button {
+      width: 80px;
+      height: 36px;
+      font-weight: 600;
+      font-size: 16px;
+      line-height: 30px;
+      text-align: center;
+      color: rgba(255, 255, 255, 0.8);
+      margin-left: auto;
+    }
+  }
+}
+
+//Add Device Info
+
+.device-info-form {
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+  .heading {
+    display: flex;
+    .device-info {
+      h1 {
+        font-weight: 400;
+        font-size: 14px;
+        line-height: 30px;
+        color: rgba(255, 255, 255, 0.8);
+        border-bottom: 3px solid rgba(1, 143, 106, 0.85);
+      }
+    }
+    .scann-qr {
+      margin-left: auto;
+      display: flex;
+      align-items: center;
+      gap: 11px;
+      h1 {
+        font-weight: 600;
+        font-size: 14px;
+        line-height: 30px;
+        color: rgba(1, 143, 106, 0.85);
+      }
+    }
+  }
+  .form-content {
+    display: flex;
+    flex-direction: column;
+    .content {
+      display: grid;
+      grid-template-columns: 50% auto;
+      .label {
+        font-weight: 400;
+        font-size: 16px;
+        line-height: 20px;
+        color: rgba(228, 228, 231, 0.6);
+      }
+      .data {
+        font-weight: 400;
+        font-size: 16px;
+        line-height: 20px;
+        text-align: center;
+        color: rgba(255, 255, 255, 0.8);
+      }
+    }
+  }
+
+  .button-container {
+    margin-left: auto;
+    display: flex;
+    justify-content: flex-end;
+    button {
+      width: 90px;
+      height: 36px;
+      background: rgba(1, 143, 106, 0.85);
+      border-radius: 4px;
+    }
+  }
+}
+
+.indoor-outdoor-label {
+  display: flex;
+  gap: 5px;
+}

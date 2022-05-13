@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/rules-of-hooks */
 import React, { useEffect, useState } from "react";
 import "../../assets/styles/dashboard.scss";
 import Header from "../../components/Header";
@@ -11,7 +12,7 @@ import smallManPic from "../../assets/images/man-sm.png";
 import menInteranceImg from "../../assets/images/men-interance.png";
 import manInSuitImg from "../../assets/images/buisness-man-going.png";
 import cryptoIc from "../../assets/images/crypto-icon.svg";
-import { Avatar, Badge } from "@mui/material";
+import { Avatar, Badge, menuItemClasses } from "@mui/material";
 import CollapsibleLocationBar from "../../components/CollapsibleLocationBar";
 import crystalIcon from "../../assets/images/hexgon-crystal.png";
 import { useQuery, useSubscription } from "urql";
@@ -40,9 +41,22 @@ import packageImg from "../../assets/images/icons/package.svg";
 import {
   saveBills,
   saveActivitiesList,
+  saveActivity,
+  saveActivityLocation,
 } from "../../redux/modules/dashboard/dashboardSlice";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { getEwayBills } from "../../GQLQueries/ewayBills";
+import useProtectedRoute from "../../hooks/UseProtectedRoute";
+import { persistor } from "../../redux/store";
+import VideoPlayer from "../../components/flows/activities/VideoPlayer";
+import EmployeeCard from "../../components/flows/activities/EmployeeCard";
+import AddNewDevice from "../../components/flows/activities/locations/AddNewDevice";
+import CollapsibleDevicesBar from "../../components/CollapsibleDevicesBar";
+import { saveSideBarView } from "../../redux/modules/dashboard/dashboardSlice";
+import timestamp from "time-stamp";
+import AddDevice from "../../components/flows/devices/AddDevice";
+import AddToOrganisationAccordon from "../../components/onboarding/organisation/AddToOrganisationAccordon";
+import DevicesBrandsDialog from "../../components/flows/devices/DevicesBrands";
 
 const memberdid =
   "did:ckdr:Ee3qAFcbDNAdq9GvYG9pBPkgr3Q3C2NqbScjdxhXymoF53VNkyVbR8p1O3jgtIVRhb6Yv9QRNFdsf1uPfANviuR5pH0BoJdmCOcZitfZvcXmp5+gF1KHlRaUTb7PRBws+9iUcmPCl166ad8Q10TCTC8FapG5nonsv071Z30ODSHCYPGm";
@@ -52,7 +66,7 @@ subscription(
   $topic: String!,
   $memberdid: String
 ){
-  activities(topic: $topic ,memberdid: $memberdid ){a
+  activities(topic: $topic ,memberdid: $memberdid ){
     id,
     type,
     timestamp,
@@ -72,9 +86,6 @@ subscription(
     signature,
     proof,
     witness,
-    
-    
-    
   }
 }
 `;
@@ -85,13 +96,22 @@ const handleSubscription = (activities = [], response: { activities: any }) => {
 
 const Dashboard = () => {
   const [detailView, setDetailVidew] = useState(false);
-  const [isActivityShutterDown, setIsActivityShutterDown] = useState(false);
+  const [isActivityShutterDown, setIsActivityShutterDown] = useState(true);
   const [isLocationView, setIsLocationView] = useState(false);
+  const [isDevicesView, setIsDevicesView] = useState(true);
   const [LocTrackerIcon, setLocTrackerIcon] = useState(null);
   const [isActivitySubPaused, setIsActivitySubPaused] = useState(false);
   const [activityList, setActivityList] = useState([]);
   const [markerCoords, setMarkerCoords] = useState([]);
   const [dialogOpen, setDialogOpen] = useState<string>("");
+
+  const [employeeCardShow, setEmployeeCardShow] = useState(false);
+
+  const [isOnboarding, setIsOnboarding] = useState(true);
+
+  const handleEmployeeCard = () => {
+    setEmployeeCardShow(!employeeCardShow);
+  };
 
   const [{ fetching: billsLoading, data: ewayBills, error: billsError }] =
     useQuery({
@@ -141,7 +161,7 @@ const Dashboard = () => {
   useEffect(() => {
     setTimeout(() => {
       setIsActivitySubPaused(true);
-    }, 2000);
+    }, 8000);
   }, []);
 
   useEffect(() => {
@@ -161,19 +181,62 @@ const Dashboard = () => {
 
   const [isLoading, setIsLoading] = useState(false);
 
-  const handleLoading = () => {
-    setIsLoading(true);
-
-    setTimeout(() => {
-      setIsLoading(false);
-    });
-  };
-
   useEffect(() => {
     if (ewayBills) {
       dispatch(saveBills(ewayBills?.getEWayBills));
     }
   }, [ewayBills]);
+
+  const {
+    activitiesList: activities,
+    activity,
+    sideBar,
+    location,
+  } = useSelector((state) => state.dashboard);
+
+  //ACTIVITY VIDEO PLAYER
+
+  const playerRef = React.useRef(null);
+
+  const videoJsOptions = {
+    autoplay: true,
+    controls: true,
+    responsive: true,
+    fluid: true,
+    sources: [
+      {
+        src: "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/TearsOfSteel.mp4",
+      },
+      {
+        src: "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4",
+      },
+    ],
+  };
+
+  const handlePlayerReady = (player) => {
+    playerRef.current = player;
+
+    // You can handle player events here, for example:
+    player.on("waiting", () => {
+      player.log("player is waiting");
+    });
+
+    player.on("dispose", () => {
+      player.log("player will dispose");
+    });
+  };
+  const handleSidebarShow = (show: string) => {
+    dispatch(saveSideBarView(show));
+  };
+
+  const locations = isActivitySubPaused
+    ? activities.map((item) => {
+        return {
+          long: item?.location?.longitude,
+          lat: item?.location?.latitude,
+        };
+      })
+    : [];
 
   return (
     <div className="dashboard">
@@ -190,6 +253,7 @@ const Dashboard = () => {
         children={null}
         icon={null}
       />
+
       <SubmitPackageDialog
         open={dialogOpen === "subpackage"}
         handleClose={handleDialogClose}
@@ -205,13 +269,11 @@ const Dashboard = () => {
         handleClose={handleDialogClose}
         handleContinue={(dialog: string) => handleDialogOpen(dialog)}
       />
-
       <PackageDetailsDialog
         open={dialogOpen === "packdetails"}
         handleClose={handleDialogClose}
         handleContinue={handleDialogClose}
       />
-
       <ServiceProviderMainDialog
         open={dialogOpen === "serviceprovider"}
         handleClose={handleDialogClose}
@@ -222,7 +284,6 @@ const Dashboard = () => {
         handleClose={handleDialogClose}
         handleContinue={handleDialogClose}
       />
-
       <div className="headerContainer">
         <Header onLocationClick={() => setIsLocationView(true)} />
       </div>
@@ -238,401 +299,430 @@ const Dashboard = () => {
         <Map
           trackerIcon={isLocationView ? crystalIcon : false}
           markerCoords={markerCoords}
+          activityLocation={location}
+          locations={locations}
         />
-
-        <div className="add-package-wrapper">
-          <AddPackage onClick={() => handleDialogOpen("addpackage")} />
-        </div>
-        <div className="traffic-presentation-wrapper">
-          <img src={trafficRepresentationImg} alt="traffic representation" />
-        </div>
+        {detailView && sideBar === "activities" && (
+          <VideoPlayer
+            show={detailView}
+            timestamp={timestamp.utc("YYYY/MM/DD:mm:ss")}
+            options={videoJsOptions}
+            onReady={handlePlayerReady}
+          />
+        )}
 
         {/* Side Panel */}
-        {!isLocationView && (
-          <div
-            className={`dashboard-side-panel ${
-              detailView ? "detail-side-panel" : ""
-            }`}
-          >
-            {!detailView ? (
-              <div className="dashboard">
-                <div>
-                  <div className="panel-header flex items-center justify-between">
-                    <div className="panel-header-label">All Activities</div>
+        <div>
+          {sideBar === "activities" && (
+            <div
+              className={`dashboard-side-panel ${
+                detailView ? "detail-side-panel" : ""
+              }`}
+            >
+              {!detailView ? (
+                <div className="dashboard">
+                  <div>
+                    <div className="panel-header flex items-center justify-between">
+                      <div className="panel-header-label">All Activities</div>
 
-                    <div className="flex items-center panel-header-ext">
-                      <div className="activities-filter c-pointer">
-                        <img src={filterIc} alt="filter icon" />
-                      </div>
-                      <div className="close-activity c-pointer">
-                        <KeyboardArrowDownIcon style={{ color: "lightgray" }} />
+                      <div className="flex items-center panel-header-ext">
+                        <div className="activities-filter c-pointer">
+                          <img src={filterIc} alt="filter icon" />
+                        </div>
+                        <div className="close-activity c-pointer">
+                          <KeyboardArrowDownIcon
+                            style={{ color: "lightgray" }}
+                          />
+                        </div>
                       </div>
                     </div>
-                  </div>
-                  <div>
-                    <br />
-                    <br />
-                    <ViewDocsDgft
-                      onClick={() => handleDialogOpen("dgftagency")}
-                    />
-                    <ViewDocsIcegate
-                      onClick={() => handleDialogOpen("icegateagency")}
-                    />
-                    <DocsNotification
-                      onClick={() => handleDialogOpen("packdetails")}
-                      title="Package details view"
-                      icon={infoImg}
-                    />
 
-                    <DocsNotification
-                      onClick={() => handleDialogOpen("serviceprovider")}
-                      title="Service provider check"
-                      icon={packageImg}
-                    />
-                    <DocsNotification
-                      onClick={() =>
-                        handleDialogOpen("provider-details-review")
-                      }
-                      icon={packageImg}
-                      title="Service provider details view"
-                    />
-                  </div>
-
-                  <ul className="activities-list">
-                    {activityList.map((e, i) => (
-                      <li className="activity-item" key={i}>
-                        <div className="activity-label">
-                          <div className="activity-title">
-                            <img
-                              src={
-                                activitiesIcons[e.type]
-                                  ? activitiesIcons[e.type]
-                                  : redLocIc
-                              }
-                              alt="red location"
-                              className="c-pointer"
-                            />
-                            <span
-                              className="c-pointer"
+                    <ul className="activities-list">
+                      {activities?.map((item, i) => (
+                        <li
+                          className="activity-item"
+                          key={i}
+                          onClick={() => {
+                            setDetailVidew(true);
+                            dispatch(saveActivity(item));
+                            dispatch(saveActivityLocation(item?.location));
+                          }}
+                        >
+                          <div className="activity-label">
+                            <div className="activity-title">
+                              <img
+                                src={
+                                  activitiesIcons[item.type]
+                                    ? activitiesIcons[item.type]
+                                    : redLocIc
+                                }
+                                alt="red location"
+                                className="c-pointer"
+                              />
+                              <span className="c-pointer">
+                                {activitiesTitle[item.type]}
+                              </span>
+                            </div>
+                            <div className="activity-time c-pointer">
+                              {moment().diff(
+                                moment(item.activity_start_time),
+                                "days"
+                              ) > 0
+                                ? `${moment().diff(
+                                    moment(item.activity_start_time),
+                                    "days"
+                                  )} mins ago`
+                                : moment().diff(
+                                    moment(item.activity_start_time),
+                                    "hours"
+                                  ) > 0
+                                ? `${moment().diff(
+                                    moment(item.activity_start_time),
+                                    "hours"
+                                  )} hrs ago`
+                                : `${moment().diff(
+                                    moment(item.activity_start_time),
+                                    "minutes"
+                                  )} min ago`}
+                            </div>
+                          </div>
+                          <div className="activity-info">
+                            <div className="activity-info-labels">
+                              <div className="activity-member c-pointer">
+                                Fleet
+                              </div>
+                              <div className="activity-priority c-pointer">
+                                {"Priority "}
+                                {item?.detections?.priority
+                                  ? item.detections.priority
+                                  : 0}
+                              </div>
+                            </div>
+                            <div
+                              className="acitivity-viewDoc c-pointer"
                               onClick={() => setDetailVidew(true)}
                             >
-                              {activitiesTitle[e.type]}
-                            </span>
-                          </div>
-                          <div className="activity-time c-pointer">
-                            {moment().diff(
-                              moment(e.activity_start_time),
-                              "days"
-                            ) > 0
-                              ? `${moment().diff(
-                                  moment(e.activity_start_time),
-                                  "days"
-                                )} mins ago`
-                              : moment().diff(
-                                  moment(e.activity_start_time),
-                                  "hours"
-                                ) > 0
-                              ? `${moment().diff(
-                                  moment(e.activity_start_time),
-                                  "hours"
-                                )} hrs ago`
-                              : `${moment().diff(
-                                  moment(e.activity_start_time),
-                                  "minutes"
-                                )} min ago`}
-                          </div>
-                        </div>
-                        <div className="activity-info">
-                          <div className="activity-info-labels">
-                            <div className="activity-member c-pointer">
-                              Fleet
-                            </div>
-                            <div className="activity-priority c-pointer">
-                              {"Priority "}
-                              {e.detections.priority
-                                ? e.detections.priority
-                                : 0}
+                              View Docs
                             </div>
                           </div>
-                          <div className="acitivity-viewDoc c-pointer">
-                            View Docs
-                          </div>
-                        </div>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              </div>
-            ) : (
-              <div className="activity-detail-view">
-                <div className="panel-header">
-                  <div className="panel-header-label flex items-center">
-                    <KeyboardBackspaceIcon
-                      className="activitydetail-back-icon c-pointer"
-                      onClick={() => setDetailVidew(false)}
-                      style={{ color: "#fff" }}
-                    />
-                    <span>Fleet</span>
+                        </li>
+                      ))}
+                    </ul>
                   </div>
                 </div>
-                <div className="activity-label">
-                  <div className="activity-title">
-                    <img
-                      src={redLocIc}
-                      alt="red location"
-                      className="c-pointer"
-                    />
-                    <span
-                      className="c-pointer"
-                      onClick={() => setDetailVidew(true)}
-                    >
-                      Activity: {faker.word}
-                    </span>
-                  </div>
-                  <div className="device-name c-pointer">
-                    {faker.vehicle.vin()}
-                  </div>
-                </div>
-                <div className="flex justify-between device-details-list">
-                  <div className="device-details flex-1">
-                    <div className="flex items-center justify-center">
-                      <img src={smallCCTVIc} alt="cctv" />
-                      <span className="device-detials-label">Camera no.</span>
+              ) : (
+                <div className="activity-detail-view">
+                  <div className="panel-header">
+                    <div className="panel-header-label flex items-center">
+                      <KeyboardBackspaceIcon
+                        className="activitydetail-back-icon c-pointer"
+                        onClick={() => setDetailVidew(false)}
+                        style={{ color: "#fff" }}
+                      />
+                      <span>Fleet</span>
                     </div>
-                    <div className="device-details-info">
+                  </div>
+                  <div className="activity-label">
+                    <div className="activity-title">
+                      <img
+                        src={redLocIc}
+                        alt="red location"
+                        className="c-pointer"
+                      />
+                      <span className="c-pointer">
+                        Activity: {activity?.type}
+                      </span>
+                    </div>
+                    <div className="device-name c-pointer">
                       {faker.vehicle.vin()}
                     </div>
                   </div>
-                  <div className="device-details flex-1 rec-border">
-                    <div className="flex items-center justify-center">
-                      <img src={smallCCTVIc} alt="cctv" />
-                      <span className="device-detials-label">Rec. time</span>
-                    </div>
-                    <div className="device-details-info">
-                      {new Date().getDay()}
-                    </div>
-                  </div>
-                  <div className="device-details flex-1">
-                    <div className="flex items-center justify-center">
-                      <img src={smallCCTVIc} alt="cctv" />
-                      <span className="device-detials-label">Area</span>
-                    </div>
-                    <div className="device-details-info">Jefferson sq.</div>
-                  </div>
-                </div>
-
-                {/* more info */}
-                <div className="moreInfo">
-                  <div className="moreInfo-title">More information</div>
-                  <ul className="moreInfo-details flex items-center justify-between">
-                    <li>
-                      <div className="moreInfoLabel">Identity</div>
-                      <div className="moreInfoValue">ID7651</div>
-                    </li>
-                    <li>
-                      <div className="moreInfoLabel">Facial identity</div>
-                      <div className="moreInfoValue">
-                        <Badge
-                          badgeContent={0}
-                          color="success"
-                          anchorOrigin={{
-                            vertical: "top",
-                            horizontal: "right",
-                          }}
-                        >
-                          <Avatar alt="Cindy Baker" src={smallManPic} />
-                        </Badge>
+                  <div className="flex justify-between device-details-list">
+                    <div className="device-details flex-1">
+                      <div className="flex items-center justify-center">
+                        <img src={smallCCTVIc} alt="cctv" />
+                        <span className="device-detials-label">Camera no.</span>
                       </div>
-                    </li>
-                    <li>
-                      <div className="moreInfoLabel">Category</div>
-                      <div className="moreInfoValue">Known</div>
-                    </li>
-                    <li>
-                      <div className="moreInfoLabel">Name</div>
-                      <div className="moreInfoValue">Rajesh</div>
-                    </li>
-                  </ul>
-
-                  {/* images */}
-                  <div className="infoImages">
-                    <div className="infoImgTitle">Images</div>
-                    <ul className="infoImgList">
-                      <li className="infoImgItem">
-                        <img
-                          src={menInteranceImg}
-                          alt="camera photos"
-                          className="c-pointer"
-                        />
-                      </li>
-                      <li className="infoImgItem">
-                        <img
-                          src={manInSuitImg}
-                          alt="camera photos"
-                          className="c-pointer"
-                        />
-                      </li>
-                    </ul>
-                  </div>
-
-                  {/* people involved */}
-                  <div className="peopleInvolved">
-                    <div className="moreInfo-title">People invovled</div>
-                    <ul className="moreInfo-details flex items-center justify-between">
-                      <li>
-                        <div className="moreInfoValue">ID7651</div>
-                      </li>
-                      <li>
-                        <div className="moreInfoValue">
-                          <Badge
-                            badgeContent={0}
-                            color="success"
-                            anchorOrigin={{
-                              vertical: "top",
-                              horizontal: "right",
-                            }}
-                          >
-                            <Avatar alt="Cindy Baker" src={smallManPic} />
-                          </Badge>
-                        </div>
-                      </li>
-                      <li>
-                        <div className="moreInfoValue">Employee</div>
-                      </li>
-                      <li>
-                        <div className="moreInfoValue">Trevor A.</div>
-                      </li>
-                    </ul>
-                    <ul className="moreInfo-details flex items-center justify-between">
-                      <li>
-                        <div className="moreInfoValue">ID7651</div>
-                      </li>
-                      <li>
-                        <div className="moreInfoValue">
-                          <Badge
-                            badgeContent={0}
-                            color="success"
-                            anchorOrigin={{
-                              vertical: "top",
-                              horizontal: "right",
-                            }}
-                          >
-                            <Avatar alt="Cindy Baker" src={smallManPic} />
-                          </Badge>
-                        </div>
-                      </li>
-                      <li>
-                        <div className="moreInfoValue">Employee</div>
-                      </li>
-                      <li>
-                        <div className="moreInfoValue">Trevor A.</div>
-                      </li>
-                    </ul>
-                    <ul className="moreInfo-details flex items-center justify-between">
-                      <li>
-                        <div className="moreInfoValue">ID7651</div>
-                      </li>
-                      <li>
-                        <div className="moreInfoValue">
-                          <Badge
-                            badgeContent={0}
-                            color="success"
-                            anchorOrigin={{
-                              vertical: "top",
-                              horizontal: "right",
-                            }}
-                          >
-                            <Avatar alt="Cindy Baker" src={smallManPic} />
-                          </Badge>
-                        </div>
-                      </li>
-                      <li>
-                        <div className="moreInfoValue">Employee</div>
-                      </li>
-                      <li>
-                        <div className="moreInfoValue">Trevor A.</div>
-                      </li>
-                    </ul>
-                  </div>
-
-                  {/* crypto details */}
-                  <div className="cryptoDetails">
-                    <div className="cryptoDetails-header flex items-center">
-                      <img
-                        src={cryptoIc}
-                        alt="crypto icon"
-                        width={30}
-                        height={32}
-                      />
-                      <span className="cryptoDetails-title">
-                        Crypto details
-                      </span>
+                      <div className="device-details-info">
+                        {faker.vehicle.vin()}
+                      </div>
                     </div>
-                    <ul className="cryptoDetails-list">
-                      <li className="cryptoDetail-item">
-                        <span className="cryptoDetails-key">Type:</span>
-                        <span className="cryptoDetails-value">
-                          "BbsBlsSignatureProof2020"
-                        </span>
+                    <div className="device-details flex-1 rec-border">
+                      <div className="flex items-center justify-center">
+                        <img src={smallCCTVIc} alt="cctv" />
+                        <span className="device-detials-label">Rec. time</span>
+                      </div>
+                      <div className="device-details-info">
+                        {new Date().getDay()}
+                      </div>
+                    </div>
+                    <div className="device-details flex-1">
+                      <div className="flex items-center justify-center">
+                        <img src={smallCCTVIc} alt="cctv" />
+                        <span className="device-detials-label">Area</span>
+                      </div>
+                      <div className="device-details-info">Jefferson sq.</div>
+                    </div>
+                  </div>
+
+                  {/* more info */}
+                  <div className="moreInfo">
+                    <div className="moreInfo-title">More information</div>
+                    <ul className="moreInfo-details flex items-center justify-between">
+                      <li>
+                        <div className="moreInfoLabel">Identity</div>
+                        <div className="moreInfoValue">ID7651</div>
                       </li>
-                      <li className="cryptoDetail-item">
-                        <span className="cryptoDetails-key">Created:</span>
-                        <span className="cryptoDetails-value">
-                          {" "}
-                          "2020-04-25"
-                        </span>
-                      </li>
-                      <li className="cryptoDetail-item">
-                        <div className="cryptoDetails-key">Proof Value:</div>
-                        <div className="cryptoDetails-value">
-                          "kTTbA3pmDa6Qia/JkOnIXDLmoBz3vsi7L5t3DWySI/VLmBqleJ/Tbus5RoyiDERDBEh5rnACXlnOqJ/U8yFQFtcp/mBCc2FtKNPHae9jKIv1dm9K9QK1F3GI1AwyGoUfjLWrkGDObO1ouNAhpEd0+et+qiOf2j8p3MTTtRRx4Hgjcl0jXCq7C7R5/nLpgimHAAAAdAx4ouhMk7v9dXijCIMaG0deicn6fLoq3GcNHuH5X1j22LU/hDu7vvPnk/6JLkZ1xQAAAAIPd1tu598L/K3NSy0zOy6obaojEnaqc1R5Ih/6ZZgfEln2a6tuUp4wePExI1DGHqwj3j2lKg31a/6bSs7SMecHBQdgIYHnBmCYGNQnu/LZ9TFV56tBXY6YOWZgFzgLDrApnrFpixEACM9rwrJ5ORtxAAAAAgE4gUIIC9aHyJNa5TBklMOh6lvQkMVLXa/vEl+3NCLXblxjgpM7UEMqBkE9/QcoD3Tgmy+z0hN+4eky1RnJsEg="
+                      <li>
+                        <div className="moreInfoLabel">Facial identity</div>
+                        <div className="moreInfoValue">
+                          <Badge
+                            badgeContent={0}
+                            color="success"
+                            anchorOrigin={{
+                              vertical: "top",
+                              horizontal: "right",
+                            }}
+                          >
+                            <Avatar alt="Cindy Baker" src={smallManPic} />
+                          </Badge>
                         </div>
                       </li>
-                      <li className="cryptoDetail-item">
-                        <span className="cryptoDetails-key">
-                          Verification Method:
-                        </span>
-                        <span className="cryptoDetails-value">
-                          {" "}
-                          "did:example:489398593#test"
-                        </span>
+                      <li>
+                        <div className="moreInfoLabel">Category</div>
+                        <div className="moreInfoValue">Known</div>
+                      </li>
+                      <li>
+                        <div className="moreInfoLabel">Name</div>
+                        <div className="moreInfoValue">Rajesh</div>
                       </li>
                     </ul>
+
+                    {/* images */}
+                    <div className="infoImages">
+                      <div className="infoImgTitle">Images</div>
+                      <ul className="infoImgList">
+                        <li className="infoImgItem">
+                          <img
+                            src={menInteranceImg}
+                            alt="camera photos"
+                            className="c-pointer"
+                          />
+                        </li>
+                        <li className="infoImgItem">
+                          <img
+                            src={manInSuitImg}
+                            alt="camera photos"
+                            className="c-pointer"
+                          />
+                        </li>
+                      </ul>
+                    </div>
+
+                    {/* people involved */}
+                    <EmployeeCard
+                      handleClick={handleEmployeeCard}
+                      show={employeeCardShow}
+                    />
+                    {!employeeCardShow && (
+                      <div className="peopleInvolved">
+                        <div className="moreInfo-title">People invovled</div>
+                        <ul
+                          className="moreInfo-details flex items-center justify-between"
+                          onClick={handleEmployeeCard}
+                        >
+                          <li>
+                            <div className="moreInfoValue">ID7651</div>
+                          </li>
+                          <li>
+                            <div className="moreInfoValue">
+                              <Badge
+                                badgeContent={0}
+                                color="success"
+                                anchorOrigin={{
+                                  vertical: "top",
+                                  horizontal: "right",
+                                }}
+                              >
+                                <Avatar alt="Cindy Baker" src={smallManPic} />
+                              </Badge>
+                            </div>
+                          </li>
+                          <li>
+                            <div className="moreInfoValue">Employee</div>
+                          </li>
+                          <li>
+                            <div className="moreInfoValue">Trevor A.</div>
+                          </li>
+                        </ul>
+                        <ul
+                          className="moreInfo-details flex items-center justify-between"
+                          onClick={handleEmployeeCard}
+                        >
+                          <li>
+                            <div className="moreInfoValue">ID7651</div>
+                          </li>
+                          <li>
+                            <div className="moreInfoValue">
+                              <Badge
+                                badgeContent={0}
+                                color="success"
+                                anchorOrigin={{
+                                  vertical: "top",
+                                  horizontal: "right",
+                                }}
+                              >
+                                <Avatar alt="Cindy Baker" src={smallManPic} />
+                              </Badge>
+                            </div>
+                          </li>
+                          <li>
+                            <div className="moreInfoValue">Employee</div>
+                          </li>
+                          <li>
+                            <div className="moreInfoValue">Trevor A.</div>
+                          </li>
+                        </ul>
+                        <ul
+                          className="moreInfo-details flex items-center justify-between"
+                          onClick={handleEmployeeCard}
+                        >
+                          <li>
+                            <div className="moreInfoValue">ID7651</div>
+                          </li>
+                          <li>
+                            <div className="moreInfoValue">
+                              <Badge
+                                badgeContent={0}
+                                color="success"
+                                anchorOrigin={{
+                                  vertical: "top",
+                                  horizontal: "right",
+                                }}
+                              >
+                                <Avatar alt="Cindy Baker" src={smallManPic} />
+                              </Badge>
+                            </div>
+                          </li>
+                          <li>
+                            <div className="moreInfoValue">Employee</div>
+                          </li>
+                          <li>
+                            <div className="moreInfoValue">Trevor A.</div>
+                          </li>
+                        </ul>
+                      </div>
+                    )}
+
+                    {/* crypto details */}
+                    <div className="cryptoDetails">
+                      <div className="cryptoDetails-header flex items-center">
+                        <img
+                          src={cryptoIc}
+                          alt="crypto icon"
+                          width={30}
+                          height={32}
+                        />
+                        <span className="cryptoDetails-title">
+                          Crypto details
+                        </span>
+                      </div>
+                      <ul className="cryptoDetails-list">
+                        <li className="cryptoDetail-item">
+                          <span className="cryptoDetails-key">Type:</span>
+                          <span className="cryptoDetails-value">
+                            "BbsBlsSignatureProof2020"
+                          </span>
+                        </li>
+                        <li className="cryptoDetail-item">
+                          <span className="cryptoDetails-key">Created:</span>
+                          <span className="cryptoDetails-value">
+                            {" "}
+                            "2020-04-25"
+                          </span>
+                        </li>
+                        <li className="cryptoDetail-item">
+                          <div className="cryptoDetails-key">Proof Value:</div>
+                          <div className="cryptoDetails-value">
+                            "kTTbA3pmDa6Qia/JkOnIXDLmoBz3vsi7L5t3DWySI/VLmBqleJ/Tbus5RoyiDERDBEh5rnACXlnOqJ/U8yFQFtcp/mBCc2FtKNPHae9jKIv1dm9K9QK1F3GI1AwyGoUfjLWrkGDObO1ouNAhpEd0+et+qiOf2j8p3MTTtRRx4Hgjcl0jXCq7C7R5/nLpgimHAAAAdAx4ouhMk7v9dXijCIMaG0deicn6fLoq3GcNHuH5X1j22LU/hDu7vvPnk/6JLkZ1xQAAAAIPd1tu598L/K3NSy0zOy6obaojEnaqc1R5Ih/6ZZgfEln2a6tuUp4wePExI1DGHqwj3j2lKg31a/6bSs7SMecHBQdgIYHnBmCYGNQnu/LZ9TFV56tBXY6YOWZgFzgLDrApnrFpixEACM9rwrJ5ORtxAAAAAgE4gUIIC9aHyJNa5TBklMOh6lvQkMVLXa/vEl+3NCLXblxjgpM7UEMqBkE9/QcoD3Tgmy+z0hN+4eky1RnJsEg="
+                          </div>
+                        </li>
+                        <li className="cryptoDetail-item">
+                          <span className="cryptoDetails-key">
+                            Verification Method:
+                          </span>
+                          <span className="cryptoDetails-value">
+                            {" "}
+                            "did:example:489398593#test"
+                          </span>
+                        </li>
+                      </ul>
+                    </div>
                   </div>
                 </div>
+              )}
+            </div>
+          )}
+          {/* Location Panel */}
+          {sideBar === "location" && (
+            <>
+              <div
+                className="location-panel-exit flex items-center justify-center c-pointer"
+                onClick={() => handleSidebarShow("activities")}
+              >
+                <KeyboardBackspaceIcon />
               </div>
-            )}
-          </div>
-        )}
-        {/* Location Panel */}
-        {isLocationView && (
-          <>
-            <div
-              className="location-panel-exit flex items-center justify-center c-pointer"
-              onClick={() => setIsLocationView(false)}
-            >
-              <KeyboardBackspaceIcon />
-            </div>
-            <div className={"location-panel"}>
-              <ul className="location-list flex fd-column">
-                {[...Array(10)].map((e, i) => (
-                  <React.Fragment key={i}>
-                    <li>
-                      <CollapsibleLocationBar isActive={true} />
-                    </li>
+              <div className={"location-panel"}>
+                <ul className="location-list flex fd-column">
+                  {[...Array(10)].map((e, i) => (
+                    <React.Fragment key={i}>
+                      <li>
+                        <CollapsibleLocationBar isActive={true} />
+                      </li>
 
-                    <li>
-                      <CollapsibleLocationBar isActive={false} />
-                    </li>
-                  </React.Fragment>
-                ))}
-              </ul>
-            </div>
-          </>
-        )}
+                      <li>
+                        <CollapsibleLocationBar isActive={false} />
+                      </li>
+                    </React.Fragment>
+                  ))}
+                </ul>
+              </div>
+            </>
+          )}
+
+          {/* Devices Panel */}
+          {sideBar === "devices" && (
+            <>
+              <div
+                className="location-panel-exit flex items-center justify-center c-pointer"
+                onClick={() => handleSidebarShow("activities")}
+              >
+                <KeyboardBackspaceIcon />
+              </div>
+              <div className={"location-panel"}>
+                <ul className="location-list flex fd-column">
+                  <AddToOrganisationAccordon />
+                  <AddDevice />
+                  <AddNewDevice />
+                  {[...Array(10)].map((e, i) => (
+                    <React.Fragment key={i}>
+                      <li>
+                        <CollapsibleDevicesBar isActive={true} />
+                      </li>
+
+                      <li>
+                        <CollapsibleDevicesBar isActive={false} />
+                      </li>
+                    </React.Fragment>
+                  ))}
+                </ul>
+              </div>
+            </>
+          )}
+        </div>
       </div>
     </div>
   );
 };
 
-export default Dashboard;
+export default useProtectedRoute(Dashboard);

@@ -1,4 +1,6 @@
+/* eslint-disable react-hooks/rules-of-hooks */
 import "../../assets/styles/signup.scss";
+import "../../assets/styles/components/popups.scss";
 import Button from "../../components/Button";
 import Card from "../../components/Card";
 import DashedInput from "../../components/DashedInput";
@@ -31,10 +33,15 @@ import { useDispatch, useSelector } from "react-redux";
 import SendingOTP from "./SendingOTP";
 import MnemonicScreen from "./MemonicScreen";
 import {
+  saveRegisterData,
   signupBackToPreviousView,
   signupCurrentView,
   signupValues,
 } from "../../redux/modules/signup/signupSlice";
+import useProtectedRoute from "../../hooks/UseProtectedRoute";
+import AllowQRCode from "./AllowQrCode";
+import SuccessPopup from "../../components/flows/common/SuccessPanel";
+import ErrorPopup from "../../components/flows/common/ErrorPanel";
 
 const styles = {
   display: "flex",
@@ -56,6 +63,7 @@ const Signup = ({ ...props }) => {
   const [showMnemonicPhrase, setShowMnemonicPhrase] = useState(false);
   const [showQRCode, setShowQRCode] = useState(false);
   const [mnenominPhrase, setMnenominPhrase] = useState("");
+  const [mnemonicError, setMnemoicError] = useState(null);
   const [readyForFaceRegistration, setReadyForFaceRegistration] =
     useState(false);
   const navigate = useNavigate();
@@ -63,15 +71,19 @@ const Signup = ({ ...props }) => {
   const [updateResult, update] = useMutation(registerMutation);
   const [updateOTPResult, sendOTP] = useMutation(sendOTPMutation);
   const [updateVerifyOTPResult, verifyOTP] = useMutation(verifyOTPMutation);
+  const [signupResult, signupUser] = useMutation(registerMutation);
 
   // redux
   const currentView = useSelector((state) => state.signup.currentView);
   const signupState = useSelector((state) => state.signup.signupData);
 
+  const [isLoading, setLoading] = useState(false);
+
   const dispatch = useDispatch();
 
   // sendOTP mutation
   const handleSendOTPRequest = () => {
+    setLoading(true);
     sendOTP({ target: `${countryCode}${phone}` })
       .then((res) => {
         console.log("OTP sent", res);
@@ -97,12 +109,13 @@ const Signup = ({ ...props }) => {
       .catch((err) => {
         console.log("err", err);
       });
+    setLoading(false);
   };
 
   const handlePhoneInput = (phoneNumber) => {
     const { value, selectedValue } = phoneNumber;
     setPhone(value);
-    // setCountryCode(selectedValue);
+    setCountryCode(selectedValue);
   };
 
   const handleVerifyOTP = () => {
@@ -122,9 +135,9 @@ const Signup = ({ ...props }) => {
   };
 
   const handleKeyPairGeneration = async () => {
-    console.log(`${countryCode}${phone}`, mnenominPassword);
     let registerObj = await testRegisterUser(
       `${countryCode}${phone}`,
+      `${countryCode}`,
       mnenominPassword
     );
     let keypair = registerObj.kayPair;
@@ -142,10 +155,11 @@ const Signup = ({ ...props }) => {
 
         if (res?.data) {
           const storedInCred = storeInCredManager(
-            registerObj.id,
-            registerObj.metaInformation.firstName,
-            registerObj.did
+            `${countryCode}${phone}`,
+            registerObj.metaInformation.phoneNumber,
+            mnenominPassword
           );
+          console.log(storedInCred);
 
           if (storedInCred) {
             console.log("user cred stored");
@@ -175,6 +189,37 @@ const Signup = ({ ...props }) => {
       });
   };
 
+  const handleSignup = () => {
+    let signupPayload = testRegisterUser(
+      `${countryCode}${phone}`,
+      mnenominPassword
+    );
+    signupUser(signupPayload.payload)
+      .then((result) => {
+        saveRegisterData(result?.data);
+        navigate("/dashboard");
+      })
+      .catch((error) => {
+        console.log("Error occured", error);
+      });
+  };
+
+  const handleSaveQr = () => {
+    dispatch(signupCurrentView(7));
+  };
+  const handleDenyQr = () => {};
+  const handleScanDevice = () => {
+    dispatch(signupCurrentView(8));
+  };
+  const handleDenyScanDevice = () => {};
+
+  const handleSuccess = () => {
+    console.log("SUCCESSFULLY SIGNED UP ==========>>>>>>>>>>>>>> DASHBOARD");
+  };
+
+  const hideSignupTitle =
+    signupScreen.AllowScanDevice || signupScreen.AllowToSave;
+
   return (
     <div className="signup">
       {regProcessing ? (
@@ -182,15 +227,15 @@ const Signup = ({ ...props }) => {
       ) : (
         <>
           <AuthHeader />
-          {/* <div className="chokidr-title">C H O K I D R</div> */}
+          <div className="chokidr-title">C H O K I D R</div>
 
           {readyForFaceRegistration ? (
             <div style={styles}>
               <FaceRecoginitionPanel />
             </div>
           ) : (
-            <SignUpWrapper>
-              {/* Enter phone number */}
+            <SignUpWrapper headText={hideSignupTitle ? "" : "Sign Up"}>
+              {/* Enter phone number  */}
               {signupScreen.phoneNumber === currentView && (
                 <GrabPhone
                   phone={phone ? phone : signupState.phone}
@@ -198,7 +243,6 @@ const Signup = ({ ...props }) => {
                   handlePhoneInput={handlePhoneInput}
                 />
               )}
-
               {/* Enter OTP */}
               {signupScreen.otp === currentView && (
                 <SendingOTP
@@ -206,13 +250,13 @@ const Signup = ({ ...props }) => {
                   setOTP={setOTP}
                   otpImg={otpImg}
                   handleVerifyOTP={handleVerifyOTP}
+                  invalidOTP={OTP !== signupState.otp}
+                  isLoading={isLoading}
                 />
               )}
-
               {/* <div className="signup-card-body">
                   <div> */}
               {/* mnemonic password screen */}
-
               {signupScreen.mnemonic === currentView && (
                 <MnemonicScreen
                   value={
@@ -230,7 +274,6 @@ const Signup = ({ ...props }) => {
                   }}
                 />
               )}
-
               {/* confirm mnemonic password screen */}
               {signupScreen.confirmMnemonic === currentView && (
                 <MnemonicScreen
@@ -241,21 +284,23 @@ const Signup = ({ ...props }) => {
                   }
                   label={"Re-enter the 6 digit password"}
                   getValue={(d) => setMnenominPassword2(d)}
+                  on
                   onSubmit={(value) => {
                     signupState.mnenominPassword === value &&
-                      dispatch(signupCurrentView(4));
-                    signupState.mnenominPassword === value &&
-                      handleKeyPairGeneration();
-                    signupState.mnenominPassword === value &&
+                      dispatch(signupCurrentView(4)) &&
+                      handleKeyPairGeneration() &&
                       dispatch(
                         signupValues({
                           confirmMnenominPassword: value,
                         })
                       );
+                    //  &&
+                    // setMnemoicError(null)) ||
+                    // setMnemoicError("Passwords doesn't match");
                   }}
+                  error={mnemonicError}
                 />
               )}
-
               {signupScreen.mnemonicPhrase === currentView &&
                 (mnenominPhrase ? (
                   <>
@@ -269,24 +314,20 @@ const Signup = ({ ...props }) => {
                 ) : (
                   dispatch(signupBackToPreviousView())
                 ))}
-
-              {signupScreen.QRCode === currentView && (
-                //  mnenominPhrase ? (
-                <>
-                  <label className="mnemonicPhraseLabel">
-                    Your mnemonic password is encrypted as a QR code
-                  </label>
-                  <div className="mnemonicQRCodeContainer">
-                    <QRCode value={mnenominPassword} level={"H"} size={170} />
-                  </div>
-                </>
-                //  ) : (
-                // dispatch(signupCurrentView(3))
-                // ))}
-              )}
-
+              {signupScreen.QRCode === currentView &&
+                (mnenominPhrase ? (
+                  <>
+                    <label className="mnemonicPhraseLabel">
+                      Your mnemonic password is encrypted as a QR code
+                    </label>
+                    <div className="mnemonicQRCodeContainer">
+                      <QRCode value={mnenominPassword} level={"H"} size={170} />
+                    </div>
+                  </>
+                ) : (
+                  dispatch(signupCurrentView(3))
+                ))}
               {/* Footer */}
-
               {signupScreen.mnemonicPhrase === currentView && (
                 <div className="signup-card-footer flex justify-evenly items-center flex-1 fd-column">
                   <div className="signup-btn">
@@ -294,15 +335,14 @@ const Signup = ({ ...props }) => {
                       outlined={false}
                       title={"Next"}
                       onClick={() => {
-                        // setShowMnemonicPhrase(false);
-                        // setShowQRCode(true);
+                        setShowMnemonicPhrase(false);
+                        setShowQRCode(true);
                         dispatch(signupCurrentView(5));
                       }}
                     />
                   </div>
                 </div>
               )}
-
               {signupScreen.QRCode === currentView && (
                 <div className="signup-card-footer flex justify-evenly items-center flex-1 fd-column">
                   <div className="signup-btn">
@@ -311,16 +351,51 @@ const Signup = ({ ...props }) => {
                       title={"Save QR code on this device"}
                       onClick={() => {
                         console.log(`Saving QR Code and dispatching`);
-                        dispatch(login());
+                        // dispatch(login());
                         console.log(`login dispatched, moving to dashboard`);
                         setShowQRCode(false);
-                        navigate("/dashboard");
-                        // dispatch(signupCurrentView(6))
+                        // handleSignup();
+                        dispatch(signupCurrentView(6));
+                        // setReadyForFaceRegistration(true)
                       }}
                     />
                   </div>
                 </div>
               )}
+              {signupScreen.AllowToSave === currentView && (
+                <AllowQRCode
+                  handleAllow={handleSaveQr}
+                  handleDeny={handleDenyQr}
+                  title="Allow access to store the QR code in this device??"
+                  isLoading={false}
+                  step={[2, 2]}
+                />
+              )}
+              {signupScreen.AllowScanDevice === currentView && (
+                <AllowQRCode
+                  handleAllow={handleScanDevice}
+                  handleDeny={handleDenyScanDevice}
+                  title="Allow  to scan this device name?"
+                  isLoading={false}
+                  step={[2, 2]}
+                />
+              )}
+              {signupScreen.success === currentView && (
+                <SuccessPopup
+                  description={
+                    "Your mnemonic password’s QR code has been successfully stored in the device DELL23"
+                  }
+                  handleClick={handleSuccess}
+                  btnText="Continue"
+                />
+              )}
+              {/* <ErrorPopup
+                description={
+                  "QR code not found on this device you cannot proceed further"
+                }
+                handleClick={handleSuccess}
+                btnText="Try other way"
+              /> */}
             </SignUpWrapper>
           )}
         </>
@@ -329,4 +404,4 @@ const Signup = ({ ...props }) => {
   );
 };
 
-export default Signup;
+export default useProtectedRoute(Signup);

@@ -1,0 +1,24 @@
+.docs-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 70px;
+  margin-bottom: 25px;
+  .doc-button {
+    display: flex;
+    gap: 10px;
+    width: 315px;
+    height: 36px;
+    background: rgba(1, 143, 106, 0.85);
+    border-radius: 4px;
+    color: white;
+    border: none;
+    align-items: center;
+    justify-content: center;
+    align-content: flex-start;
+    justify-items: flex-start;
+    cursor: pointer;
+  }
+}

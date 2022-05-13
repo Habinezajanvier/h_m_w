@@ -58,7 +58,7 @@ const CollapsibleLocationBar = ({ isActive }) => {
             <div className="panel-header-label">All Activities</div>
           </div>
           <ul className="activities-list">
-            {[...Array(3)].map((e, i) => (
+            {[...Array(10)].map((e, i) => (
               <li className="activity-item" key={i}>
                 <div className="activity-label">
                   <div className="activity-title">

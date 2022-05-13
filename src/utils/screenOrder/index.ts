@@ -6,6 +6,7 @@ export const signupScreen = {
   mnemonicPhrase: 4,
   QRCode: 5,
   AllowToSave: 6,
-  AllowToSearch: 7,
-  success: 8,
+  AllowScanDevice: 7,
+  AllowToSearch: 8,
+  success: 9,
 };
